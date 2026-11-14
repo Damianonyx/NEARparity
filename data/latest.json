@@ -1,11 +1,9 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-11-14T12:51:23.078Z",
-  "last_successful_refresh": "2026-11-14T12:51:23.078Z",
+  "generated_at": "2026-11-14T13:10:44.600Z",
+  "last_successful_refresh": "2026-11-14T13:10:44.600Z",
   "partial_refresh": false,
-  "failed_groups": {
-    "revenue_dashboard": "fetch failed"
-  },
+  "failed_groups": {},
   "window": {
     "start": "2026-10-15T00:00:00.000Z",
     "end": "2026-11-14T00:00:00.000Z",
@@ -238,10 +236,10 @@
       "reason": null
     },
     "price_current": {
-      "value": 3.340035169290167,
+      "value": 3.3220075000000002,
       "unit": "USD",
-      "period_start": "2026-11-14T12:50:00.000Z",
-      "period_end": "2026-11-14T12:50:00.000Z",
+      "period_start": "2026-11-14T13:10:30.000Z",
+      "period_end": "2026-11-14T13:10:30.000Z",
       "source": "DefiLlama coins API: https://coins.llama.fi/prices/current/coingecko:near",
       "method": "Latest price for coingecko:near.",
       "status": "measured",
@@ -343,14 +341,14 @@
     "label": "Conditional scenario under the stated assumptions. Not a prediction and not a supply-neutrality threshold.",
     "defaults": {
       "daily_issuance_near": 88934.8197390998,
-      "price_usd": 3.340035169290167,
+      "price_usd": 3.3220075000000002,
       "net_revenue_capture_bps": 4.7596025388269005,
       "buyback_allocation_pct": 100,
       "observed_avg_daily_volume_usd": 126582068.23333333
     },
     "default_result": {
       "finite": true,
-      "value": 624097124.2449322,
+      "value": 620728591.882076,
       "reason": null
     },
     "period_start": "2026-10-15T00:00:00.000Z",
@@ -1042,7 +1040,7 @@
   },
   "official_dashboard": {
     "source": "NEAR revenue dashboard (official): https://revenue.near.org/",
-    "fetched_at": "2026-11-14T12:44:36.528Z",
+    "fetched_at": "2026-11-14T13:10:44.187Z",
     "wallet_breakdown": [
       {
         "account": "fefundsadmin.sputnik-dao.near",
@@ -1066,17 +1064,15 @@
       "share_pct": 40.9
     },
     "onchain_now": {
-      "block_height": 224515649,
-      "block_time": "2026-11-14T12:44:25.103Z",
+      "block_height": 224518398,
+      "block_time": "2026-11-14T13:10:33.857Z",
       "total_near": 2281071.567219708,
       "native_near": 2281071.567219708,
       "wnear_near": 0,
       "intents_wnear_near": 0
     },
     "difference_near": 499259.76498769945,
-    "note": "The dashboard attributes captured revenue to wallets; on-chain holdings can differ (other inflows, outflows, timing). Neither figure alone proves purchases.",
-    "stale": true,
-    "stale_reason": "fetch failed"
+    "note": "The dashboard attributes captured revenue to wallets; on-chain holdings can differ (other inflows, outflows, timing). Neither figure alone proves purchases."
   },
   "sources": [
     {
