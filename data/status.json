@@ -1,98 +1,98 @@
 {
-  "generated_at": "2026-11-14T13:36:42.427Z",
-  "last_successful_refresh": "2026-11-14T13:36:42.427Z",
+  "generated_at": "2026-11-14T15:01:12.023Z",
+  "last_successful_refresh": "2026-11-14T15:01:12.023Z",
   "sources": {
     "near_archival_rpc": {
       "ok": true,
       "http_status": 200,
       "error": null,
-      "fetched_at": "2026-11-14T13:36:42.427Z",
+      "fetched_at": "2026-11-14T15:01:12.023Z",
       "url": "https://archival-rpc.mainnet.fastnear.com",
-      "calls": 5,
+      "calls": 8,
       "failures": 0,
-      "last_ok_at": "2026-11-14T13:36:42.427Z"
+      "last_ok_at": "2026-11-14T15:01:12.023Z"
     },
     "defillama_volume": {
       "ok": true,
       "http_status": 200,
       "error": null,
-      "fetched_at": "2026-11-14T13:36:35.343Z",
+      "fetched_at": "2026-11-14T15:01:05.399Z",
       "url": "https://api.llama.fi/summary/dexs/near-intents",
       "calls": 1,
       "failures": 0,
-      "last_ok_at": "2026-11-14T13:36:35.343Z"
+      "last_ok_at": "2026-11-14T15:01:05.399Z"
     },
     "defillama_fees": {
       "ok": true,
       "http_status": 200,
       "error": null,
-      "fetched_at": "2026-11-14T13:36:35.366Z",
+      "fetched_at": "2026-11-14T15:01:05.417Z",
       "url": "https://api.llama.fi/summary/fees/near-intents?dataType=dailyFees",
       "calls": 1,
       "failures": 0,
-      "last_ok_at": "2026-11-14T13:36:35.366Z"
+      "last_ok_at": "2026-11-14T15:01:05.417Z"
     },
     "defillama_revenue": {
       "ok": true,
       "http_status": 200,
       "error": null,
-      "fetched_at": "2026-11-14T13:36:35.391Z",
+      "fetched_at": "2026-11-14T15:01:05.437Z",
       "url": "https://api.llama.fi/summary/fees/near-intents?dataType=dailyRevenue",
       "calls": 1,
       "failures": 0,
-      "last_ok_at": "2026-11-14T13:36:35.391Z"
+      "last_ok_at": "2026-11-14T15:01:05.437Z"
     },
     "defillama_holders_revenue": {
       "ok": true,
       "http_status": 200,
       "error": null,
-      "fetched_at": "2026-11-14T13:36:35.414Z",
+      "fetched_at": "2026-11-14T15:01:05.455Z",
       "url": "https://api.llama.fi/summary/fees/near-intents?dataType=dailyHoldersRevenue",
       "calls": 1,
       "failures": 0,
-      "last_ok_at": "2026-11-14T13:36:35.414Z"
+      "last_ok_at": "2026-11-14T15:01:05.455Z"
     },
     "price_defillama_chart": {
       "ok": true,
       "http_status": 200,
       "error": null,
-      "fetched_at": "2026-11-14T13:36:35.492Z",
+      "fetched_at": "2026-11-14T15:01:05.905Z",
       "url": "https://coins.llama.fi/chart/coingecko:near?start=1769904000&span=287&period=1d&searchWidth=600",
       "calls": 1,
       "failures": 0,
-      "last_ok_at": "2026-11-14T13:36:35.492Z"
+      "last_ok_at": "2026-11-14T15:01:05.905Z"
     },
     "price_defillama_current": {
       "ok": true,
       "http_status": 200,
       "error": null,
-      "fetched_at": "2026-11-14T13:36:35.515Z",
+      "fetched_at": "2026-11-14T15:01:05.925Z",
       "url": "https://coins.llama.fi/prices/current/coingecko:near",
       "calls": 1,
       "failures": 0,
-      "last_ok_at": "2026-11-14T13:36:35.515Z"
+      "last_ok_at": "2026-11-14T15:01:05.925Z"
     },
     "nearblocks": {
       "ok": true,
       "http_status": 200,
       "error": null,
-      "fetched_at": "2026-11-14T13:36:36.589Z",
+      "fetched_at": "2026-11-14T15:01:06.389Z",
       "url": "https://api.nearblocks.io/v1/account/buybacks.multisignature.near/txns?per_page=100",
       "calls": 1,
       "failures": 0,
-      "last_ok_at": "2026-11-14T13:36:36.589Z"
+      "last_ok_at": "2026-11-14T15:01:06.389Z"
     },
     "near_revenue_dashboard": {
       "ok": true,
       "http_status": 200,
       "error": null,
-      "fetched_at": "2026-11-14T13:36:42.060Z",
+      "fetched_at": "2026-11-14T15:01:11.781Z",
       "url": "https://revenue.near.org/",
       "calls": 1,
       "failures": 0,
-      "last_ok_at": "2026-11-14T13:36:42.060Z"
+      "last_ok_at": "2026-11-14T15:01:11.781Z"
     }
   },
   "failed_groups": {},
-  "rpc_calls": 5
+  "rpc_calls": 8
 }
