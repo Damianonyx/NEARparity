@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+import { readFileSync } from 'node:fs';
 // UI smoke test with no dependencies: serves the site, renders it in headless Chrome (--dump-dom),
 // and checks the rendered DOM. Runs twice: with the real data, and with deliberately degraded data
 // (missing metrics and series) to prove that sections fail independently instead of blanking the page.
@@ -55,7 +56,8 @@ await run('real data', ROOT, 8731, (html) => {
   check('hero simulation running', /id="hero-canvas"/.test(html) && /id="ro-cov">[0-9.]+%</.test(html) && /id="ro-need">Parity needs/.test(html));
   check('simulator result rendered', /id="sim-out"[\s\S]{0,400}(per day|No finite volume)/.test(html));
   check('no section errors', !html.includes('class="section-error"'));
-  check('usage tiles rendered', count(html, /<div class="tile">/g) === 4, `${count(html, /<div class="tile">/g)} tiles`);
+  { const n = count(html, /<div class="tile">/g); const L = JSON.parse(readFileSync(new URL('../data/latest.json', import.meta.url), 'utf8')); const want = L.metrics?.usage_function_calls?.value != null ? 5 : 4; check('usage tiles rendered', n === want, `${n} tiles, expected ${want}`); }
+  check('leading-indicator test shown when computed', !JSON.parse(readFileSync(new URL('../data/latest.json', import.meta.url), 'utf8')).meta?.leading_indicator || html.includes('Does Intents volume lead usage better than price?'));
   check('usage chart rendered', /id="usage-chart"[^>]*>\s*<svg/.test(html));
   check('chart takeaways rendered', /id="chart-takeaway">[^<]{20,}/.test(html) && /id="usage-takeaway">[^<]{20,}/.test(html));
   check('a query behind every section', count(html, /<details class="query">/g) >= 7, `${count(html, /<details class="query">/g)} query blocks`);

@@ -12,6 +12,7 @@
 2. **Supply is still growing at close to the protocol cap.** Observed issuance runs at an annualised **2.48%** of supply, just under the **2.5%** maximum. Protocol burns offset under 1% of it.
 3. **Parity needs about 5× today's Intents volume**, under today's price, capture rate and allocation.
 4. **"Buyback" here means "held", not "burned".** Total supply does not fall when the wallet accumulates NEAR.
+5. **The track hypothesis does not hold in 2026 data.** Intents volume is not a leading indicator of NEAR network usage, and neither is the NEAR price (§2.8): volume has held up while usage fell by roughly three quarters.
 
 This is an investment-thesis claim about *flows*. It is not a price prediction.
 
@@ -74,6 +75,28 @@ With the snapshot defaults (88,935 NEAR/day, $3.32 per NEAR, **4.76 bps** net re
 
 NEAR's official revenue dashboard ([revenue.near.org](https://revenue.near.org/)) says that NEAR "captures a growing share of fees, feeding buybacks that permanently remove NEAR from circulation". The NEAR in the buyback wallet is held, not burned. Total supply rose by 2.64 M NEAR in the window, and burns explain only 25 k NEAR of the difference from issuance. "Removed from circulation" is accurate only in the sense of "held by a NEAR-controlled multisig", and that is reversible: the wallet has sent NEAR out (17 outbound receipts in its history, including 12,000 NEAR on 10 Jul 2026, NearBlocks).
 
+### 2.6 Network usage behind the buyback (measured, BigQuery SQL)
+
+The buyback is funded by Intents fees, so it helps to know whether activity on NEAR is growing alongside it. These figures come from SQL on the NEAR BigQuery public dataset (`DAILY_USAGE_SQL` in [`scripts/lib/bigquery.mjs`](scripts/lib/bigquery.mjs), always filtered on `block_date`): **daily active accounts** = distinct transaction signers, **transactions** = rows of `transactions`, **contract usage** = distinct contracts receiving `FUNCTION_CALL` actions and the number of those calls (`receipt_actions`). The refresh workflow ran it for every day since 1 Feb 2026 (about 89 GB, once) and adds each new day (about 0.22 GB). Every daily row is in [`data/bigquery-usage.json`](data/bigquery-usage.json).
+
+**Cross-check.** NearBlocks' daily charts report the *same* 30-day means for active accounts and transactions, to the unit (64,822 and 678,139), so the two sources agree exactly on those. They differ on "active contracts": NearBlocks reports about 69,900 a day with an undocumented definition; the BigQuery figure below uses the documented one.
+
+| 30-day mean (15 Oct – 13 Nov 2026) vs the previous 30 days (15 Sep – 14 Oct) | Now | Before | Change |
+|---|---|---|---|
+| Daily active accounts | 64,822 | 74,812 | **−13.4%** |
+| Daily transactions | 678,139 | 872,564 | **−22.3%** |
+| New accounts (30-day total; NearBlocks) | 283,950 | 345,347 | −17.8% |
+| Daily active contracts (distinct `FUNCTION_CALL` receivers) | 1,408 | 1,726 | **−18.5%** |
+| Daily contract calls (`FUNCTION_CALL` actions) | 1,774,565 | 2,399,103 | **−26.0%** |
+| Intents volume (DefiLlama, 30-day total) | $3.80 B | $4.84 B | −21.5% |
+
+- **Weekly index, week of 1 Feb 2026 = 100.** By the last full week (starting 1 Nov), Intents volume per day was at **97**, daily active accounts at **27** and daily transactions at **19**.
+- **The two have come apart since August.** Intents volume roughly doubled from its summer level, while active accounts kept falling. Week-over-week changes in Intents volume and active accounts are essentially uncorrelated over 39 full weeks (r = −0.19; `meta.usage_correlation`). Lags are tested in §2.8.
+- **There is one structural break.** On 2 Apr 2026, daily transactions fell from 3,758,663 to 1,063,375 (−72%), while active accounts barely moved (139,048 → 137,183) and the number of contracts called did not fall (955 → 998). The drop was in activity per account, not in the number of accounts or contracts. Its cause is not verified here.
+- **The 2025 baseline was higher still.** The 2025 daily averages were 421k active accounts and 5.34 M transactions (NearBlocks rows, 1 Jan – 31 Dec 2025; not re-run in BigQuery, which would scan about 547 GB).
+
+What this means for the claim: the buyback depends on cross-chain swap volume through Intents, which has held up, not on NEAR's own on-chain activity, which has fallen. That makes the buyback more sensitive to Intents' competitive position than to NEAR adoption. It also means Intents volume is a poor stand-in for NEAR network usage over this period.
+
 ### 2.7 On-chain trace of the buyback (BigQuery, measured)
 
 We traced the buyback wallet's funding through the NEAR BigQuery public dataset (`bigquery-public-data.crypto_near_mainnet_us`, `execution_outcomes` event logs of `intents.near`), for the same 30-day window (15 Oct – 13 Nov 2026). The dataset was current to 14 Nov 2026 when queried. The SQL is in [`queries/bigquery/`](queries/bigquery/) and the results are in [`docs/bigquery-results.json`](docs/bigquery-results.json); each query scanned about 35 GB and ran in the free BigQuery sandbox.
@@ -85,24 +108,25 @@ We traced the buyback wallet's funding through the NEAR BigQuery public dataset 
 
 So verified purchases are a **lower bound of 2.7%**. Counting every NEAR delivered to the wallet as bought gives 11.3%, and the revenue-based proxy gives 15.7–15.8%. On every measure, buybacks are a small fraction of issuance.
 
-### 2.6 Network usage behind the buyback (measured, as reported by NearBlocks)
+### 2.8 The track hypothesis: is Intents volume a better leading indicator of network usage than token price?
 
-The buyback is funded by Intents fees, so it helps to know whether activity on NEAR is growing alongside it. These figures come from NearBlocks' daily network charts. Every daily row is in [`data/usage.json`](data/usage.json), and the figures below can be recomputed from the rows for the dates given.
+The track's working hypothesis is that cross-chain volume through NEAR Intents leads real network usage better than the NEAR price does. We tested it directly, with the build's own data (`meta.leading_indicator`, shown in the dashboard's usage section with the full table):
 
-| 30-day mean (15 Oct – 13 Nov 2026) vs the previous 30 days (15 Sep – 14 Oct) | Now | Before | Change |
-|---|---|---|---|
-| Daily active accounts | 64,822 | 74,812 | **−13.4%** |
-| Daily transactions | 678,139 | 872,564 | **−22.3%** |
-| New accounts (30-day total) | 283,950 | 345,347 | −17.8% |
-| Daily active contracts | 69,939 | 55,981 | +24.9% |
-| Intents volume (DefiLlama, 30-day total) | $3.80 B | $4.84 B | −21.5% |
+- **Method.** For each full week from 1 Feb to 7 Nov 2026 (40 weeks), take the week-over-week % change in Intents volume (DefiLlama) and in the weekly mean NEAR price, and correlate it with the % change in usage (BigQuery) 0, 1, 2, 3 and 4 weeks later. We report Pearson r and Spearman ρ (rank-based, so one-off jumps such as 2 Apr do not dominate), with a noise band of ±1.96/√n (about 95%). A "lead" needs both r and ρ positive and above the band.
 
-- **Weekly index, week of 1 Feb 2026 = 100.** By the last full week (starting 1 Nov), Intents volume per day was at **97**, daily active accounts at **27** and daily transactions at **19**.
-- **The two have come apart since August.** Intents volume roughly doubled from its summer level, while active accounts kept falling. Week-over-week changes in Intents volume and active accounts are essentially uncorrelated over 39 full weeks (r = −0.19; computed by the build, `meta.usage_correlation`; descriptive only, no lag or causality tested).
-- **There is one structural break.** On 2 Apr 2026, daily transactions fell from 3,758,663 to 1,063,375 (−72%) and active contracts from 1,381,922 to 184,649, while active accounts barely moved (139,048 → 137,183). The drop was in activity per account, not in the number of accounts. Its cause is not verified here.
-- **The 2025 baseline was higher still.** The 2025 daily averages were 421k active accounts and 5.34 M transactions (NearBlocks rows, 1 Jan – 31 Dec 2025).
+| Lead | Volume → active accounts (r / ρ) | Price → active accounts | Volume → transactions | Price → transactions | Noise band |
+|---|---|---|---|---|---|
+| 0 (same week) | −0.19 / −0.08 | −0.00 / −0.01 | 0.19 / 0.36 | 0.12 / 0.23 | ±0.31 |
+| 1 week | 0.10 / 0.05 | 0.28 / 0.03 | 0.12 / 0.24 | 0.35 / 0.15 | ±0.32 |
+| 2 weeks | 0.27 / 0.27 | 0.26 / 0.05 | −0.06 / −0.04 | −0.01 / 0.02 | ±0.32 |
+| 3 weeks | −0.09 / −0.06 | −0.17 / 0.08 | −0.08 / −0.20 | 0.01 / 0.13 | ±0.33 |
+| 4 weeks | −0.14 / −0.03 | −0.07 / −0.04 | 0.18 / 0.13 | −0.32 / −0.39 | ±0.33 |
 
-What this means for the claim: the buyback depends on cross-chain swap volume through Intents, which has held up, not on NEAR's own on-chain activity, which has fallen. That makes the buyback more sensitive to Intents' competitive position than to NEAR adoption. It also means Intents volume is a poor stand-in for NEAR network usage over this period.
+- **Result: the hypothesis is not supported.** Neither Intents volume nor NEAR price leads daily active accounts or daily transactions: no lag of 1–4 weeks is above the noise band on both measures. The strongest volume lead (2 weeks → active accounts, r = ρ = 0.27) is inside the band.
+- **Volume is not a better indicator than price; both are weak.** Price shows a single-measure blip (1 week → transactions, r = 0.35 but ρ = 0.15). The only cell beyond the band on both measures is *negative* (price → transactions 4 weeks later, −0.32 / −0.39), the opposite of a lead. With 20 tests at about 95%, one such cell is expected by chance, so we do not read it as a signal.
+- **The levels tell the same story.** Since the week of 1 Feb 2026, Intents volume per day is back at 97% of its starting level, while daily active accounts are at 27% and transactions at 19% (§2.6). Intents volume tracks cross-chain demand that mostly does not show up as NEAR-native activity.
+
+Limits: 35–39 weekly pairs is a small sample, the period has a structural break (2 Apr 2026), and correlation of changes says nothing about causality. A longer history (2025 in BigQuery) could change the result; see §5.
 
 ## 3. Counterevidence and the strongest case against the claim
 
@@ -125,7 +149,7 @@ What this means for the claim: the buyback depends on cross-chain swap volume th
 - **Third-party data.** DefiLlama volume, fees and revenue are reported as published, and DefiLlama revises its history: in a later build the same day, gross fees for this same window read $6.27 M rather than $5.83 M, and net revenue $1.802 M rather than $1.807 M. This is why every number here cites a fixed snapshot. If DefiLlama has not yet filled the last day, the build keeps the previous value, marked stale, rather than understating it.
 - **The window is short.** The 30-day comparison reflects one market regime. Weekly history starts on 1 Feb 2026.
 
-- **Network usage comes from NearBlocks, not BigQuery.** The daily build stays keyless, so it uses NearBlocks' daily charts for active accounts, transactions and contract activity. BigQuery (free sandbox, no billing account needed) is used for the one-off buyback trace in §2.7. The definitions are NearBlocks' own and are not formally documented, so the absolute levels should be read as NearBlocks-reported.
+- **Network usage comes from BigQuery from 1 Feb 2026, NearBlocks before that.** Active accounts, transactions and contract usage are computed with SQL on the BigQuery public dataset (§2.6), which matches NearBlocks exactly on accounts and transactions. The 2025 baseline and new-account counts still come from NearBlocks. If BigQuery is unavailable, the build falls back to NearBlocks and says so. The definitions are NearBlocks' own and are not formally documented, so the absolute levels should be read as NearBlocks-reported.
 
 ## 5. Findings that would invalidate the thesis
 
@@ -135,8 +159,9 @@ The claim "buybacks are not keeping pace with issuance" would be wrong, or would
 2. **Coverage reaches parity.** Proxy or verified coverage of 100% or more of issuance in three consecutive 30-day windows would mean buybacks are keeping pace.
 3. **Supply stops growing because of the buyback.** If purchased NEAR were burned, so that the 30-day total supply change fell to zero or below while issuance continued, the "held, not burned" point would no longer apply.
 4. **Undercounting is shown.** If other NEAR wallets were shown to hold buyback NEAR not captured by either measure, coverage would need restating.
-5. **Usage and Intents volume re-couple at a much higher level.** If NEAR's daily active accounts and transactions grew alongside Intents volume, the buyback base would be broader than this thesis assumes.
-6. **The parity gap closes.** HSP-029 taking effect on-chain (`max_inflation_rate` falling below 1/40), combined with volume or capture-rate growth, would close the gap if the simulator's required volume fell to the observed 30-day average.
+5. **Intents volume starts to lead usage.** A positive lead of 1–4 weeks above the noise band on both r and ρ (§2.8), holding over a longer history, would support the track hypothesis and widen the buyback's base.
+6. **Usage and Intents volume re-couple at a much higher level.** If NEAR's daily active accounts and transactions grew alongside Intents volume, the buyback base would be broader than this thesis assumes.
+7. **The parity gap closes.** HSP-029 taking effect on-chain (`max_inflation_rate` falling below 1/40), combined with volume or capture-rate growth, would close the gap if the simulator's required volume fell to the observed 30-day average.
 
 ## 6. Verified context
 
