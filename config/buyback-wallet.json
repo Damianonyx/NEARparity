@@ -1,0 +1,6 @@
+{
+  "account_id": "buybacks.multisignature.near",
+  "label": "unconfirmed wallet",
+  "official_source": null,
+  "reason": "Candidate supplied for access testing. An official NEAR or NEAR Intents source has not yet been verified. Balances and net accumulation do not establish purchases or burns."
+}
