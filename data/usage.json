@@ -1,7 +1,7 @@
 {
   "description": "Daily NEAR network usage as reported by NearBlocks (/v1/charts), complete UTC days since 2025-01-01. Field definitions are NearBlocks’ own.",
   "source": "https://api.nearblocks.io/v1/charts",
-  "updated_at": "2026-11-14T16:19:40.378Z",
+  "updated_at": "2026-11-14T16:21:24.632Z",
   "fields": [
     "txns",
     "active_accounts",
