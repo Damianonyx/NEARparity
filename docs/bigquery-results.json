@@ -140,6 +140,115 @@
       ],
       "bytes_processed": "34.71 GB",
       "duration": "2.1 s"
+    },
+    "04-hub-account-30d": {
+      "sql": "queries/bigquery/04-hub-account-30d.sql",
+      "result": [
+        {
+          "flow": "sent to other accounts",
+          "n": "31736",
+          "near": "17683629.242121173537530496012723"
+        },
+        {
+          "flow": "received from solver-priv-liq.near",
+          "n": "75428",
+          "near": "6526946.85418161140349199227749"
+        },
+        {
+          "flow": "received from 9e1bb7223262aa121140c89ab9b464e622929a173de874b35dd0b153f90c8db7",
+          "n": "2",
+          "near": "1442618"
+        },
+        {
+          "flow": "received from fc2624c899f96d549aadeb12ce129b39335a71058ae519c5d5d74ebce1af376a",
+          "n": "12",
+          "near": "982695"
+        },
+        {
+          "flow": "received from 20338d625dfd16affd2dcad8b28679af5b2bd19b51626de1736b788f5a54cb78",
+          "n": "1",
+          "near": "601744.117730026977982457914718"
+        },
+        {
+          "flow": "received from 1f84de4a9387495ff30d20a51b86ae3d5099f5c5f6683a420ddfc4d1256ae36c",
+          "n": "1",
+          "near": "438281.86"
+        },
+        {
+          "flow": "received from 6247d9c671ca6a80cf2c75e26edb8cd75ebf00fcd3c56c39107d6ca20c9cfb29",
+          "n": "253",
+          "near": "258659.103552207079686754760556"
+        },
+        {
+          "flow": "received from 1e05a0110376c52628aca3c976108d3a1712f6265c9a62acb935ebffc188b596",
+          "n": "2",
+          "near": "200000"
+        },
+        {
+          "flow": "received from 1b2ff1665c97c6174b522eab289cfe6ac5d411aed5c00187801da457e33b1cb4",
+          "n": "1",
+          "near": "133311.18"
+        },
+        {
+          "flow": "received from 9136e62396dd21cf2cf11348d0060ba65f658754bde011701e84e6be2653b0ec",
+          "n": "1",
+          "near": "128299.999999999999999999999997"
+        },
+        {
+          "flow": "received from d629abf0f5c45c98f7da442dea54a74ef4c28eec7a8cecf84bbbd552a57872df",
+          "n": "1",
+          "near": "112623.999999999999999999999999"
+        },
+        {
+          "flow": "received from bcbaba2176762242343d706f6833bbe5849ecceeaaeeef98056ba15793d2daac",
+          "n": "1",
+          "near": "110239.029666641"
+        },
+        {
+          "flow": "received from prod.sadgeaystar.near",
+          "n": "2",
+          "near": "100090"
+        },
+        {
+          "flow": "received from 6c281d1a80d3fdb08344d0a332e7b34693b519d18461de73984a9f0090a0897a",
+          "n": "1",
+          "near": "100000"
+        },
+        {
+          "flow": "received from d0b3a1f97d986501b08dcd254907e851266b84d594eaaedf520ce5f99327d3b3",
+          "n": "74",
+          "near": "87060.7046970813392849999999"
+        },
+        {
+          "flow": "received from 348751731e67aca6a1ed5b0a76bb77a75149761dae4d4862e9b8937f03480049",
+          "n": "1",
+          "near": "80000"
+        },
+        {
+          "flow": "received from eb3a91631ceb968388189351cfc9a9d521bcf29552ec098d8e841eb97deff542",
+          "n": "1",
+          "near": "79999.999999999999999999999999"
+        },
+        {
+          "flow": "received from 7a58371401366db841101605a141e2911ad626f38672f36488d6bd0c044a59e5",
+          "n": "15",
+          "near": "79982"
+        },
+        {
+          "flow": "received from ad36bee6be1516a5151a2bdc016078b59da868be739408f09f157ac7c861140a",
+          "n": "1",
+          "near": "73274.978594759768138085928998"
+        },
+        {
+          "flow": "received from a9fedab6f15409cbc208b5f08df2c772984793589f252006dbbda619076442a8",
+          "n": "1",
+          "near": "72000"
+        }
+      ],
+      "bytes_processed": "34.71 GB",
+      "duration": "1.4 s",
+      "note": "No swap (token_diff) rows and no mint/burn rows: the account made no swaps and no deposits/withdrawals of wNEAR in the window."
     }
-  }
+  },
+  "total_bytes_processed": "105.29 GB (plus 0.29 GB for the freshness and schema checks)"
 }

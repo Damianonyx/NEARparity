@@ -32,8 +32,9 @@ The contract below is enforced in CI by `node scripts/check-data.mjs`.
 | `simulator` | object | Formula, label, `defaults` (daily issuance, price, capture bps, allocation %, observed volume) and `default_result`. |
 | `series_weekly` | array | One row per 7-day bucket since 2026-02-01: `issuance_near`, `supply_change_near`, `derived_burns_near`, `buyback_proxy_near`, `wallet_net_near`, `wallet_internal_near`, `wallet_net_excl_internal_near`, `wallet_balance_end_near`, `verified_purchases_near` (always null), `intents_volume_usd`, `active_accounts_avg`, `txns_avg`, `active_contracts_avg`, `partial`, `days`. |
 | `wallet_transfers` | object | Summary of the wallet's transfers in the window (counts, counterparties, outbound list). |
+| `onchain_trace` | object or null | Summary of the BigQuery trace (`config/bigquery-trace.json`): window, run date, totals, funding sources, SQL and results paths. |
 | `official_dashboard` | object | revenue.near.org wallet breakdown vs on-chain holdings now, and the difference. |
-| `queries` | object | The query behind each section (`issuance`, `supply`, `intents`, `coverage`, `weekly`, `usage`, `simulator`): a list of `{ label, code }` with runnable requests using the actual blocks of this build. |
+| `queries` | object | The query behind each section (`issuance`, `supply`, `intents`, `coverage`, `trace`, `weekly`, `usage`, `simulator`; `trace` holds the BigQuery SQL): a list of `{ label, code }` with runnable requests using the actual blocks of this build. |
 | `sources` | array | Name, URL and use of every source. |
 
 ### Metric record
@@ -82,7 +83,8 @@ Every metric has the same shape:
 | `wallet_net_accumulation` | NEAR | measured | Change in the wallet's NEAR: native, wNEAR, wNEAR in intents.near, and staked |
 | `wallet_internal_transfers` | NEAR | measured | Net transfers in from NEAR's other listed revenue wallets |
 | `wallet_net_excl_internal` | NEAR | measured, derived | wallet_net_accumulation − wallet_internal_transfers |
-| `verified_purchases`, `coverage_verified` | NEAR, ratio | unavailable | No swap-level record (see the reason field) |
+| `verified_purchases`, `coverage_verified` | NEAR, ratio | measured (lower bound) | BigQuery on-chain trace: NEAR bought in swaps by the accounts that fund the wallet, and ÷ issuance of the same window. A fixed snapshot: `period_start`/`period_end` are the trace window, and `snapshot.window_matches_dashboard` says whether it equals `window`. Unavailable if `config/bigquery-trace.json` is absent. |
+| `trace_withdrawn_to_wallet`, `trace_untraced_near` | NEAR | measured | Same trace: NEAR delivered to the wallet by `native_withdraw` intents, and the part not matched to a swap. |
 | `coverage_proxy` | ratio | proxy | buyback_proxy_near ÷ issuance |
 | `coverage_wallet` | ratio | proxy | wallet_net_excl_internal ÷ issuance |
 | `usage_active_accounts`, `usage_txns`, `usage_active_contracts` | per day | measured (NearBlocks) | 30-day mean of NearBlocks' daily field; each carries `prior_value`, `prior_period_start/end` and `change_pct` against the previous 30 days |
