@@ -294,3 +294,12 @@ test('leading-indicator test: lagged correlations, noise band and verdict', asyn
   assert.match(leadVerdict(flat, flat, 'usage').text, /^Neither/);
   assert.equal(leadVerdict(flat, L, 'usage').supports_hypothesis, false);
 });
+
+test('parity simulator: tiny positive rates are out of range, never Infinity', () => {
+  const r = parityRequiredDailyVolume({ dailyIssuanceNear: 90_000, priceUsd: 3, captureRate: 1e-310, allocation: 1 });
+  assert.equal(r.finite, false); assert.equal(r.value, null); assert.match(r.reason, /Out of range/);
+  const big = parityRequiredDailyVolume({ dailyIssuanceNear: 90_000, priceUsd: 3, captureRate: 1e-12, allocation: 1 });
+  assert.equal(big.finite, false, '2.7e17 USD/day is beyond the display limit');
+  const ok = parityRequiredDailyVolume({ dailyIssuanceNear: 90_000, priceUsd: 3, captureRate: 0.0005, allocation: 1 });
+  assert.equal(ok.finite, true); assert.ok(Number.isFinite(ok.value));
+});

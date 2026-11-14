@@ -37,7 +37,7 @@ function pill(m) {
   if (!m) return [el('span', { class: 'pill pill-unavailable' }, 'unavailable')]; // always a list: callers spread it
   const label = m.derived ? 'measured · derived' : m.reported_by ? `${m.status} · ${m.reported_by}` : m.status;
   const frag = [el('span', { class: `pill pill-${m.status}`, title: m.reported_by ? `${statusHelp[m.status] || ''} Reported by ${m.reported_by} (third-party data).` : statusHelp[m.status] }, label)];
-  if (m.stale) frag.push(' ', el('span', { class: 'pill pill-stale', title: m.stale_reason || '' }, `stale since ${fmtDay(m.stale_since)}`));
+  if (m.stale) frag.push(' ', el('span', { class: 'pill pill-stale', title: m.stale_reason || '' }, m.period_start && m.period_end ? `stale · value for ${fmtDayShort(m.period_start)} – ${fmtDay(lastDay(m.period_end))}` : `stale since ${fmtDay(m.stale_since)}`));
   if (m.snapshot && !m.snapshot.window_matches_dashboard) frag.push(' ', el('span', { class: 'pill pill-stale', title: `One-off BigQuery trace run ${m.snapshot.run_on}; its window differs from the dashboard window.` }, `fixed window ${fmtDayShort(m.period_start)} – ${fmtDay(lastDay(m.period_end))}`));
   return frag;
 }
@@ -75,7 +75,7 @@ function renderAnswer(L) {
   box.textContent = '';
   const proxy = m.coverage_proxy; const wallet = m.coverage_wallet; const verified = m.coverage_verified;
   box.append(
-    el('p', { class: 'eyebrow' }, `Buyback coverage · ${fmtDay(L.window.start)} – ${fmtDay(lastDay(L.window.end))}`),
+    el('p', { class: 'eyebrow' }, `Buyback coverage · ${fmtDay(proxy?.period_start ?? L.window.start)} – ${fmtDay(lastDay(proxy?.period_end ?? L.window.end))}${proxy?.stale ? ' (previous window, stale)' : ''}`),
     el('div', { class: 'big' }, proxy?.value != null ? fmtPct(proxy.value) : 'Unavailable', ' ', ...pill(proxy)),
     el('p', { class: 'answer-line' }, 'of newly issued NEAR is matched by the revenue-based buyback proxy.'),
     el('p', { class: 'small muted' },
@@ -239,6 +239,8 @@ function setupSimulator(L) {
         el('span', { class: 'num' }, r.finite && obs ? `${nf2.format(r.value / obs)}×` : implied != null ? fmtPct(implied) : '—')),
     ));
     if (implied != null && r.finite) out.append(el('p', { class: 'small' }, `At the observed average volume and these inputs, purchases would equal ${fmtPct(implied)} of daily issuance. Conditional on the inputs; it says nothing about future volume, price or supply.`));
+    const pAvg = L.metrics?.price_avg?.value;
+    if (pAvg) out.append(el('p', { class: 'small muted' }, `Price assumption: ${nf2.format(price)} (default: today’s price). The hero illustration scales measured coverage, which converts each day’s revenue at that day’s price (window average ${nf2.format(pAvg)}); that is why its parity multiple differs from this one.`));
   }
   for (const i of Object.values(inputs)) i.addEventListener('input', compute);
   $('#sim-reset').addEventListener('click', reset);
@@ -356,11 +358,11 @@ function showTip(i, r, g) {
   const share = (v) => (v != null && r.issuance_near ? ` (${fmtPct(v / r.issuance_near)})` : '');
   tip.append(...[
     el('div', { class: 't' }, `${fmtDayShort(r.period_start)} – ${fmtDayShort(lastDay(r.period_end))}${r.partial ? ` · partial (${r.days} days)` : ''}`),
-    el('div', { class: 'r' }, el('span', {}, 'Issuance'), el('span', {}, fmtNear(r.issuance_near))),
-    el('div', { class: 'r' }, el('span', {}, 'Proxy'), el('span', {}, r.buyback_proxy_near != null ? fmtNear(r.buyback_proxy_near) + share(r.buyback_proxy_near) : 'unavailable')),
-    el('div', { class: 'r' }, el('span', {}, 'Wallet net*'), el('span', {}, walletVal(r) != null ? fmtNear(walletVal(r)) + share(walletVal(r)) : 'unavailable')),
+    el('div', { class: 'r' }, el('span', {}, 'Issuance'), el('span', {}, r.issuance_near != null ? fmtNear(r.issuance_near) + (r.chain_stale ? ' (stale)' : '') : `unavailable${r.chain_integrity_issue ? ` (${r.chain_integrity_issue})` : ''}`)),
+    el('div', { class: 'r' }, el('span', {}, 'Proxy'), el('span', {}, r.buyback_proxy_near != null ? fmtNear(r.buyback_proxy_near) + share(r.buyback_proxy_near) + (r.buyback_proxy_stale ? ' (stale)' : '') : 'unavailable')),
+    el('div', { class: 'r' }, el('span', {}, 'Wallet net*'), el('span', {}, walletVal(r) != null ? fmtNear(walletVal(r)) + share(walletVal(r)) + (r.wallet_stale ? ' (stale)' : '') : 'unavailable')),
     Math.abs(r.wallet_internal_near ?? 0) >= 1 ? el('div', { class: 'small' }, `*Excludes ${fmtNear(r.wallet_internal_near)} moved in from NEAR's other revenue wallets (raw change ${fmtNear(r.wallet_net_near)}).`) : null,
-    el('div', { class: 'r' }, el('span', {}, 'Supply change'), el('span', {}, fmtNear(r.supply_change_near))),
+    el('div', { class: 'r' }, el('span', {}, 'Supply change'), el('span', {}, r.supply_change_near != null ? fmtNear(r.supply_change_near) : 'unavailable')),
     META.wallet_created_at && r.period_end <= META.wallet_created_at ? el('div', { class: 'small' }, `Wallet created ${META.wallet_created_at.slice(0, 10)}; zero before.`) : null,
     META.holders_revenue_labelled_from && r.period_end.slice(0, 10) <= META.holders_revenue_labelled_from ? el('div', { class: 'small' }, `DefiLlama labels buyback revenue from ${META.holders_revenue_labelled_from}.`) : null,
   ].filter(Boolean));
@@ -738,7 +740,8 @@ function startHeroSim(L) {
     $('#ro-k').textContent = `${k.toFixed(1)}×`;
     $('#ro-cov').textContent = cov == null ? 'unavailable' : fmtPct(cov);
     $('#ro-parity').hidden = !(cov != null && cov >= 1);
-    $('#ro-need').textContent = kStar ? `Parity needs ≈${kStar.toFixed(1)}× today’s Intents volume (conditional; capture, allocation and price held fixed).` : 'Coverage unavailable.';
+    const pAvg = L?.metrics?.price_avg?.value;
+    $('#ro-need').textContent = kStar ? `The revenue proxy reaches parity at ≈${kStar.toFixed(1)}× today’s Intents volume, at the window’s average price${pAvg ? ` (${nf2.format(pAvg)})` : ''}; capture and allocation held fixed. The calculator below uses today’s price, so its multiple differs. Conditional, not a forecast.` : 'Coverage unavailable.';
   }
   // Pause the loop while the hero is off screen (battery); resume where it left off.
   let visible = true;

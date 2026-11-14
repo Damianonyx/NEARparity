@@ -4,7 +4,7 @@
 // simulated chain. No network access, no dependencies. Run: node scripts/test-integration.mjs
 import assert from 'node:assert/strict';
 import { spawnSync } from 'node:child_process';
-import { cp, mkdir, mkdtemp, readFile, readdir, rm } from 'node:fs/promises';
+import { cp, mkdir, mkdtemp, readFile, readdir, rm, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { test } from 'node:test';
@@ -13,13 +13,18 @@ import { BQ, CHAIN, USAGE, WALLET, existingIn, heightAt, missing, supplyAt } fro
 
 const ROOT = fileURLToPath(new URL('..', import.meta.url));
 const NOW = '2026-11-14T12:00:00.000Z';
-const dir = await mkdtemp(join(tmpdir(), 'near-parity-it-'));
-await cp(join(ROOT, 'scripts'), join(dir, 'scripts'), { recursive: true });
-await cp(join(ROOT, 'config'), join(dir, 'config'), { recursive: true });
-await mkdir(join(dir, 'data'), { recursive: true });
+async function makeDir() {
+  const d = await mkdtemp(join(tmpdir(), 'near-parity-it-'));
+  await cp(join(ROOT, 'scripts'), join(d, 'scripts'), { recursive: true });
+  await cp(join(ROOT, 'config'), join(d, 'config'), { recursive: true });
+  await mkdir(join(d, 'data'), { recursive: true });
+  return d;
+}
+const dir = await makeDir();
+const dirs = [dir];
 
-function build(env = {}) {
-  const r = spawnSync(process.execPath, ['--import', join(dir, 'scripts/fixtures/mock-network.mjs'), join(dir, 'scripts/build-data.mjs')], {
+function build(env = {}, d = dir) {
+  const r = spawnSync(process.execPath, ['--import', join(d, 'scripts/fixtures/mock-network.mjs'), join(d, 'scripts/build-data.mjs')], {
     // Never use a real Google sign-in from the test runs (the refresh job has an OIDC token): only the fakes in run 5+.
     env: { ...process.env, ACTIONS_ID_TOKEN_REQUEST_URL: '', ACTIONS_ID_TOKEN_REQUEST_TOKEN: '', NEAR_PARITY_GCP_TOKEN: '', NEAR_PARITY_FAST: '1', NEAR_PARITY_NOW: NOW, NEAR_PARITY_RPC_URLS: 'https://fake-archival.test,https://fake-fallback.test', ...env },
     encoding: 'utf8', timeout: 300_000,
@@ -27,7 +32,8 @@ function build(env = {}) {
   if (r.status !== 0 && r.status !== 2) console.error(r.stdout, r.stderr);
   return r;
 }
-const read = async (f) => JSON.parse(await readFile(join(dir, 'data', f), 'utf8'));
+const read = async (f, d = dir) => JSON.parse(await readFile(join(d, 'data', f), 'utf8'));
+const contract = (d) => spawnSync(process.execPath, [join(d, 'scripts/check-data.mjs'), join(d, 'data/latest.json')], { encoding: 'utf8' });
 
 // Independent expectations from the simulated chain.
 const lastBefore = (iso) => { let h = heightAt(Date.parse(iso) / 1000) - 1; while (missing(h)) h--; return h; };
@@ -102,10 +108,15 @@ test('run 1: fresh build from an empty data directory', async () => {
   assert.equal(S.sources.near_archival_rpc.ok, true);
 });
 
-test('run 2: backfill resumes; a missing last day keeps the previous value as stale', async () => {
+test('run 2: backfill resumes; a missing last day keeps the previous value as stale and the refresh is partial', async () => {
+  const before = await read('latest.json');
   const r = build({ MOCK_LLAMA_DROP_LAST_DAY: '1' });
-  assert.equal(r.status, 0, r.stdout.slice(-2000));
+  assert.equal(r.status, 2, 'HTTP 200 with the last day missing is an incomplete refresh');
   const L = await read('latest.json');
+  assert.equal(L.partial_refresh, true);
+  assert.equal(L.last_successful_refresh, before.last_successful_refresh, 'a partial run does not advance the success time');
+  assert.ok(L.notes.incomplete_metrics.includes('intents_holders_revenue'));
+  assert.equal((await read('status.json')).consecutive_partial_runs, 1);
   const T = await read('wallet-transfers.json');
   assert.equal(T.complete, true);
   assert.equal(L.meta.wallet_created_at, new Date((WALLET.created + 10) * 1000).toISOString(), 'creation date from the CREATE_ACCOUNT receipt');
@@ -125,7 +136,7 @@ test('run 3: a failed source is a partial refresh with stale values, never nulls
   assert.equal(L.metrics.issuance.stale, true);
   assert.equal(L.metrics.issuance.value_yocto, expIssuance.toString());
   assert.equal(L.last_successful_refresh, before.last_successful_refresh);
-  assert.equal((await read('status.json')).consecutive_partial_runs, 1);
+  assert.equal((await read('status.json')).consecutive_partial_runs, 2, 'run 2 and run 3 were both partial');
   assert.ok(Array.isArray(L.series_weekly) && L.series_weekly.length > 30);
 });
 
@@ -202,4 +213,63 @@ test('run 7: next day → queries one new day with the known accounts; sign-in f
   assert.match((await read('latest.json')).failed_groups.bigquery, /OIDC/);
 });
 
-test.after(() => rm(dir, { recursive: true, force: true }));
+// ---------- regressions from the external audit (each in a fresh workspace) ----------
+test('audit 1: no staking pools, empty cache → every boundary wallet record is fetched', async () => {
+  const d = await makeDir(); dirs.push(d);
+  const r = build({ MOCK_NO_STAKE: '1' }, d);
+  assert.ok([0, 2].includes(r.status), r.stdout.slice(-1500));
+  const B = await read('boundaries.json', d);
+  const missingWallet = Object.entries(B.boundaries).filter(([, b]) => !b.wallets?.[WALLET.id]);
+  assert.equal(missingWallet.length, 0, `${missingWallet.length} boundaries without a wallet record`);
+  const L = await read('latest.json', d);
+  assert.deepEqual(L.meta.staking_pools, []);
+  assert.equal(L.metrics.wallet_net_accumulation.status, 'measured');
+});
+
+test('audit 2: a missing epoch in the cache blocks publication of chain figures (no negative burns)', async () => {
+  const d = await makeDir(); dirs.push(d);
+  assert.equal(build({}, d).status, 0);
+  const good = await read('latest.json', d);
+  const E = await read('epochs.json', d);
+  const victim = E.records.findIndex((x) => x.start_time >= WIN.start && x.start_time < WIN.end) + 5;
+  E.records.splice(victim, 1);
+  await writeFile(join(d, 'data/epochs.json'), JSON.stringify(E));
+  const r = build({}, d);
+  assert.equal(r.status, 2, 'partial refresh');
+  const L = await read('latest.json', d);
+  assert.equal(L.partial_refresh, true);
+  assert.match(L.failed_groups.chain, /integrity check failed/);
+  assert.equal(L.metrics.issuance.stale, true); assert.equal(L.metrics.issuance.value_yocto, good.metrics.issuance.value_yocto, 'previous good value kept');
+  assert.ok(L.metrics.derived_burns.value >= 0, 'never a negative measured burn');
+  assert.ok(L.series_weekly.every((w) => w.derived_burns_near == null || w.derived_burns_near >= 0));
+  assert.equal(contract(d).status, 0, contract(d).stdout);
+});
+
+test('audit 3: next UTC day with revenue failing → stale coverage keeps its own dates; weekly values only for identical periods', async () => {
+  const d = await makeDir(); dirs.push(d);
+  assert.equal(build({}, d).status, 0);
+  const r = build({ NEAR_PARITY_NOW: '2026-11-15T12:00:00.000Z', NEAR_PARITY_SIMULATE_FAIL: 'llama_holders' }, d);
+  assert.equal(r.status, 2);
+  const L = await read('latest.json', d);
+  assert.equal(L.window.start, '2026-10-16T00:00:00.000Z');
+  const c = L.metrics.coverage_proxy;
+  assert.equal(c.stale, true); assert.equal(c.period_start, WIN.start, 'stale value carries its own (previous) window');
+  for (const w of L.series_weekly) if (w.buyback_proxy_stale) assert.equal(w.days, 7);
+  const last = L.series_weekly.at(-1);
+  assert.ok(!(last.partial && last.buyback_proxy_stale), 'a partial week never borrows a value from a different-length row');
+  assert.equal(contract(d).status, 0, contract(d).stdout);
+});
+
+test('audit 4: a malformed token amount is quarantined, never stored or counted as zero', async () => {
+  const d = await makeDir(); dirs.push(d);
+  build({ MOCK_BAD_FT: '1' }, d);
+  const T = await read('wallet-transfers.json', d);
+  const bad = T.ft_txns.find((f) => f.invalid);
+  assert.ok(bad && bad.delta_yocto === null, 'kept as null with an invalid flag');
+  assert.ok(!T.ft_txns.some((f) => f.delta_yocto === '0'));
+  const L = await read('latest.json', d);
+  assert.equal(L.metrics.wallet_internal_transfers.status, 'unavailable');
+  assert.match(L.metrics.wallet_internal_transfers.reason, /malformed/);
+});
+
+test.after(() => Promise.all(dirs.map((d) => rm(d, { recursive: true, force: true }))));

@@ -67,13 +67,16 @@ const slimTxn = (t) => ({
   actions: (t.actions || []).map((a) => (a.method ? `${a.action}:${a.method}` : a.action)),
   // NearBlocks returns receipt deposits as JSON floats: approximate, used for listing and internal-transfer netting.
   deposit_near_approx: (t.actions || []).reduce((s, a) => s + (Number(a.deposit) || 0), 0) / 1e24,
+  ...((t.actions || []).some((a) => a.deposit != null && !Number.isFinite(Number(a.deposit))) ? { invalid: 'malformed deposit' } : {}),
   success: t.outcomes?.status ?? null,
 });
 const slimFt = (t) => ({
   event_index: t.event_index, tx_hash: t.transaction_hash ?? null,
   time: new Date(Number(BigInt(t.block_timestamp) / 1_000_000n)).toISOString(),
   contract: t.ft?.contract ?? null, counterparty: t.involved_account_id ?? null, cause: t.cause ?? null,
-  delta_yocto: /^-?\d+$/.test(String(t.delta_amount)) ? String(t.delta_amount) : '0', // exact smallest units
+  // Exact smallest units. A malformed amount is kept as null and flagged, never turned into 0.
+  delta_yocto: /^-?\d+$/.test(String(t.delta_amount)) ? String(t.delta_amount) : null,
+  ...(/^-?\d+$/.test(String(t.delta_amount)) ? {} : { invalid: `malformed delta_amount: ${JSON.stringify(t.delta_amount)?.slice(0, 40)}` }),
 });
 
 /**

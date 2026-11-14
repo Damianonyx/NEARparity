@@ -27,18 +27,23 @@ export function internalTransfers({ txns = [], ftTxns = [], complete = false }, 
   if (!accountId) return null;
   const oldest = txns.at(-1)?.time;
   if (!complete && (!oldest || oldest > start)) return null;
-  let inbound = 0; let outbound = 0; let count = 0;
+  let inbound = 0; let outbound = 0; let count = 0; let ftNet = 0n; const invalid = [];
   for (const t of txns) {
     if (t.time < start || t.time >= end || t.success === false) continue;
+    if (t.invalid && ((t.to === accountId && related.has(t.from)) || (t.from === accountId && related.has(t.to)))) { invalid.push(t.receipt_id ?? t.tx_hash); continue; }
     if (t.to === accountId && related.has(t.from)) { inbound += t.deposit_near_approx; count++; }
     if (t.from === accountId && related.has(t.to)) { outbound += t.deposit_near_approx; count++; }
   }
   for (const f of ftTxns) {
     if (f.time < start || f.time >= end || f.contract !== 'wrap.near' || !related.has(f.counterparty)) continue;
-    const near = yoctoToNear(f.delta_yocto);
-    if (near >= 0) inbound += near; else outbound -= near;
+    if (f.invalid || f.delta_yocto == null) { invalid.push(f.event_index ?? f.tx_hash); continue; }
+    ftNet += BigInt(f.delta_yocto); // exact integer arithmetic for token amounts
     count++;
   }
+  // A malformed record that would enter the calculation makes it unavailable instead of silently wrong.
+  if (invalid.length) return { invalid };
+  const ft = yoctoToNear(ftNet);
+  if (ft >= 0) inbound += ft; else outbound -= ft;
   return { inbound, outbound, net: inbound - outbound, count };
 }
 
