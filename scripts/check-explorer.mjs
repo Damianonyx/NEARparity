@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 // Optional, key-gated check against the NEAR Intents Explorer API (1Click swaps index).
 // Asks two questions and saves the answer to docs/explorer-check.json:
-//   1. Does the index contain swaps by the buyback operator (the Intents account whose native_withdraw
-//      intents fund the buyback wallet)?
+//   1. Does the index contain swaps by an Intents account whose native_withdraw intents fund the buyback
+//      wallet? (Many accounts do; see docs/withdrawer-sample.json. Two more were searched by hand: 0 found.)
 //   2. Which 1Click transactions name the buyback wallet?
 // Needs a JWT from https://partners.near-intents.org/ (Key type: Explorer). Provide it as EXPLORER_JWT,
 // or run where a network proxy injects it. The API allows roughly one request per 30 s, so requests are spaced.

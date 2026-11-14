@@ -24,6 +24,7 @@
     "check:data": "node scripts/check-data.mjs",
     "check:apis": "node --use-env-proxy scripts/check-apis.mjs",
     "verify:claims": "node --use-env-proxy scripts/verify-claims.mjs",
-    "check:explorer": "node --use-env-proxy scripts/check-explorer.mjs"
+    "check:explorer": "node --use-env-proxy scripts/check-explorer.mjs",
+    "check:withdrawers": "node scripts/check-withdrawers.mjs"
   }
 }

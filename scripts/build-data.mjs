@@ -277,7 +277,7 @@ if (!M.wallet_net_accumulation) set('wallet_net_accumulation', ['chain'], unavai
 }
 set('verified_purchases', [], unavailable('NEAR', 'n/a', 'Would require swap records attributed to the buyback wallet.',
   wallet?.official_source
-    ? `The wallet is listed on an official source (${wallet.official_source.url}). Its inflows are native_withdraw intents from an operator account inside NEAR Intents; the swap legs inside Intents have no keyless public index, so purchases are not verified.`
+    ? `The wallet is listed on an official source (${wallet.official_source.url}). Its inflows are native_withdraw intents from many accounts inside NEAR Intents (docs/withdrawer-sample.json); the purchases happen in separate transactions with no keyless public index, so they are not verified.`
     : `The wallet (${wallet?.account_id ?? 'none'}) is not confirmed by an official source, and balance changes alone do not prove purchases.`));
 set('coverage_verified', [], unavailable('ratio', 'n/a', 'Verified NEAR purchased ÷ newly issued NEAR.', 'No verified purchase record exists: wallet inflows from intents.near do not show the swaps behind them.'));
 ratioMetric('coverage_proxy', ['llama_holders', 'price', 'chain'], 'buyback_proxy_near', 'issuance', 'ratio', 'Proxy: revenue-based buyback estimate (NEAR) ÷ measured issuance (NEAR), same 30 UTC days.', 'proxy');
@@ -321,7 +321,7 @@ if (transferHistory && wallet?.account_id) {
     inbound_count: inbound.length, outbound_count: outbound.length,
     inbound_by_counterparty: Object.fromEntries(Object.entries(byCounterparty).sort((a, b) => b[1].deposit_near_approx - a[1].deposit_near_approx).slice(0, 10)),
     outbound_recent: outbound.slice(0, 20), staking_pools: pools, stale: transfers ? undefined : true,
-    note: 'Inbound transfers from intents.near are native_withdraw intents from an operator account inside NEAR Intents; they are consistent with NEAR bought there, but transfers alone do not show the swap. Receipt amounts are approximate (NearBlocks floats).',
+    note: 'Inbound transfers from intents.near are native_withdraw intents from many accounts inside NEAR Intents; they are consistent with NEAR bought there, but transfers alone do not show the swap. Receipt amounts are approximate (NearBlocks floats).',
   };
 }
 

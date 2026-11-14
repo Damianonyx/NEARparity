@@ -82,5 +82,19 @@
       ]
     }
   ],
-  "reading": "The 1Click index has no transactions by the buyback operator: its buyback swaps happen inside NEAR Intents outside 1Click, so this API cannot verify them. Transactions naming the wallet are third-party 1Click transfers into it."
+  "reading": "The 1Click index has no transactions by the buyback operator: its buyback swaps happen inside NEAR Intents outside 1Click, so this API cannot verify them. Transactions naming the wallet are third-party 1Click transfers into it.",
+  "additional_searches": [
+    {
+      "checked_at": "2026-11-14T18:00:00Z",
+      "account": "5880ad2b362620fadf759cbceb1cd5737ce8c6ed7fb8e9942881e6731f9247dd",
+      "transactions_found": 0,
+      "note": "Top withdrawing account in docs/withdrawer-sample.json"
+    },
+    {
+      "checked_at": "2026-11-14T18:12:00Z",
+      "account": "143f2bb439575c286f4f585163f0e5fb4e464f8ce57ec06ae80741407d3cfb31",
+      "transactions_found": 0,
+      "note": "Second withdrawing account in docs/withdrawer-sample.json"
+    }
+  ]
 }

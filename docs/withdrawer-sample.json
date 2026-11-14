@@ -1,0 +1,880 @@
+{
+  "checked_at": "2026-11-14T18:09:14.525Z",
+  "method": "EXPERIMENTAL_tx_status on the archival RPC; dip4 native_withdraw and token_diff events in each inflow transaction",
+  "inflows_total": 3369,
+  "sampled": 120,
+  "withdrawals_read": 120,
+  "errors": 0,
+  "sample_period": [
+    "2026-04-23T16:20:51.992Z",
+    "2026-11-14T16:27:20.500Z"
+  ],
+  "distinct_withdrawing_accounts": 47,
+  "top_withdrawing_accounts": [
+    {
+      "account": "5880ad2b362620fadf759cbceb1cd5737ce8c6ed7fb8e9942881e6731f9247dd",
+      "withdrawals": 49
+    },
+    {
+      "account": "143f2bb439575c286f4f585163f0e5fb4e464f8ce57ec06ae80741407d3cfb31",
+      "withdrawals": 26
+    },
+    {
+      "account": "dc42da8182ff5c43e7c97d2ecfcf6469df6f330e2fcb932f9095cb0b063b9d72",
+      "withdrawals": 1
+    },
+    {
+      "account": "76c95a339a8fab7b14a9470ed50fc5a3f5c4933ca9a6a120a28b5d757d42f89d",
+      "withdrawals": 1
+    },
+    {
+      "account": "2349d0c027c161d4daf55a9058dce2e35bedff870463cbd1e3a544429d5b5fa7",
+      "withdrawals": 1
+    }
+  ],
+  "withdrawals_with_purchase_in_same_tx": 0,
+  "withdrawals_with_any_swap_in_same_tx": 42,
+  "reading": "Many different NEAR Intents accounts fund the wallet, and no sampled withdrawal carries its purchase in the same transaction (only dust swaps). The NEAR is bought earlier, in separate transactions that can only be found by searching every intents.near event by account (an indexer such as BigQuery), so purchases stay unverified.",
+  "rows": [
+    {
+      "tx_hash": "BuC2pzbhD1SVerEPW2BXTtbj1ncacsFXEz7mSqQGHBDb",
+      "time": "2026-04-23T16:20:51.992Z",
+      "withdrawing_account": "5880ad2b362620fadf759cbceb1cd5737ce8c6ed7fb8e9942881e6731f9247dd",
+      "withdrawn_near": 714.146375,
+      "wnear_from_swap_in_same_tx": 0.017217
+    },
+    {
+      "tx_hash": "4zn3D3uUeCTi2ZjdjcWnScLSbDcKcNnP1gUSmDTSqMm9",
+      "time": "2026-04-29T14:50:08.800Z",
+      "withdrawing_account": "5880ad2b362620fadf759cbceb1cd5737ce8c6ed7fb8e9942881e6731f9247dd",
+      "withdrawn_near": 1031.551765,
+      "wnear_from_swap_in_same_tx": 0.014854
+    },
+    {
+      "tx_hash": "Dk17UZZRmPwEFJ2gDFzUY49fmrxnnqZyhLyvPtdx1Afi",
+      "time": "2026-05-03T23:08:54.933Z",
+      "withdrawing_account": "5880ad2b362620fadf759cbceb1cd5737ce8c6ed7fb8e9942881e6731f9247dd",
+      "withdrawn_near": 1157.178357,
+      "wnear_from_swap_in_same_tx": 0.000343
+    },
+    {
+      "tx_hash": "2NrF1Deq3QSMjHiZ9Gj6NEpukuqYtAE6oQAzju7Bpxjn",
+      "time": "2026-05-06T20:43:06.365Z",
+      "withdrawing_account": "5880ad2b362620fadf759cbceb1cd5737ce8c6ed7fb8e9942881e6731f9247dd",
+      "withdrawn_near": 678.146354,
+      "wnear_from_swap_in_same_tx": 0.06717
+    },
+    {
+      "tx_hash": "DTXk9iUCyPMoEJ8QSB32bjUt4tHKMjKmbb9XwXL6GrsD",
+      "time": "2026-05-11T15:11:30.322Z",
+      "withdrawing_account": "5880ad2b362620fadf759cbceb1cd5737ce8c6ed7fb8e9942881e6731f9247dd",
+      "withdrawn_near": 854.914404,
+      "wnear_from_swap_in_same_tx": 0.23008
+    },
+    {
+      "tx_hash": "6QUcQd5qiugwKPqWwJnw1G4QLhnAK9xDp7tqxb7uv7eT",
+      "time": "2026-05-15T16:33:02.162Z",
+      "withdrawing_account": "5880ad2b362620fadf759cbceb1cd5737ce8c6ed7fb8e9942881e6731f9247dd",
+      "withdrawn_near": 860.91267,
+      "wnear_from_swap_in_same_tx": 0.001777
+    },
+    {
+      "tx_hash": "E8AtCf5naDdmSFehMTRh2MGDCLN5ctMidqWxH9xrVJWC",
+      "time": "2026-05-19T02:47:50.128Z",
+      "withdrawing_account": "5880ad2b362620fadf759cbceb1cd5737ce8c6ed7fb8e9942881e6731f9247dd",
+      "withdrawn_near": 629.455697,
+      "wnear_from_swap_in_same_tx": 0.077557
+    },
+    {
+      "tx_hash": "8mdhVwFpRcgkHbU2ZtaR78TfUMtdr5NJYMxh1DSGMdB8",
+      "time": "2026-05-22T07:19:20.714Z",
+      "withdrawing_account": "5880ad2b362620fadf759cbceb1cd5737ce8c6ed7fb8e9942881e6731f9247dd",
+      "withdrawn_near": 479.699393,
+      "wnear_from_swap_in_same_tx": 0.447965
+    },
+    {
+      "tx_hash": "6wxw3Etb7kRgvQgysLjRSUBAQMykxpTX57WAiHXozLbW",
+      "time": "2026-05-24T02:31:23.316Z",
+      "withdrawing_account": "5880ad2b362620fadf759cbceb1cd5737ce8c6ed7fb8e9942881e6731f9247dd",
+      "withdrawn_near": 508.586129,
+      "wnear_from_swap_in_same_tx": 0.000208
+    },
+    {
+      "tx_hash": "GzYRARCNdsME2u3rEQmGn46Q2rXUDpmV8kUA2mrCajcr",
+      "time": "2026-05-26T02:47:50.663Z",
+      "withdrawing_account": "5880ad2b362620fadf759cbceb1cd5737ce8c6ed7fb8e9942881e6731f9247dd",
+      "withdrawn_near": 387.107758,
+      "wnear_from_swap_in_same_tx": 0.001058
+    },
+    {
+      "tx_hash": "EbewtrGrvrFsg4KPRfWLBCVn9aFqStQYNQsEDU7EH4kP",
+      "time": "2026-05-27T18:24:57.371Z",
+      "withdrawing_account": "5880ad2b362620fadf759cbceb1cd5737ce8c6ed7fb8e9942881e6731f9247dd",
+      "withdrawn_near": 432.539953,
+      "wnear_from_swap_in_same_tx": 0.000157
+    },
+    {
+      "tx_hash": "6dRSkqSnZ5LwiQkbSYkMb3sc7h3RiZXWRT4udwpj8sMj",
+      "time": "2026-05-30T18:21:20.924Z",
+      "withdrawing_account": "143f2bb439575c286f4f585163f0e5fb4e464f8ce57ec06ae80741407d3cfb31",
+      "withdrawn_near": 465.875162,
+      "wnear_from_swap_in_same_tx": 0
+    },
+    {
+      "tx_hash": "BwKcDb3UYHqgwuwmKUPgi4FEcp6i1BzZ86Rfmf36XYUQ",
+      "time": "2026-06-01T21:36:38.564Z",
+      "withdrawing_account": "143f2bb439575c286f4f585163f0e5fb4e464f8ce57ec06ae80741407d3cfb31",
+      "withdrawn_near": 397.010469,
+      "wnear_from_swap_in_same_tx": 0.035354
+    },
+    {
+      "tx_hash": "685XT1v4dBi3kgXvGQayDRiaPw5SWKkD1eEBenqr189t",
+      "time": "2026-06-03T19:22:37.452Z",
+      "withdrawing_account": "5880ad2b362620fadf759cbceb1cd5737ce8c6ed7fb8e9942881e6731f9247dd",
+      "withdrawn_near": 488.805876,
+      "wnear_from_swap_in_same_tx": 0.010554
+    },
+    {
+      "tx_hash": "14ch4g5BWChhLnEc7SXwqx5nZskFHQvtYFx9GKtoRzBW",
+      "time": "2026-06-05T05:18:00.381Z",
+      "withdrawing_account": "5880ad2b362620fadf759cbceb1cd5737ce8c6ed7fb8e9942881e6731f9247dd",
+      "withdrawn_near": 1021.952829,
+      "wnear_from_swap_in_same_tx": 1.272252
+    },
+    {
+      "tx_hash": "2SkDGtRes9zf3S1VDUyB7GhMjGkcRn1G6tzGMhtcfQKr",
+      "time": "2026-06-06T01:36:43.004Z",
+      "withdrawing_account": "5880ad2b362620fadf759cbceb1cd5737ce8c6ed7fb8e9942881e6731f9247dd",
+      "withdrawn_near": 533.067473,
+      "wnear_from_swap_in_same_tx": 0.039717
+    },
+    {
+      "tx_hash": "DwGtRWDQWvPtd3u6jKy5H1BBQFdwt1fXUPuxB9n7BXiW",
+      "time": "2026-06-08T17:28:52.987Z",
+      "withdrawing_account": "5880ad2b362620fadf759cbceb1cd5737ce8c6ed7fb8e9942881e6731f9247dd",
+      "withdrawn_near": 521.784632,
+      "wnear_from_swap_in_same_tx": 0.000303
+    },
+    {
+      "tx_hash": "6HNY89UGe4H6r8afe7jXQhJKWgdvvGVuXXKmKTxvsxtq",
+      "time": "2026-06-11T19:31:13.171Z",
+      "withdrawing_account": "5880ad2b362620fadf759cbceb1cd5737ce8c6ed7fb8e9942881e6731f9247dd",
+      "withdrawn_near": 566.39336,
+      "wnear_from_swap_in_same_tx": 0.001205
+    },
+    {
+      "tx_hash": "GpPh9DgNycfT9Eh2rvq4xKCLUS1gkTzZFZTc4ozbcLHv",
+      "time": "2026-06-15T08:21:33.480Z",
+      "withdrawing_account": "5880ad2b362620fadf759cbceb1cd5737ce8c6ed7fb8e9942881e6731f9247dd",
+      "withdrawn_near": 675.727376,
+      "wnear_from_swap_in_same_tx": 0.000498
+    },
+    {
+      "tx_hash": "gyUikjKGZiMdk9ebkqrhDPeUyxsNTD11DaD55fmkx6V",
+      "time": "2026-06-18T09:44:38.237Z",
+      "withdrawing_account": "5880ad2b362620fadf759cbceb1cd5737ce8c6ed7fb8e9942881e6731f9247dd",
+      "withdrawn_near": 614.265868,
+      "wnear_from_swap_in_same_tx": 0.01213
+    },
+    {
+      "tx_hash": "FeAm3LCGw5deB2PSrZx3LmuMEQm4ijZkJYBTYgbEogbK",
+      "time": "2026-06-22T18:17:33.339Z",
+      "withdrawing_account": "5880ad2b362620fadf759cbceb1cd5737ce8c6ed7fb8e9942881e6731f9247dd",
+      "withdrawn_near": 498.643116,
+      "wnear_from_swap_in_same_tx": 0
+    },
+    {
+      "tx_hash": "6Bs1RMQDnHMH3fEbcWcfkARB9DNgUZDbmymVh5SedLZd",
+      "time": "2026-06-26T06:10:39.049Z",
+      "withdrawing_account": "5880ad2b362620fadf759cbceb1cd5737ce8c6ed7fb8e9942881e6731f9247dd",
+      "withdrawn_near": 557.558086,
+      "wnear_from_swap_in_same_tx": 0.002899
+    },
+    {
+      "tx_hash": "Bdmy19EVNyGAf2YHoCxxsHuWucnveYnqsEUURYEGcpxq",
+      "time": "2026-06-30T16:35:53.561Z",
+      "withdrawing_account": "143f2bb439575c286f4f585163f0e5fb4e464f8ce57ec06ae80741407d3cfb31",
+      "withdrawn_near": 676.507947,
+      "wnear_from_swap_in_same_tx": 0.542951
+    },
+    {
+      "tx_hash": "8529fKf17hGn82TBJ7RJRonzz2LrTqRv1i19vLsuqJKW",
+      "time": "2026-07-03T19:13:01.336Z",
+      "withdrawing_account": "143f2bb439575c286f4f585163f0e5fb4e464f8ce57ec06ae80741407d3cfb31",
+      "withdrawn_near": 518.759714,
+      "wnear_from_swap_in_same_tx": 0.035105
+    },
+    {
+      "tx_hash": "4qpRXcJeRZ4YhkQQseqGyTdh2iMK4E2LZ5iMYJgX55Nh",
+      "time": "2026-07-07T13:36:23.592Z",
+      "withdrawing_account": "5880ad2b362620fadf759cbceb1cd5737ce8c6ed7fb8e9942881e6731f9247dd",
+      "withdrawn_near": 545.706354,
+      "wnear_from_swap_in_same_tx": 0.081007
+    },
+    {
+      "tx_hash": "4nooF5iroKAZjfjW3BhvcMPPJi9VqgisUy823kXB56Tx",
+      "time": "2026-07-09T22:50:15.465Z",
+      "withdrawing_account": "5880ad2b362620fadf759cbceb1cd5737ce8c6ed7fb8e9942881e6731f9247dd",
+      "withdrawn_near": 562.007441,
+      "wnear_from_swap_in_same_tx": 0.000453
+    },
+    {
+      "tx_hash": "J68SgjLZ8t8UyL5ASS6zypT2DU2qJtMc2ZqqAgHu66eL",
+      "time": "2026-07-13T14:49:06.642Z",
+      "withdrawing_account": "143f2bb439575c286f4f585163f0e5fb4e464f8ce57ec06ae80741407d3cfb31",
+      "withdrawn_near": 527.63547,
+      "wnear_from_swap_in_same_tx": 0.004183
+    },
+    {
+      "tx_hash": "BMMmYwBq4mY2aasGkcizfhu9uFfmfNaLqnnUmmvxMsEX",
+      "time": "2026-07-16T00:57:44.498Z",
+      "withdrawing_account": "143f2bb439575c286f4f585163f0e5fb4e464f8ce57ec06ae80741407d3cfb31",
+      "withdrawn_near": 498.139821,
+      "wnear_from_swap_in_same_tx": 0
+    },
+    {
+      "tx_hash": "4Dq1sUaERtUUFAmEn3V6QK3mekg6vxEHMfC3bjfkpojW",
+      "time": "2026-07-18T14:26:28.402Z",
+      "withdrawing_account": "dc42da8182ff5c43e7c97d2ecfcf6469df6f330e2fcb932f9095cb0b063b9d72",
+      "withdrawn_near": 866.508627,
+      "wnear_from_swap_in_same_tx": 0
+    },
+    {
+      "tx_hash": "4nBpmCB81wPBwE79VgSL3MRgTFtuvmQ8WnddrcRESG2R",
+      "time": "2026-07-21T17:53:09.385Z",
+      "withdrawing_account": "76c95a339a8fab7b14a9470ed50fc5a3f5c4933ca9a6a120a28b5d757d42f89d",
+      "withdrawn_near": 575.509306,
+      "wnear_from_swap_in_same_tx": 0
+    },
+    {
+      "tx_hash": "GobHLgQjW3oH7aSN48XvDeEaixfdcUwVvDTRg5eKjQ3K",
+      "time": "2026-07-23T19:57:06.760Z",
+      "withdrawing_account": "143f2bb439575c286f4f585163f0e5fb4e464f8ce57ec06ae80741407d3cfb31",
+      "withdrawn_near": 571.483404,
+      "wnear_from_swap_in_same_tx": 0.352356
+    },
+    {
+      "tx_hash": "7Trf5RMFNeQ31HAUjQMy9HxCu9tYxmLRJVbBZkHrzdSS",
+      "time": "2026-07-27T23:15:14.022Z",
+      "withdrawing_account": "5880ad2b362620fadf759cbceb1cd5737ce8c6ed7fb8e9942881e6731f9247dd",
+      "withdrawn_near": 606.01543,
+      "wnear_from_swap_in_same_tx": 0.004587
+    },
+    {
+      "tx_hash": "Ey8hzoYqg1y2rs7Dje1aq8m4xy1QDqawTioupWaTDk3y",
+      "time": "2026-07-31T04:44:18.046Z",
+      "withdrawing_account": "5880ad2b362620fadf759cbceb1cd5737ce8c6ed7fb8e9942881e6731f9247dd",
+      "withdrawn_near": 674.781075,
+      "wnear_from_swap_in_same_tx": 0.006931
+    },
+    {
+      "tx_hash": "2heuZ7jHiEiujQ3tGqisSSNiJGP9QCc1VJ4kAjNGDNr4",
+      "time": "2026-08-04T06:50:05.968Z",
+      "withdrawing_account": "5880ad2b362620fadf759cbceb1cd5737ce8c6ed7fb8e9942881e6731f9247dd",
+      "withdrawn_near": 592.796766,
+      "wnear_from_swap_in_same_tx": 0.000216
+    },
+    {
+      "tx_hash": "93FgBZDnyPz8gDHzkNDECyUDX82zre9ixGLDDbSTTX3E",
+      "time": "2026-08-07T12:57:09.124Z",
+      "withdrawing_account": "5880ad2b362620fadf759cbceb1cd5737ce8c6ed7fb8e9942881e6731f9247dd",
+      "withdrawn_near": 848.336969,
+      "wnear_from_swap_in_same_tx": 0.003034
+    },
+    {
+      "tx_hash": "7wJh2QPe83tNJvfdZRJAJhHVgcpMUHK6NazdNxt4YYka",
+      "time": "2026-08-10T17:47:12.049Z",
+      "withdrawing_account": "5880ad2b362620fadf759cbceb1cd5737ce8c6ed7fb8e9942881e6731f9247dd",
+      "withdrawn_near": 662.539551,
+      "wnear_from_swap_in_same_tx": 0.002976
+    },
+    {
+      "tx_hash": "BQH4GpxUjvR1k7kRoZgmckf653EMHTsS4YBjM1zoywff",
+      "time": "2026-08-13T12:16:42.870Z",
+      "withdrawing_account": "2349d0c027c161d4daf55a9058dce2e35bedff870463cbd1e3a544429d5b5fa7",
+      "withdrawn_near": 609.310979,
+      "wnear_from_swap_in_same_tx": 0
+    },
+    {
+      "tx_hash": "AhZ8euMU2PRBWd9TdAxwaKRhbMMr3H9RrdEEdvcS8Ze9",
+      "time": "2026-08-17T15:28:19.055Z",
+      "withdrawing_account": "143f2bb439575c286f4f585163f0e5fb4e464f8ce57ec06ae80741407d3cfb31",
+      "withdrawn_near": 634.360432,
+      "wnear_from_swap_in_same_tx": 0
+    },
+    {
+      "tx_hash": "5RkNq1UMiwxEsLS9LwDRtuoLm2UvujAK8fzYyUNZ2Q5Y",
+      "time": "2026-08-19T15:02:48.747Z",
+      "withdrawing_account": "5880ad2b362620fadf759cbceb1cd5737ce8c6ed7fb8e9942881e6731f9247dd",
+      "withdrawn_near": 973.737959,
+      "wnear_from_swap_in_same_tx": 0
+    },
+    {
+      "tx_hash": "5CjLJBVx4ifs7gxCYuHJzV412axZBHJjQ1uvRBct3fuS",
+      "time": "2026-08-21T00:57:54.932Z",
+      "withdrawing_account": "dcac425ab9d3597dcc84a1a9d84072f1c9be422427052621c4de51c93f8cae3f",
+      "withdrawn_near": 611.285922,
+      "wnear_from_swap_in_same_tx": 0
+    },
+    {
+      "tx_hash": "H7HcA6YYuEbPcFroA8shGc88qgFQVuBtK8JSFhy42AjB",
+      "time": "2026-08-22T04:59:32.572Z",
+      "withdrawing_account": "143f2bb439575c286f4f585163f0e5fb4e464f8ce57ec06ae80741407d3cfb31",
+      "withdrawn_near": 763.641494,
+      "wnear_from_swap_in_same_tx": 0
+    },
+    {
+      "tx_hash": "61BnZBh7Q6DAP5UBEcKf6Kn873B2qRriCUD3twJ2gtjR",
+      "time": "2026-08-23T19:30:58.991Z",
+      "withdrawing_account": "143f2bb439575c286f4f585163f0e5fb4e464f8ce57ec06ae80741407d3cfb31",
+      "withdrawn_near": 576.960656,
+      "wnear_from_swap_in_same_tx": 0
+    },
+    {
+      "tx_hash": "Co1eALZtryTwE4txpMM1U8XE1cD2cpZW3qoApG4MRSg8",
+      "time": "2026-08-25T13:39:04.478Z",
+      "withdrawing_account": "143f2bb439575c286f4f585163f0e5fb4e464f8ce57ec06ae80741407d3cfb31",
+      "withdrawn_near": 629.333593,
+      "wnear_from_swap_in_same_tx": 4.160716
+    },
+    {
+      "tx_hash": "AmLYYmiTu1okpawompPw6SzadW7rsxz1g9x4vRiy4P8P",
+      "time": "2026-08-27T12:21:46.216Z",
+      "withdrawing_account": "143f2bb439575c286f4f585163f0e5fb4e464f8ce57ec06ae80741407d3cfb31",
+      "withdrawn_near": 549.363234,
+      "wnear_from_swap_in_same_tx": 0
+    },
+    {
+      "tx_hash": "3mye7gwZcbudQ19711vcmJRpoS8xxB27NZ2zY7KV47zL",
+      "time": "2026-08-29T15:27:49.882Z",
+      "withdrawing_account": "143f2bb439575c286f4f585163f0e5fb4e464f8ce57ec06ae80741407d3cfb31",
+      "withdrawn_near": 559.410852,
+      "wnear_from_swap_in_same_tx": 0
+    },
+    {
+      "tx_hash": "DMi3nrKcChSdQcoJ7tW7gHdoSj6w1GvzzTfqP8qLkWpf",
+      "time": "2026-08-31T18:47:38.881Z",
+      "withdrawing_account": "143f2bb439575c286f4f585163f0e5fb4e464f8ce57ec06ae80741407d3cfb31",
+      "withdrawn_near": 551.882008,
+      "wnear_from_swap_in_same_tx": 0.003592
+    },
+    {
+      "tx_hash": "ChmKP8q6BfHHeDxzMUWoLBjf8wpcKnCZmhW7VxwFmZL7",
+      "time": "2026-09-02T18:31:43.498Z",
+      "withdrawing_account": "5880ad2b362620fadf759cbceb1cd5737ce8c6ed7fb8e9942881e6731f9247dd",
+      "withdrawn_near": 549.568666,
+      "wnear_from_swap_in_same_tx": 0.002794
+    },
+    {
+      "tx_hash": "DDdHiTMrvZaW4swcAuHARyWb2zv6aWHSpLLJcgmz9sDC",
+      "time": "2026-09-03T18:33:24.698Z",
+      "withdrawing_account": "143f2bb439575c286f4f585163f0e5fb4e464f8ce57ec06ae80741407d3cfb31",
+      "withdrawn_near": 821.533094,
+      "wnear_from_swap_in_same_tx": 0
+    },
+    {
+      "tx_hash": "EXygRAu3FRJz3uS5YWGkJ2pyFu2djZGB1gWzFvQF6gwG",
+      "time": "2026-09-04T14:58:00.718Z",
+      "withdrawing_account": "5880ad2b362620fadf759cbceb1cd5737ce8c6ed7fb8e9942881e6731f9247dd",
+      "withdrawn_near": 578.965592,
+      "wnear_from_swap_in_same_tx": 0.001875
+    },
+    {
+      "tx_hash": "5mDLibD4zoa3GfAk49A83V2nRHTJnppLbNQKaDp4SS7G",
+      "time": "2026-09-05T07:29:07.428Z",
+      "withdrawing_account": "ba4725d5e6794a19ef9390e328d0a8438e9a3e6c8aaf88c4397801f01001f0b7",
+      "withdrawn_near": 462.860579,
+      "wnear_from_swap_in_same_tx": 0
+    },
+    {
+      "tx_hash": "EApQF5b68E1RvdrkTAFAunDZQ7eFFhVhrdS39eQE9Qkz",
+      "time": "2026-09-06T14:34:34.666Z",
+      "withdrawing_account": "e2452acadeb5a6a8232c7c12d7cbaedd56e848c7e1fe7cec413066d0f03dde14",
+      "withdrawn_near": 834.091279,
+      "wnear_from_swap_in_same_tx": 0
+    },
+    {
+      "tx_hash": "B54BuCQrFWC5JsgvHyacoDEc82pZ9LxUM6VxcxbK292T",
+      "time": "2026-09-07T19:33:35.256Z",
+      "withdrawing_account": "5880ad2b362620fadf759cbceb1cd5737ce8c6ed7fb8e9942881e6731f9247dd",
+      "withdrawn_near": 511.143796,
+      "wnear_from_swap_in_same_tx": 0
+    },
+    {
+      "tx_hash": "9265FFc1rpEFbfNKWR9b1Hh4NTaGZkWHv9RHESocZzeV",
+      "time": "2026-09-09T12:15:48.000Z",
+      "withdrawing_account": "2edbad908b17c0363e5c9c7fe0a4917da4b1173e403e565c1fa5e1437f7bdea9",
+      "withdrawn_near": 413.398347,
+      "wnear_from_swap_in_same_tx": 0
+    },
+    {
+      "tx_hash": "GMdvxkJQAn8nGuLA5BYYBrJSahrPyQwYQUrnrogJuQDZ",
+      "time": "2026-09-10T14:14:05.125Z",
+      "withdrawing_account": "5880ad2b362620fadf759cbceb1cd5737ce8c6ed7fb8e9942881e6731f9247dd",
+      "withdrawn_near": 419.626962,
+      "wnear_from_swap_in_same_tx": 0
+    },
+    {
+      "tx_hash": "HLCfsmxz6bNiJafNdfN6K3WUdUMNzzb6dexZsofLW31v",
+      "time": "2026-09-11T18:19:37.563Z",
+      "withdrawing_account": "143f2bb439575c286f4f585163f0e5fb4e464f8ce57ec06ae80741407d3cfb31",
+      "withdrawn_near": 413.969295,
+      "wnear_from_swap_in_same_tx": 0
+    },
+    {
+      "tx_hash": "9Q6HSNX9ou6HuWv7VtX6hA2CoMDpVumvMZ6cZYuPPZGU",
+      "time": "2026-09-13T17:09:26.606Z",
+      "withdrawing_account": "3bf791f22f7128dcf98362f3377a92f12ac4aa3c29e7a42d499cadc82e55eecf",
+      "withdrawn_near": 432.549291,
+      "wnear_from_swap_in_same_tx": 0
+    },
+    {
+      "tx_hash": "CmUycE2GmmmPYYcShcoPFQBR7QM84GQjZgkxM183vK7J",
+      "time": "2026-09-15T08:51:16.735Z",
+      "withdrawing_account": "5880ad2b362620fadf759cbceb1cd5737ce8c6ed7fb8e9942881e6731f9247dd",
+      "withdrawn_near": 449.940273,
+      "wnear_from_swap_in_same_tx": 0
+    },
+    {
+      "tx_hash": "EgmgM4SiccqdGc7fe6426U5eeZWbYmAayZs92ni3yWfB",
+      "time": "2026-09-16T14:14:11.100Z",
+      "withdrawing_account": "4fb33dd0cccd9a2364564051f71c1949e56e6f2983dbe8ce2b06c86bffe222f7",
+      "withdrawn_near": 485.272431,
+      "wnear_from_swap_in_same_tx": 0
+    },
+    {
+      "tx_hash": "WN57STvR38vCqzz12tFy8VMkLWpnK6kxcLA9fgWdepz",
+      "time": "2026-09-17T12:34:52.434Z",
+      "withdrawing_account": "5880ad2b362620fadf759cbceb1cd5737ce8c6ed7fb8e9942881e6731f9247dd",
+      "withdrawn_near": 492.234754,
+      "wnear_from_swap_in_same_tx": 0
+    },
+    {
+      "tx_hash": "BAjYT9fS4tEywYK76QHu95UK18StdUxrJXfJNGpiX3N9",
+      "time": "2026-09-18T00:29:33.691Z",
+      "withdrawing_account": "143f2bb439575c286f4f585163f0e5fb4e464f8ce57ec06ae80741407d3cfb31",
+      "withdrawn_near": 1043.531984,
+      "wnear_from_swap_in_same_tx": 7.484409
+    },
+    {
+      "tx_hash": "5h2vW5A7EeQSSXcA9EeXYoH6w5niSBLz5ff34jSvVgne",
+      "time": "2026-09-18T15:01:27.610Z",
+      "withdrawing_account": "f945aa273d950e6b1c0d27b213e9963722b44807073b3ee65297275a709b186b",
+      "withdrawn_near": 270.515143,
+      "wnear_from_swap_in_same_tx": 0
+    },
+    {
+      "tx_hash": "84qoKRuMRYodnXscv7eJv5SuxmQft91pPDmLYdJyo3ZH",
+      "time": "2026-09-19T10:30:17.647Z",
+      "withdrawing_account": "143f2bb439575c286f4f585163f0e5fb4e464f8ce57ec06ae80741407d3cfb31",
+      "withdrawn_near": 316.698323,
+      "wnear_from_swap_in_same_tx": 3.298056
+    },
+    {
+      "tx_hash": "Dnix2AYYjY2djJXUXdM3KS2rSrd5vwAyQuNjE8VYocv2",
+      "time": "2026-09-20T15:05:43.788Z",
+      "withdrawing_account": "5880ad2b362620fadf759cbceb1cd5737ce8c6ed7fb8e9942881e6731f9247dd",
+      "withdrawn_near": 276.204861,
+      "wnear_from_swap_in_same_tx": 0
+    },
+    {
+      "tx_hash": "BWMigqcXEDnZv3evZ17LqEdEPZn6veGiBXjfqaotg6nj",
+      "time": "2026-09-21T05:24:36.260Z",
+      "withdrawing_account": "90316d671966cc9ce2e954a65b1dc6612a7014d22dde270c3e45474f4e7ad819",
+      "withdrawn_near": 466.836631,
+      "wnear_from_swap_in_same_tx": 0
+    },
+    {
+      "tx_hash": "DsBQ6mcMNP43MQUKPLEi9J3Tq3vZwkVntsHy68TUmHZu",
+      "time": "2026-09-21T17:11:00.483Z",
+      "withdrawing_account": "143f2bb439575c286f4f585163f0e5fb4e464f8ce57ec06ae80741407d3cfb31",
+      "withdrawn_near": 307.960656,
+      "wnear_from_swap_in_same_tx": 0
+    },
+    {
+      "tx_hash": "FQf9G7ixz2hpKoH55pRKmbqa3iqLB7ASdxUPcWi3EhYM",
+      "time": "2026-09-22T09:24:38.794Z",
+      "withdrawing_account": "7b9d2e0d30b088e6024168648e27430bbb622c0dbca48f97bf8098b52c8803d4",
+      "withdrawn_near": 233.542281,
+      "wnear_from_swap_in_same_tx": 0
+    },
+    {
+      "tx_hash": "2Z1GPG5JFguwMoa4yz5yo79FF7mPBa8npFQ95hC1amH6",
+      "time": "2026-09-22T21:23:07.624Z",
+      "withdrawing_account": "5880ad2b362620fadf759cbceb1cd5737ce8c6ed7fb8e9942881e6731f9247dd",
+      "withdrawn_near": 703.665397,
+      "wnear_from_swap_in_same_tx": 0.019595
+    },
+    {
+      "tx_hash": "D3u8cwxTHxWidjdgZVm6i35s8PBvXK8q5U5EM7SAW6Vq",
+      "time": "2026-09-23T12:08:29.739Z",
+      "withdrawing_account": "61a02b1221ad089666f57a48271c88f6d75fd66589da3e9bf3a7844c95dad8ed",
+      "withdrawn_near": 220.83967,
+      "wnear_from_swap_in_same_tx": 0
+    },
+    {
+      "tx_hash": "HbT6qkvZSgqgUz3HcaVKDAUMmEx5cqk6p4c4hbAZKfLz",
+      "time": "2026-09-24T01:11:54.052Z",
+      "withdrawing_account": "5880ad2b362620fadf759cbceb1cd5737ce8c6ed7fb8e9942881e6731f9247dd",
+      "withdrawn_near": 288.12285,
+      "wnear_from_swap_in_same_tx": 0
+    },
+    {
+      "tx_hash": "EeBhYfGBSk7cLNX5qNqnhpqyyACG3rtnmsH5thXbajRu",
+      "time": "2026-09-24T13:56:49.724Z",
+      "withdrawing_account": "143f2bb439575c286f4f585163f0e5fb4e464f8ce57ec06ae80741407d3cfb31",
+      "withdrawn_near": 230.498182,
+      "wnear_from_swap_in_same_tx": 0
+    },
+    {
+      "tx_hash": "6LncNEqnkv6zEgpne5ckxoszs6U9da2LEWaJjzanmZbD",
+      "time": "2026-09-25T10:55:40.520Z",
+      "withdrawing_account": "faa64e6de14352ca101005575563f26ad5847e65e6ea347ac5497e9ad027b723",
+      "withdrawn_near": 353.98244,
+      "wnear_from_swap_in_same_tx": 0
+    },
+    {
+      "tx_hash": "H2C7uRs9JrM89UrBRqJcXHFWhsdiZUDam7GRiVauZ8Ar",
+      "time": "2026-09-25T23:48:57.018Z",
+      "withdrawing_account": "5f32b122b8253f2c4e6593feeeb2030d3ab58100c4bfcf6b5b553cba0441fa37",
+      "withdrawn_near": 214.308825,
+      "wnear_from_swap_in_same_tx": 0
+    },
+    {
+      "tx_hash": "8YbcweUmLh82jb8paUqJHzc4QXi7SCA4tPWAooSR67pN",
+      "time": "2026-09-27T06:00:28.793Z",
+      "withdrawing_account": "94a4f5c44e7cc5952fa571189ada28f9d5071ae45f102f2c79aea625035e34f4",
+      "withdrawn_near": 191.508913,
+      "wnear_from_swap_in_same_tx": 0
+    },
+    {
+      "tx_hash": "121xW4SjgxzfU8i1JhtKR8h7hA5k8SMCRNh6c5oqW5DF",
+      "time": "2026-09-28T07:10:55.322Z",
+      "withdrawing_account": "85f65c477cad5ed892ead45afc8b5bb22f4f97b8b67845f9d570bf8b03b83478",
+      "withdrawn_near": 324.711689,
+      "wnear_from_swap_in_same_tx": 0
+    },
+    {
+      "tx_hash": "H5XXE4MCjzuLzn6sN8VFXfZfuEFbr1PN5LM1bMLsNG2w",
+      "time": "2026-09-29T02:00:55.241Z",
+      "withdrawing_account": "5880ad2b362620fadf759cbceb1cd5737ce8c6ed7fb8e9942881e6731f9247dd",
+      "withdrawn_near": 538.582854,
+      "wnear_from_swap_in_same_tx": 0
+    },
+    {
+      "tx_hash": "FQsWowUdKwGfY4RsUAwh9YqH2EYSs179n1aZifTLv1vy",
+      "time": "2026-09-29T21:01:22.818Z",
+      "withdrawing_account": "143f2bb439575c286f4f585163f0e5fb4e464f8ce57ec06ae80741407d3cfb31",
+      "withdrawn_near": 213.233283,
+      "wnear_from_swap_in_same_tx": 0.000892
+    },
+    {
+      "tx_hash": "5Qq13f3RWJnr5YyWgJej5X6h1kQAPHJVngbnfMkm4xwh",
+      "time": "2026-09-30T13:18:19.717Z",
+      "withdrawing_account": "533d99a9b6505e082532d62adb3474a7fbf3f04537de2c310c1a6219799b6f1b",
+      "withdrawn_near": 498.23481,
+      "wnear_from_swap_in_same_tx": 0
+    },
+    {
+      "tx_hash": "3PVUtnBQ1wywSrisjrfbdykfC8L3btLRZdpDV2g999LD",
+      "time": "2026-10-01T13:14:12.423Z",
+      "withdrawing_account": "e802fc2e43caaa4a46140b55c0f6837f1d99328326c8510d673dc9a0c767059f",
+      "withdrawn_near": 221.500399,
+      "wnear_from_swap_in_same_tx": 0
+    },
+    {
+      "tx_hash": "B5J1BDWDZADbf9Em945RtWxuoXVucBhymsNLcGkg5AhJ",
+      "time": "2026-10-02T09:25:58.987Z",
+      "withdrawing_account": "038aabb1f13a74f33fb2ef6f26567039b49d6c478f31e1acca28953e7062b710",
+      "withdrawn_near": 243.029423,
+      "wnear_from_swap_in_same_tx": 0
+    },
+    {
+      "tx_hash": "7PkATXyviCZxdU7UjnhH9DQg8TbVaoMae226cKQw3td3",
+      "time": "2026-10-03T18:19:57.060Z",
+      "withdrawing_account": "3e6f93401f0c61b92fc453e5a269e7f9855fcb0ce16bb075047944036cb90ca2",
+      "withdrawn_near": 290.383508,
+      "wnear_from_swap_in_same_tx": 0
+    },
+    {
+      "tx_hash": "4qHhb6bnqugwPzqqMP18qi5gAW1uKV82CGGirk2Ucisx",
+      "time": "2026-10-05T12:07:17.105Z",
+      "withdrawing_account": "5880ad2b362620fadf759cbceb1cd5737ce8c6ed7fb8e9942881e6731f9247dd",
+      "withdrawn_near": 303.757001,
+      "wnear_from_swap_in_same_tx": 0
+    },
+    {
+      "tx_hash": "H82H9D2vuM6sybuLUpHu1vJ2GRj2TNicwaQiGrg2JpNi",
+      "time": "2026-10-06T16:01:04.474Z",
+      "withdrawing_account": "5a39a0b6351685a2b5069ebdefcf82615d7f13bc78270e1e8a1d42172e126d66",
+      "withdrawn_near": 488.382261,
+      "wnear_from_swap_in_same_tx": 0
+    },
+    {
+      "tx_hash": "Fuhg276jSwaM4VDtnzeBNAxhPzKP9hYYkaCGFajNWYtz",
+      "time": "2026-10-07T12:01:01.953Z",
+      "withdrawing_account": "aa44e433995b5399c8f657db167b3fe168dfe59653ed2bcb2381d4d1a6f82740",
+      "withdrawn_near": 253.522899,
+      "wnear_from_swap_in_same_tx": 0
+    },
+    {
+      "tx_hash": "BzPjMoF363MMRexEasw3QiALofZhip8XpbsqaqfpAc8f",
+      "time": "2026-10-08T07:16:32.542Z",
+      "withdrawing_account": "6f4b29a03d53627d1c2cb1f2b77c1b7b5bc21bf27b92731b26a1fedb0adc178f",
+      "withdrawn_near": 261.396095,
+      "wnear_from_swap_in_same_tx": 0
+    },
+    {
+      "tx_hash": "9KwJAGUHy2zmUmUK2zXhLAf6XR4kWmx2ZcRrqtSQKBqL",
+      "time": "2026-10-08T18:57:57.502Z",
+      "withdrawing_account": "e3c19bbe8f60abd05b16c2177a0c2e0df0f4bfc32f61fd0942346b1127f08e4c",
+      "withdrawn_near": 484.716241,
+      "wnear_from_swap_in_same_tx": 0
+    },
+    {
+      "tx_hash": "78o9hAMp253egFRbua67tJRDJ2wN73V2qnmHH6YwvgFH",
+      "time": "2026-10-09T09:09:59.702Z",
+      "withdrawing_account": "5880ad2b362620fadf759cbceb1cd5737ce8c6ed7fb8e9942881e6731f9247dd",
+      "withdrawn_near": 398.248431,
+      "wnear_from_swap_in_same_tx": 0
+    },
+    {
+      "tx_hash": "AjQo6oJyKUBFxpAo7tdwDR5x22d6MjyhaM98cN27GLE2",
+      "time": "2026-10-10T02:11:33.080Z",
+      "withdrawing_account": "143f2bb439575c286f4f585163f0e5fb4e464f8ce57ec06ae80741407d3cfb31",
+      "withdrawn_near": 365.194968,
+      "wnear_from_swap_in_same_tx": 0
+    },
+    {
+      "tx_hash": "2mQtwgj3omg1TZ8hjfapoEJ2KLZgNGjQ22FKioMY9UDo",
+      "time": "2026-10-11T07:06:29.901Z",
+      "withdrawing_account": "6e576f6e9274374d7b0b8d9b3548a6f35bcaae76d519b32781f183042887d0d2",
+      "withdrawn_near": 200.454483,
+      "wnear_from_swap_in_same_tx": 0
+    },
+    {
+      "tx_hash": "86yMFKoqd7Rdrd7ufv7Pd1XRLhordMQLTKCMfVBy9zjT",
+      "time": "2026-10-12T00:14:56.103Z",
+      "withdrawing_account": "5880ad2b362620fadf759cbceb1cd5737ce8c6ed7fb8e9942881e6731f9247dd",
+      "withdrawn_near": 171.21029,
+      "wnear_from_swap_in_same_tx": 0.667354
+    },
+    {
+      "tx_hash": "2QUbK3qC8SkjR1m7JSoXHUuvjHJYsUMdwEeEJtYVpEhy",
+      "time": "2026-10-12T20:58:23.224Z",
+      "withdrawing_account": "3d7ab36c72bc791dd946ef5383ca3bb2983526d9a269c9ba7a78440289f07d5a",
+      "withdrawn_near": 182.579829,
+      "wnear_from_swap_in_same_tx": 0
+    },
+    {
+      "tx_hash": "34XcXB16PQEZtkwZbCjQmkdFzNi1E4KNZ6VGbvmFE4Sa",
+      "time": "2026-10-13T20:12:42.484Z",
+      "withdrawing_account": "f13689bdab029c097c957983e667e510783e249e3e813df08303ecb4743f58c7",
+      "withdrawn_near": 202.560919,
+      "wnear_from_swap_in_same_tx": 0
+    },
+    {
+      "tx_hash": "5ixgd78R7Agrv5jq23oRzLGqFgKpQq9YZAUCuRmf7KmK",
+      "time": "2026-10-14T18:02:30.137Z",
+      "withdrawing_account": "bd43672a81088957ea9c0f60087538f0167a4cda72a77d9e70934e06065df548",
+      "withdrawn_near": 406.969075,
+      "wnear_from_swap_in_same_tx": 0
+    },
+    {
+      "tx_hash": "7S7CiHhgnx3KBmHozoLod4HREFHv4RAwULog1QRi7KT8",
+      "time": "2026-10-15T17:11:47.752Z",
+      "withdrawing_account": "143f2bb439575c286f4f585163f0e5fb4e464f8ce57ec06ae80741407d3cfb31",
+      "withdrawn_near": 367.985788,
+      "wnear_from_swap_in_same_tx": 0
+    },
+    {
+      "tx_hash": "2GzDDFG568quhRcrsp9TZCwRGXitoEVtuAcHBBpC3aEn",
+      "time": "2026-10-16T21:54:39.674Z",
+      "withdrawing_account": "5880ad2b362620fadf759cbceb1cd5737ce8c6ed7fb8e9942881e6731f9247dd",
+      "withdrawn_near": 219.494452,
+      "wnear_from_swap_in_same_tx": 0
+    },
+    {
+      "tx_hash": "Dbkb5dZwwGhy3WRzWwE6ZYUtPhRZW2fPeCcbZ6UApCyD",
+      "time": "2026-10-18T14:08:13.990Z",
+      "withdrawing_account": "40d6fd379580ed45b738e676ee41d8838fe2177fc2b23a18eccf82d936df4b5d",
+      "withdrawn_near": 536.220756,
+      "wnear_from_swap_in_same_tx": 0
+    },
+    {
+      "tx_hash": "4pWSnjYpBTDZgMbiYqWWETMygYWxmxuCjeWgSfMsfQka",
+      "time": "2026-10-19T17:54:45.178Z",
+      "withdrawing_account": "5880ad2b362620fadf759cbceb1cd5737ce8c6ed7fb8e9942881e6731f9247dd",
+      "withdrawn_near": 215.756314,
+      "wnear_from_swap_in_same_tx": 0
+    },
+    {
+      "tx_hash": "7nA4rVcRRrYKw6YTV7FBtwRQwLyAPoo1iCdUiqzTuvXM",
+      "time": "2026-10-20T21:31:52.532Z",
+      "withdrawing_account": "143f2bb439575c286f4f585163f0e5fb4e464f8ce57ec06ae80741407d3cfb31",
+      "withdrawn_near": 463.552937,
+      "wnear_from_swap_in_same_tx": 0
+    },
+    {
+      "tx_hash": "CyKDAj49bsjGGhXx8WWyBrEErzQvJefGBxhkUGdRiUSP",
+      "time": "2026-10-21T17:51:12.408Z",
+      "withdrawing_account": "5880ad2b362620fadf759cbceb1cd5737ce8c6ed7fb8e9942881e6731f9247dd",
+      "withdrawn_near": 205.258625,
+      "wnear_from_swap_in_same_tx": 0.000665
+    },
+    {
+      "tx_hash": "4ktyeEWhmmytm9S17bWiJQDov5X6gvEmGUtAxqbUavkA",
+      "time": "2026-10-22T15:40:31.179Z",
+      "withdrawing_account": "c90c39129d56dbddac78b8fccd0ddbbadc41f1a4bc5dbe97fe1d2859aac3392b",
+      "withdrawn_near": 375.198297,
+      "wnear_from_swap_in_same_tx": 0
+    },
+    {
+      "tx_hash": "12GdCHTJojr9DUapwgUZJqyjifTuSk8TQwJgLz4vEhWh",
+      "time": "2026-10-23T23:29:51.992Z",
+      "withdrawing_account": "5880ad2b362620fadf759cbceb1cd5737ce8c6ed7fb8e9942881e6731f9247dd",
+      "withdrawn_near": 300.872768,
+      "wnear_from_swap_in_same_tx": 0
+    },
+    {
+      "tx_hash": "BxaEgxwUXJ6jS6JxW786sRTBkRW4jaf5AE5VthNcxRU2",
+      "time": "2026-10-25T08:05:55.055Z",
+      "withdrawing_account": "793ac1eb5538a9bc200d37221d26d009dcce4de3a0b3e13794a54a38b90719d3",
+      "withdrawn_near": 235.833008,
+      "wnear_from_swap_in_same_tx": 0
+    },
+    {
+      "tx_hash": "7mcE1AYjXNKkefomCoxg7xnG6F7aF9AZ2z5JwGkyYoW4",
+      "time": "2026-10-26T05:53:20.020Z",
+      "withdrawing_account": "fac1377ab3b112aa1584fd3b3a87f80e2b3a21c21f47fac5f6f86e3a5a0fec9f",
+      "withdrawn_near": 235.398524,
+      "wnear_from_swap_in_same_tx": 0
+    },
+    {
+      "tx_hash": "CCWpeoPhV8MsM3jtvHEWeCkPFa8PP4B6uF5qTGWABpb3",
+      "time": "2026-10-26T20:46:45.025Z",
+      "withdrawing_account": "ebbccca78b60ebaa2088fd7cc58b7a56f4042e56a9e94b7bc219e3e5d2bea76e",
+      "withdrawn_near": 236.21127,
+      "wnear_from_swap_in_same_tx": 0
+    },
+    {
+      "tx_hash": "7P9tyo6DWR2T9rQtdcYrTh5e2J7LAkcevDwVH8Np8HBf",
+      "time": "2026-10-27T16:13:14.947Z",
+      "withdrawing_account": "143f2bb439575c286f4f585163f0e5fb4e464f8ce57ec06ae80741407d3cfb31",
+      "withdrawn_near": 252.123514,
+      "wnear_from_swap_in_same_tx": 0
+    },
+    {
+      "tx_hash": "HVzC3U3FJFqHqwxNaP1HhZDmjQ5UtQK3MCUkvrGbMDhD",
+      "time": "2026-10-28T14:56:07.715Z",
+      "withdrawing_account": "5880ad2b362620fadf759cbceb1cd5737ce8c6ed7fb8e9942881e6731f9247dd",
+      "withdrawn_near": 225.988554,
+      "wnear_from_swap_in_same_tx": 0
+    },
+    {
+      "tx_hash": "Ce6sA83ic9dCTXCPagtf2yfvRaT4BFR6UybAxPrXqeFW",
+      "time": "2026-10-29T15:23:26.192Z",
+      "withdrawing_account": "f3ff787488ba173597afb535838feae84e9d9375b8a9c8b3628dd2fce80d9015",
+      "withdrawn_near": 412.793485,
+      "wnear_from_swap_in_same_tx": 0
+    },
+    {
+      "tx_hash": "BkoQcHY6fgdW1u1FF3KpgtEkhk7ZYQtGESz13tYeTvQi",
+      "time": "2026-10-30T01:47:05.731Z",
+      "withdrawing_account": "143f2bb439575c286f4f585163f0e5fb4e464f8ce57ec06ae80741407d3cfb31",
+      "withdrawn_near": 508.111163,
+      "wnear_from_swap_in_same_tx": 62.631759
+    },
+    {
+      "tx_hash": "GvC7Lfqsdi9bmpC6UhwzEaSMVoULZisQp55gkKYaGvSj",
+      "time": "2026-10-30T17:44:00.161Z",
+      "withdrawing_account": "6f01f7e7d275bdf861abdc3716394065d960e331a4b5e1c1c9559d8815c84e0e",
+      "withdrawn_near": 289.200507,
+      "wnear_from_swap_in_same_tx": 0
+    },
+    {
+      "tx_hash": "796PWR5y9fhdAHUF6KLvUgDSQ95NULwGEwVhLxpF4sME",
+      "time": "2026-10-31T18:23:00.631Z",
+      "withdrawing_account": "5880ad2b362620fadf759cbceb1cd5737ce8c6ed7fb8e9942881e6731f9247dd",
+      "withdrawn_near": 597.505775,
+      "wnear_from_swap_in_same_tx": 0
+    },
+    {
+      "tx_hash": "9NGJLCqoMNwUVqseGU3PefTbWqubD4DwrgP8Ta6pHKkh",
+      "time": "2026-11-02T05:47:06.349Z",
+      "withdrawing_account": "aee0a368e3c09c9bc559b4a147ea2cc468c65ce5f3249c80cedcc8a9455c3bda",
+      "withdrawn_near": 274.990608,
+      "wnear_from_swap_in_same_tx": 0
+    },
+    {
+      "tx_hash": "34Fahz3sBcaePcYU5zsGbyymZpDoDLUP8rGb6DaL1qyd",
+      "time": "2026-11-03T12:53:09.741Z",
+      "withdrawing_account": "76f7d32aecdd991e210692e97102b4719103394fd3cf7935c6b28e1ce96ddf3b",
+      "withdrawn_near": 384.979361,
+      "wnear_from_swap_in_same_tx": 0
+    },
+    {
+      "tx_hash": "DHUn5cb5n3PZVSTgfC2zusk8hxsRPrN5ryNwLnk6m2Uh",
+      "time": "2026-11-04T16:48:54.169Z",
+      "withdrawing_account": "2772edd39c294f1bf79d1934be4835dfd3f715808940576f3174aa9617e58245",
+      "withdrawn_near": 267.678859,
+      "wnear_from_swap_in_same_tx": 0
+    },
+    {
+      "tx_hash": "FW9pahcg8BjRXzQ2mhjwkqE7sC9bNDgxGxQS3RQUg89x",
+      "time": "2026-11-06T00:14:39.049Z",
+      "withdrawing_account": "15aaeaa8ba02639f1a81270a1819af4db07d990363287c6adf25b4f192dd4020",
+      "withdrawn_near": 337.207418,
+      "wnear_from_swap_in_same_tx": 0
+    },
+    {
+      "tx_hash": "C8w3f4PFp7BrqBzHReZDM35oWr6F2aazQ4AdyeexLE9H",
+      "time": "2026-11-07T00:51:03.166Z",
+      "withdrawing_account": "0c5ce6664b6f9287f37d196b721994d59851ce98871ba46c2b031f335dcf8387",
+      "withdrawn_near": 303.862259,
+      "wnear_from_swap_in_same_tx": 0
+    },
+    {
+      "tx_hash": "31VxiUbaxAuVMYyNpH8k5sfmxqSzwnDF1dr6oA91L3eD",
+      "time": "2026-11-08T22:06:19.032Z",
+      "withdrawing_account": "e904f6473857371d1488fe4f029a87baa1f3511d6d5ca28c70f61610b76a8d67",
+      "withdrawn_near": 938.237804,
+      "wnear_from_swap_in_same_tx": 0
+    },
+    {
+      "tx_hash": "FTbTaNBPxB3jTCdbYiPeZkMs5GQWWBKtSuhY9j19Adzy",
+      "time": "2026-11-09T19:06:49.879Z",
+      "withdrawing_account": "5880ad2b362620fadf759cbceb1cd5737ce8c6ed7fb8e9942881e6731f9247dd",
+      "withdrawn_near": 398.559912,
+      "wnear_from_swap_in_same_tx": 0
+    },
+    {
+      "tx_hash": "HvKfibZ2CKUyjkBaNDnaCB3VLGPcejpxEogU6zbFRvvN",
+      "time": "2026-11-11T00:58:34.643Z",
+      "withdrawing_account": "5880ad2b362620fadf759cbceb1cd5737ce8c6ed7fb8e9942881e6731f9247dd",
+      "withdrawn_near": 317.84414,
+      "wnear_from_swap_in_same_tx": 0
+    },
+    {
+      "tx_hash": "5PJPhMX93nLnN4Ez4dtDPDGT6cDkSifJErt5bpNge2mr",
+      "time": "2026-11-12T08:57:29.241Z",
+      "withdrawing_account": "3f02ced22b9e16003003c2c174c81f4c18816dda7e7f2e69f1b2178191b91754",
+      "withdrawn_near": 1152.92332,
+      "wnear_from_swap_in_same_tx": 0
+    },
+    {
+      "tx_hash": "8xUrUGQkxbBnm92iw6QsvEeUuftsH6CcoCCuaENhX9fJ",
+      "time": "2026-11-13T05:52:18.702Z",
+      "withdrawing_account": "a72dffe798f9c27f7535a419953481e648b0dffabe8c0e1f5f6b125916d4aacc",
+      "withdrawn_near": 299.820715,
+      "wnear_from_swap_in_same_tx": 0
+    },
+    {
+      "tx_hash": "6H9mrNeVZWFcrULvFmE9eeW8vppPwpVSoxoegLKWnLEA",
+      "time": "2026-11-14T16:27:20.500Z",
+      "withdrawing_account": "d9d65b40535cc891267b90a8ed6814c6cbc77b91dd22f756c35c804ecc3dcb69",
+      "withdrawn_near": 328.628043,
+      "wnear_from_swap_in_same_tx": 0
+    }
+  ]
+}
