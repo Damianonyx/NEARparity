@@ -195,6 +195,15 @@ async function probeOfficialWalletSource() {
         i = text.indexOf(wallet.account_id, i + 1);
       }
     }
+    // Visible text around the first mention in the page (tags stripped), to read headings and labels.
+    const first = html.indexOf(wallet.account_id);
+    if (first > -1) {
+      result.page_text_context = html.slice(Math.max(0, first - 6000), first + 1500)
+        .replace(/<script[\s\S]*?<\/script>/g, ' ').replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim().slice(-2500);
+      console.log(`Visible text before/around the first mention:\n  ${result.page_text_context}`);
+    }
+    const headings = [...html.matchAll(/<h[1-4][^>]*>([\s\S]*?)<\/h[1-4]>/g)].map((m) => m[1].replace(/<[^>]+>/g, '').trim()).filter(Boolean);
+    console.log(`Page headings: ${JSON.stringify(headings)}`);
     console.log(`Searched ${texts.length} documents (page + same-origin scripts).`);
     for (const m of result.mentions) console.log(`Mention in ${m.source}:\n  ${JSON.stringify(m.context)}`);
     requireShape(result.mentions.length > 0, 'Account not found in page or same-origin scripts (may be loaded from another API)');
