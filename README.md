@@ -1,5 +1,7 @@
 # NEAR Parity
 
+![NEAR Parity: are NEAR Intents buybacks keeping pace with new NEAR issuance?](og-image.png)
+
 [![CI](https://github.com/Damianonyx/NEARparity/actions/workflows/ci.yml/badge.svg)](https://github.com/Damianonyx/NEARparity/actions/workflows/ci.yml)
 [![Refresh data](https://github.com/Damianonyx/NEARparity/actions/workflows/refresh.yml/badge.svg)](https://github.com/Damianonyx/NEARparity/actions/workflows/refresh.yml)
 [![License: MIT](https://img.shields.io/badge/license-MIT-black.svg)](LICENSE)
