@@ -7,19 +7,40 @@
   <meta name="description" content="Are NEAR Intents buybacks keeping pace with new NEAR issuance? Measured issuance, Intents economics, buyback coverage and supply change, with transparent calculations.">
   <meta name="color-scheme" content="light dark">
   <link rel="stylesheet" href="style.css">
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='16' rx='3' fill='%23111'/%3E%3Cpath d='M4 11h8M4 8h8M4 5h8' stroke='%23fff' stroke-width='1.5'/%3E%3C/svg%3E">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='-1 -1 9 9' shape-rendering='crispEdges'%3E%3Crect x='-1' y='-1' width='9' height='9' fill='%23fff'/%3E%3Cpath d='M0 1h7v2H0zM0 4h7v2H0z' fill='%23111'/%3E%3C/svg%3E">
 </head>
 <body>
   <a class="skip" href="#main">Skip to content</a>
-  <header class="site">
-    <div class="wrap">
-      <div class="brand-row">
-        <p class="brand">NEAR Parity</p>
-        <button id="theme-toggle" class="ghost" type="button" aria-label="Toggle dark mode">Theme</button>
+  <header class="hero">
+    <nav class="topnav wrap-wide" aria-label="Sections">
+      <a class="logo" href="#top" aria-label="NEAR Parity, top">
+        <svg viewBox="0 0 7 7" width="21" height="21" aria-hidden="true" shape-rendering="crispEdges"><path d="M0 1h7v2H0zM0 4h7v2H0z"/></svg>
+        <span>NEAR PARITY</span>
+      </a>
+      <ul class="navlinks">
+        <li><a href="#answer">Numbers</a></li>
+        <li><a href="#simulator">Simulator</a></li>
+        <li><a href="#chart-h">Chart</a></li>
+        <li><a href="#claims-h">Evidence</a></li>
+        <li><a href="#sources-h">Sources</a></li>
+      </ul>
+      <button id="theme-toggle" class="ghost" type="button" aria-label="Toggle dark mode">Theme</button>
+    </nav>
+    <div class="hero-grid wrap-wide" id="top">
+      <div class="hero-copy">
+        <h1 class="pixel-title"><span class="sr-only">NEAR Parity</span><span id="pixel-title" aria-hidden="true"></span></h1>
+        <p class="hero-q">Are NEAR Intents buybacks keeping pace with new NEAR issuance?</p>
+        <p class="hero-lede">Measured issuance, Intents revenue, buyback evidence and actual supply change, with every calculation shown. Buybacks do not automatically reduce supply: purchased NEAR can sit in a treasury wallet, and matching issuance would not establish zero inflation or price appreciation.</p>
+        <div class="hero-cta">
+          <a class="btn" href="#answer">See the numbers</a>
+          <a class="btn-link" href="#cards-h">How it's calculated <span aria-hidden="true">›</span></a>
+        </div>
+        <p class="meta" id="refresh-meta">Loading data…</p>
       </div>
-      <h1>Are NEAR Intents buybacks keeping pace with new NEAR issuance?</h1>
-      <p class="lede">A research dashboard comparing newly minted NEAR with Intents revenue, buyback evidence and actual supply change. Buybacks do not automatically reduce supply: purchased NEAR can sit in a treasury wallet. Matching issuance with purchases would not establish zero inflation or price appreciation.</p>
-      <p class="meta" id="refresh-meta">Loading data…</p>
+      <figure class="hero-art">
+        <div id="scale-art" class="scale-art" role="img" aria-label="Scanline illustration of a balance scale weighing newly issued NEAR against the buyback proxy"></div>
+        <figcaption id="scale-caption">Scale drawn from the latest data.</figcaption>
+      </figure>
     </div>
   </header>
 
