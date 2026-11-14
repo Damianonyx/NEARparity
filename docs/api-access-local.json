@@ -1,0 +1,489 @@
+{
+  "started_at": "2026-11-14T11:15:42.905Z",
+  "completed_at": "2026-11-14T11:15:45.934Z",
+  "node_version": "v22.23.5",
+  "requested_price_window": {
+    "period_start": "2026-10-15T00:00:00.000Z",
+    "period_end": "2026-11-14T00:00:00.000Z"
+  },
+  "wallet": {
+    "account_id": "buybacks.multisignature.near",
+    "label": "unconfirmed wallet",
+    "official_source": null,
+    "reason": "Candidate supplied for access testing. An official NEAR or NEAR Intents source has not yet been verified. Balances and net accumulation do not establish purchases or burns."
+  },
+  "results": [
+    {
+      "name": "CoinGecko: daily NEAR price fallback",
+      "url": "https://api.coingecko.com/api/v3/coins/near/market_chart?vs_currency=usd&days=30&interval=daily",
+      "method": "GET",
+      "request": null,
+      "fetched_at": "2026-11-14T11:15:42.927Z",
+      "http_status": 200,
+      "status": "ok",
+      "error": null,
+      "response_preview": "{\"prices\":[[1792108800000,5.257478171188409],[1792195200000,5.060826870899352],[1792281600000,4.856513264288132],[1792368000000,5.007467606309968],[1792454400000,4.899896640657338],[1792540800000,4.923929210042525],[1792627200000,5.26112213879386],[1792713600000,4.878253373145789],[1792800000000,4.6"
+    },
+    {
+      "name": "DefiLlama: Intents swap volume",
+      "url": "https://api.llama.fi/summary/dexs/near-intents",
+      "method": "GET",
+      "request": null,
+      "fetched_at": "2026-11-14T11:15:42.917Z",
+      "http_status": 200,
+      "status": "ok",
+      "error": null,
+      "response_preview": "{\"id\":\"6225\",\"name\":\"NEAR Intents\",\"address\":null,\"symbol\":\"NEAR\",\"url\":\"https://near.com/\",\"description\":\"NEAR Intents are a new type of transaction that allow information, requests, assets, and actions to be exchanged between AI agents, services, and end users\",\"chain\":\"Near\",\"logo\":\"https://icons"
+    },
+    {
+      "name": "FastNEAR mainnet: block (final)",
+      "url": "https://rpc.mainnet.fastnear.com",
+      "method": "POST",
+      "request": {
+        "jsonrpc": "2.0",
+        "id": "near-parity-access-check",
+        "method": "block",
+        "params": {
+          "finality": "final"
+        }
+      },
+      "fetched_at": "2026-11-14T11:15:42.905Z",
+      "http_status": 200,
+      "status": "ok",
+      "error": null,
+      "response_preview": "{\"jsonrpc\":\"2.0\",\"result\":{\"author\":\"zavodil.poolv1.near\",\"chunks\":[{\"balance_burnt\":\"7396743341279200000000\",\"bandwidth_requests\":{\"V1\":{\"requests\":[]}},\"chunk_hash\":\"DoY4SULqn9efVP7r32fayCTJvVdVf9zb1RMNVTrQzm9T\",\"congestion_info\":{\"allowed_shard\":4,\"buffered_receipts_gas\":\"0\",\"delayed_receipts_gas"
+    },
+    {
+      "name": "FastNEAR archival: block (final)",
+      "url": "https://archival-rpc.mainnet.fastnear.com",
+      "method": "POST",
+      "request": {
+        "jsonrpc": "2.0",
+        "id": "near-parity-access-check",
+        "method": "block",
+        "params": {
+          "finality": "final"
+        }
+      },
+      "fetched_at": "2026-11-14T11:15:42.915Z",
+      "http_status": 200,
+      "status": "ok",
+      "error": null,
+      "response_preview": "{\"jsonrpc\":\"2.0\",\"result\":{\"author\":\"zavodil.poolv1.near\",\"chunks\":[{\"balance_burnt\":\"7396743341279200000000\",\"bandwidth_requests\":{\"V1\":{\"requests\":[]}},\"chunk_hash\":\"DoY4SULqn9efVP7r32fayCTJvVdVf9zb1RMNVTrQzm9T\",\"congestion_info\":{\"allowed_shard\":4,\"buffered_receipts_gas\":\"0\",\"delayed_receipts_gas"
+    },
+    {
+      "name": "FastNEAR archival: validators (current epoch)",
+      "url": "https://archival-rpc.mainnet.fastnear.com",
+      "method": "POST",
+      "request": {
+        "jsonrpc": "2.0",
+        "id": "near-parity-access-check",
+        "method": "validators",
+        "params": [
+          null
+        ]
+      },
+      "fetched_at": "2026-11-14T11:15:43.501Z",
+      "http_status": 200,
+      "status": "ok",
+      "error": null,
+      "response_preview": "{\"jsonrpc\":\"2.0\",\"result\":{\"current_fishermen\":[],\"current_proposals\":[{\"account_id\":\"00aboo203.pool.near\",\"public_key\":\"ed25519:2dJjJWXgvSG6iMbLFnhjrZhttrznxS225Wfq8Ffqz3Up\",\"stake\":\"40013022548056771234573984285\",\"validator_stake_struct_version\":\"V1\"},{\"account_id\":\"01node.poolv1.near\",\"public_key"
+    },
+    {
+      "name": "FastNEAR mainnet: validators (current epoch)",
+      "url": "https://rpc.mainnet.fastnear.com",
+      "method": "POST",
+      "request": {
+        "jsonrpc": "2.0",
+        "id": "near-parity-access-check",
+        "method": "validators",
+        "params": [
+          null
+        ]
+      },
+      "fetched_at": "2026-11-14T11:15:43.478Z",
+      "http_status": 200,
+      "status": "ok",
+      "error": null,
+      "response_preview": "{\"jsonrpc\":\"2.0\",\"result\":{\"current_fishermen\":[],\"current_proposals\":[{\"account_id\":\"00aboo203.pool.near\",\"public_key\":\"ed25519:2dJjJWXgvSG6iMbLFnhjrZhttrznxS225Wfq8Ffqz3Up\",\"stake\":\"40013022548056771234573984285\",\"validator_stake_struct_version\":\"V1\"},{\"account_id\":\"01node.poolv1.near\",\"public_key"
+    },
+    {
+      "name": "NearBlocks: txns (unconfirmed wallet; first page only)",
+      "url": "https://api.nearblocks.io/v1/account/buybacks.multisignature.near/txns?page=1&per_page=1",
+      "method": "GET",
+      "request": null,
+      "fetched_at": "2026-11-14T11:15:42.927Z",
+      "http_status": 200,
+      "status": "ok",
+      "error": null,
+      "response_preview": "{\"cursor\":\"24953065165\",\"txns\":[{\"id\":\"24953065165\",\"receipt_id\":\"6ji6PyNma9bqU9tEJhZBTUaM9i5y2J6v6HzHXwWoMffZ\",\"predecessor_account_id\":\"intents.near\",\"receiver_account_id\":\"buybacks.multisignature.near\",\"receipt_kind\":\"ACTION\",\"receipt_block\":{\"block_hash\":\"C9gAKi839oa7w46748Uxb3DV6nsW8eSZp8wAc8Vz"
+    },
+    {
+      "name": "FastNEAR mainnet: EXPERIMENTAL_protocol_config (final)",
+      "url": "https://rpc.mainnet.fastnear.com",
+      "method": "POST",
+      "request": {
+        "jsonrpc": "2.0",
+        "id": "near-parity-access-check",
+        "method": "EXPERIMENTAL_protocol_config",
+        "params": {
+          "finality": "final"
+        }
+      },
+      "fetched_at": "2026-11-14T11:15:43.831Z",
+      "http_status": 200,
+      "status": "ok",
+      "error": null,
+      "response_preview": "{\"jsonrpc\":\"2.0\",\"result\":{\"block_producer_kickout_threshold\":80,\"chain_id\":\"mainnet\",\"chunk_producer_kickout_threshold\":80,\"chunk_validator_only_kickout_threshold\":70,\"dynamic_resharding\":false,\"epoch_length\":43200,\"fishermen_threshold\":\"340282366920938463463374607431768211455\",\"gas_limit\":10000000"
+    },
+    {
+      "name": "DefiLlama: daily NEAR price chart",
+      "url": "https://coins.llama.fi/chart/coingecko:near?start=1792022400&span=30&period=1d&searchWidth=600",
+      "method": "GET",
+      "request": null,
+      "fetched_at": "2026-11-14T11:15:42.926Z",
+      "http_status": 200,
+      "status": "ok",
+      "error": null,
+      "response_preview": "{\"coins\":{\"coingecko:near\":{\"symbol\":\"NEAR\",\"confidence\":0.99,\"prices\":[{\"timestamp\":1792022400,\"price\":4.881085155891693},{\"timestamp\":1792108800,\"price\":5.256841821770708},{\"timestamp\":1792195200,\"price\":5.060826870899352},{\"timestamp\":1792281600,\"price\":4.856513264288132},{\"timestamp\":1792368000,"
+    },
+    {
+      "name": "FastNEAR mainnet final: query view_account (unconfirmed wallet)",
+      "url": "https://rpc.mainnet.fastnear.com",
+      "method": "POST",
+      "request": {
+        "jsonrpc": "2.0",
+        "id": "near-parity-access-check",
+        "method": "query",
+        "params": {
+          "request_type": "view_account",
+          "account_id": "buybacks.multisignature.near",
+          "finality": "final"
+        }
+      },
+      "fetched_at": "2026-11-14T11:15:43.940Z",
+      "http_status": 200,
+      "status": "ok",
+      "error": null,
+      "response_preview": "{\"jsonrpc\":\"2.0\",\"result\":{\"amount\":\"2281071567219708014434593357342\",\"block_hash\":\"FdVdqZ2QvjEm9qU5YqGR7jBS7f5qf5Kwo2MZk1j6YdY6\",\"block_height\":224506259,\"code_hash\":\"2v9kZJHN4sogHuKtKHaqYAqQBazkqH2cjY1rrjQYvNQa\",\"locked\":\"0\",\"storage_paid_at\":0,\"storage_usage\":356468},\"id\":\"near-parity-access-chec"
+    },
+    {
+      "name": "NearBlocks: ft-txns (unconfirmed wallet; first page only)",
+      "url": "https://api.nearblocks.io/v1/account/buybacks.multisignature.near/ft-txns?page=1&per_page=1",
+      "method": "GET",
+      "request": null,
+      "fetched_at": "2026-11-14T11:15:43.850Z",
+      "http_status": 200,
+      "status": "ok",
+      "error": null,
+      "response_preview": "{\"cursor\":\"17832951238845625000000000051000001\",\"txns\":[{\"event_index\":\"17832951238845625000000000051000001\",\"affected_account_id\":\"buybacks.multisignature.near\",\"involved_account_id\":\"kvshnir.tg\",\"delta_amount\":\"69000000000000000000\",\"cause\":\"TRANSFER\",\"transaction_hash\":\"B5vYwQLZ1qjLFGfjoEoXTSh86U"
+    },
+    {
+      "name": "FastNEAR mainnet final: query wrap.near.ft_balance_of (unconfirmed wallet)",
+      "url": "https://rpc.mainnet.fastnear.com",
+      "method": "POST",
+      "request": {
+        "jsonrpc": "2.0",
+        "id": "near-parity-access-check",
+        "method": "query",
+        "params": {
+          "request_type": "call_function",
+          "account_id": "wrap.near",
+          "method_name": "ft_balance_of",
+          "args_base64": "eyJhY2NvdW50X2lkIjoiYnV5YmFja3MubXVsdGlzaWduYXR1cmUubmVhciJ9",
+          "finality": "final"
+        }
+      },
+      "fetched_at": "2026-11-14T11:15:44.033Z",
+      "http_status": 200,
+      "status": "ok",
+      "error": null,
+      "response_preview": "{\"jsonrpc\":\"2.0\",\"result\":{\"block_hash\":\"FdVdqZ2QvjEm9qU5YqGR7jBS7f5qf5Kwo2MZk1j6YdY6\",\"block_height\":224506259,\"logs\":[],\"result\":[34,48,34]},\"id\":\"near-parity-access-check\"}"
+    },
+    {
+      "name": "FastNEAR archival: EXPERIMENTAL_protocol_config (final)",
+      "url": "https://archival-rpc.mainnet.fastnear.com",
+      "method": "POST",
+      "request": {
+        "jsonrpc": "2.0",
+        "id": "near-parity-access-check",
+        "method": "EXPERIMENTAL_protocol_config",
+        "params": {
+          "finality": "final"
+        }
+      },
+      "fetched_at": "2026-11-14T11:15:43.725Z",
+      "http_status": 200,
+      "status": "ok",
+      "error": null,
+      "response_preview": "{\"jsonrpc\":\"2.0\",\"result\":{\"block_producer_kickout_threshold\":80,\"chain_id\":\"mainnet\",\"chunk_producer_kickout_threshold\":80,\"chunk_validator_only_kickout_threshold\":70,\"dynamic_resharding\":false,\"epoch_length\":43200,\"fishermen_threshold\":\"340282366920938463463374607431768211455\",\"gas_limit\":10000000"
+    },
+    {
+      "name": "DefiLlama: current NEAR price",
+      "url": "https://coins.llama.fi/prices/current/coingecko:near",
+      "method": "GET",
+      "request": null,
+      "fetched_at": "2026-11-14T11:15:43.974Z",
+      "http_status": 200,
+      "status": "ok",
+      "error": null,
+      "response_preview": "{\"coins\":{\"coingecko:near\":{\"price\":3.3268031999999996,\"symbol\":\"NEAR\",\"timestamp\":1794654942,\"confidence\":0.999}}}"
+    },
+    {
+      "name": "FastNEAR archival final: query view_account (unconfirmed wallet)",
+      "url": "https://archival-rpc.mainnet.fastnear.com",
+      "method": "POST",
+      "request": {
+        "jsonrpc": "2.0",
+        "id": "near-parity-access-check",
+        "method": "query",
+        "params": {
+          "request_type": "view_account",
+          "account_id": "buybacks.multisignature.near",
+          "finality": "final"
+        }
+      },
+      "fetched_at": "2026-11-14T11:15:44.139Z",
+      "http_status": 200,
+      "status": "ok",
+      "error": null,
+      "response_preview": "{\"jsonrpc\":\"2.0\",\"result\":{\"amount\":\"2281071567219708014434593357342\",\"block_hash\":\"FdVdqZ2QvjEm9qU5YqGR7jBS7f5qf5Kwo2MZk1j6YdY6\",\"block_height\":224506259,\"code_hash\":\"2v9kZJHN4sogHuKtKHaqYAqQBazkqH2cjY1rrjQYvNQa\",\"locked\":\"0\",\"storage_paid_at\":0,\"storage_usage\":356468},\"id\":\"near-parity-access-chec"
+    },
+    {
+      "name": "FastNEAR mainnet final: query intents.near.mt_balance_of (unconfirmed wallet)",
+      "url": "https://rpc.mainnet.fastnear.com",
+      "method": "POST",
+      "request": {
+        "jsonrpc": "2.0",
+        "id": "near-parity-access-check",
+        "method": "query",
+        "params": {
+          "request_type": "call_function",
+          "account_id": "intents.near",
+          "method_name": "mt_balance_of",
+          "args_base64": "eyJhY2NvdW50X2lkIjoiYnV5YmFja3MubXVsdGlzaWduYXR1cmUubmVhciIsInRva2VuX2lkIjoibmVwMTQxOndyYXAubmVhciJ9",
+          "finality": "final"
+        }
+      },
+      "fetched_at": "2026-11-14T11:15:44.138Z",
+      "http_status": 200,
+      "status": "ok",
+      "error": null,
+      "response_preview": "{\"jsonrpc\":\"2.0\",\"result\":{\"block_hash\":\"FdVdqZ2QvjEm9qU5YqGR7jBS7f5qf5Kwo2MZk1j6YdY6\",\"block_height\":224506259,\"logs\":[],\"result\":[34,48,34]},\"id\":\"near-parity-access-check\"}"
+    },
+    {
+      "name": "FastNEAR archival final: query wrap.near.ft_balance_of (unconfirmed wallet)",
+      "url": "https://archival-rpc.mainnet.fastnear.com",
+      "method": "POST",
+      "request": {
+        "jsonrpc": "2.0",
+        "id": "near-parity-access-check",
+        "method": "query",
+        "params": {
+          "request_type": "call_function",
+          "account_id": "wrap.near",
+          "method_name": "ft_balance_of",
+          "args_base64": "eyJhY2NvdW50X2lkIjoiYnV5YmFja3MubXVsdGlzaWduYXR1cmUubmVhciJ9",
+          "finality": "final"
+        }
+      },
+      "fetched_at": "2026-11-14T11:15:44.241Z",
+      "http_status": 200,
+      "status": "ok",
+      "error": null,
+      "response_preview": "{\"jsonrpc\":\"2.0\",\"result\":{\"block_hash\":\"FdVdqZ2QvjEm9qU5YqGR7jBS7f5qf5Kwo2MZk1j6YdY6\",\"block_height\":224506259,\"logs\":[],\"result\":[34,48,34]},\"id\":\"near-parity-access-check\"}"
+    },
+    {
+      "name": "DefiLlama: dailyFees",
+      "url": "https://api.llama.fi/summary/fees/near-intents?dataType=dailyFees",
+      "method": "GET",
+      "request": null,
+      "fetched_at": "2026-11-14T11:15:43.382Z",
+      "http_status": 200,
+      "status": "ok",
+      "error": null,
+      "response_preview": "{\"id\":\"6225\",\"name\":\"NEAR Intents\",\"address\":null,\"symbol\":\"NEAR\",\"url\":\"https://near.com/\",\"description\":\"NEAR Intents are a new type of transaction that allow information, requests, assets, and actions to be exchanged between AI agents, services, and end users\",\"chain\":\"Near\",\"logo\":\"https://icons"
+    },
+    {
+      "name": "FastNEAR archival final: query intents.near.mt_balance_of (unconfirmed wallet)",
+      "url": "https://archival-rpc.mainnet.fastnear.com",
+      "method": "POST",
+      "request": {
+        "jsonrpc": "2.0",
+        "id": "near-parity-access-check",
+        "method": "query",
+        "params": {
+          "request_type": "call_function",
+          "account_id": "intents.near",
+          "method_name": "mt_balance_of",
+          "args_base64": "eyJhY2NvdW50X2lkIjoiYnV5YmFja3MubXVsdGlzaWduYXR1cmUubmVhciIsInRva2VuX2lkIjoibmVwMTQxOndyYXAubmVhciJ9",
+          "finality": "final"
+        }
+      },
+      "fetched_at": "2026-11-14T11:15:44.337Z",
+      "http_status": 200,
+      "status": "ok",
+      "error": null,
+      "response_preview": "{\"jsonrpc\":\"2.0\",\"result\":{\"block_hash\":\"5hXgfL4oDDkrvTxB1muwPg3L3Fyv2MoDy3sTZ1iSGtKM\",\"block_height\":224506260,\"logs\":[],\"result\":[34,48,34]},\"id\":\"near-parity-access-check\"}"
+    },
+    {
+      "name": "FastNEAR archival: block (epoch_start_height)",
+      "url": "https://archival-rpc.mainnet.fastnear.com",
+      "method": "POST",
+      "request": {
+        "jsonrpc": "2.0",
+        "id": "near-parity-access-check",
+        "method": "block",
+        "params": {
+          "block_id": 224481137
+        }
+      },
+      "fetched_at": "2026-11-14T11:15:44.424Z",
+      "http_status": 200,
+      "status": "ok",
+      "error": null,
+      "response_preview": "{\"jsonrpc\":\"2.0\",\"result\":{\"author\":\"x.poolv1.near\",\"chunks\":[{\"balance_burnt\":\"103171157480500000000\",\"bandwidth_requests\":{\"V1\":{\"requests\":[]}},\"chunk_hash\":\"5TJb2uZQ882Ff8NpuLDFaHPCSBFCxFEJXkt5rLvb9EfC\",\"congestion_info\":{\"allowed_shard\":7,\"buffered_receipts_gas\":\"0\",\"delayed_receipts_gas\":\"0\",\""
+    },
+    {
+      "name": "FastNEAR archival: block (boundary prev_hash)",
+      "url": "https://archival-rpc.mainnet.fastnear.com",
+      "method": "POST",
+      "request": {
+        "jsonrpc": "2.0",
+        "id": "near-parity-access-check",
+        "method": "block",
+        "params": {
+          "block_id": "HrjtXTcwMkpGwgbQqNJih2BMPbNmaTeuSTpCbHzPFwvd"
+        }
+      },
+      "fetched_at": "2026-11-14T11:15:44.611Z",
+      "http_status": 200,
+      "status": "ok",
+      "error": null,
+      "response_preview": "{\"jsonrpc\":\"2.0\",\"result\":{\"author\":\"stakesabai.poolv1.near\",\"chunks\":[{\"balance_burnt\":\"154725741806000000000\",\"bandwidth_requests\":{\"V1\":{\"requests\":[]}},\"chunk_hash\":\"4WGp51ybCHv4iCYRirbCFYSpJ9WyENGMDX58Q24EQ9MF\",\"congestion_info\":{\"allowed_shard\":6,\"buffered_receipts_gas\":\"0\",\"delayed_receipts_g"
+    },
+    {
+      "name": "FastNEAR archival: validators (previous epoch via prev_hash)",
+      "url": "https://archival-rpc.mainnet.fastnear.com",
+      "method": "POST",
+      "request": {
+        "jsonrpc": "2.0",
+        "id": "near-parity-access-check",
+        "method": "validators",
+        "params": [
+          "HrjtXTcwMkpGwgbQqNJih2BMPbNmaTeuSTpCbHzPFwvd"
+        ]
+      },
+      "fetched_at": "2026-11-14T11:15:44.809Z",
+      "http_status": 200,
+      "status": "ok",
+      "error": null,
+      "response_preview": "{\"jsonrpc\":\"2.0\",\"result\":{\"current_fishermen\":[],\"current_proposals\":[{\"account_id\":\"00aboo203.pool.near\",\"public_key\":\"ed25519:2dJjJWXgvSG6iMbLFnhjrZhttrznxS225Wfq8Ffqz3Up\",\"stake\":\"40011433206824447340700391124\",\"validator_stake_struct_version\":\"V1\"},{\"account_id\":\"01node.poolv1.near\",\"public_key"
+    },
+    {
+      "name": "FastNEAR archival: EXPERIMENTAL_protocol_config (boundary prev_hash)",
+      "url": "https://archival-rpc.mainnet.fastnear.com",
+      "method": "POST",
+      "request": {
+        "jsonrpc": "2.0",
+        "id": "near-parity-access-check",
+        "method": "EXPERIMENTAL_protocol_config",
+        "params": {
+          "block_id": "HrjtXTcwMkpGwgbQqNJih2BMPbNmaTeuSTpCbHzPFwvd"
+        }
+      },
+      "fetched_at": "2026-11-14T11:15:45.009Z",
+      "http_status": 200,
+      "status": "ok",
+      "error": null,
+      "response_preview": "{\"jsonrpc\":\"2.0\",\"result\":{\"block_producer_kickout_threshold\":80,\"chain_id\":\"mainnet\",\"chunk_producer_kickout_threshold\":80,\"chunk_validator_only_kickout_threshold\":70,\"dynamic_resharding\":false,\"epoch_length\":43200,\"fishermen_threshold\":\"340282366920938463463374607431768211455\",\"gas_limit\":10000000"
+    },
+    {
+      "name": "DefiLlama: dailyRevenue",
+      "url": "https://api.llama.fi/summary/fees/near-intents?dataType=dailyRevenue",
+      "method": "GET",
+      "request": null,
+      "fetched_at": "2026-11-14T11:15:44.350Z",
+      "http_status": 200,
+      "status": "ok",
+      "error": null,
+      "response_preview": "{\"id\":\"6225\",\"name\":\"NEAR Intents\",\"address\":null,\"symbol\":\"NEAR\",\"url\":\"https://near.com/\",\"description\":\"NEAR Intents are a new type of transaction that allow information, requests, assets, and actions to be exchanged between AI agents, services, and end users\",\"chain\":\"Near\",\"logo\":\"https://icons"
+    },
+    {
+      "name": "FastNEAR archival historical: query view_account (unconfirmed wallet)",
+      "url": "https://archival-rpc.mainnet.fastnear.com",
+      "method": "POST",
+      "request": {
+        "jsonrpc": "2.0",
+        "id": "near-parity-access-check",
+        "method": "query",
+        "params": {
+          "request_type": "view_account",
+          "account_id": "buybacks.multisignature.near",
+          "block_id": "HrjtXTcwMkpGwgbQqNJih2BMPbNmaTeuSTpCbHzPFwvd"
+        }
+      },
+      "fetched_at": "2026-11-14T11:15:45.081Z",
+      "http_status": 200,
+      "status": "ok",
+      "error": null,
+      "response_preview": "{\"jsonrpc\":\"2.0\",\"result\":{\"amount\":\"2280458576843134160152516655372\",\"block_hash\":\"HrjtXTcwMkpGwgbQqNJih2BMPbNmaTeuSTpCbHzPFwvd\",\"block_height\":224481136,\"code_hash\":\"2v9kZJHN4sogHuKtKHaqYAqQBazkqH2cjY1rrjQYvNQa\",\"locked\":\"0\",\"storage_paid_at\":0,\"storage_usage\":356468},\"id\":\"near-parity-access-chec"
+    },
+    {
+      "name": "FastNEAR archival historical: query wrap.near.ft_balance_of (unconfirmed wallet)",
+      "url": "https://archival-rpc.mainnet.fastnear.com",
+      "method": "POST",
+      "request": {
+        "jsonrpc": "2.0",
+        "id": "near-parity-access-check",
+        "method": "query",
+        "params": {
+          "request_type": "call_function",
+          "account_id": "wrap.near",
+          "method_name": "ft_balance_of",
+          "args_base64": "eyJhY2NvdW50X2lkIjoiYnV5YmFja3MubXVsdGlzaWduYXR1cmUubmVhciJ9",
+          "block_id": "HrjtXTcwMkpGwgbQqNJih2BMPbNmaTeuSTpCbHzPFwvd"
+        }
+      },
+      "fetched_at": "2026-11-14T11:15:45.241Z",
+      "http_status": 200,
+      "status": "ok",
+      "error": null,
+      "response_preview": "{\"jsonrpc\":\"2.0\",\"result\":{\"block_hash\":\"HrjtXTcwMkpGwgbQqNJih2BMPbNmaTeuSTpCbHzPFwvd\",\"block_height\":224481136,\"logs\":[],\"result\":[34,48,34]},\"id\":\"near-parity-access-check\"}"
+    },
+    {
+      "name": "FastNEAR archival historical: query intents.near.mt_balance_of (unconfirmed wallet)",
+      "url": "https://archival-rpc.mainnet.fastnear.com",
+      "method": "POST",
+      "request": {
+        "jsonrpc": "2.0",
+        "id": "near-parity-access-check",
+        "method": "query",
+        "params": {
+          "request_type": "call_function",
+          "account_id": "intents.near",
+          "method_name": "mt_balance_of",
+          "args_base64": "eyJhY2NvdW50X2lkIjoiYnV5YmFja3MubXVsdGlzaWduYXR1cmUubmVhciIsInRva2VuX2lkIjoibmVwMTQxOndyYXAubmVhciJ9",
+          "block_id": "HrjtXTcwMkpGwgbQqNJih2BMPbNmaTeuSTpCbHzPFwvd"
+        }
+      },
+      "fetched_at": "2026-11-14T11:15:45.676Z",
+      "http_status": 200,
+      "status": "ok",
+      "error": null,
+      "response_preview": "{\"jsonrpc\":\"2.0\",\"result\":{\"block_hash\":\"HrjtXTcwMkpGwgbQqNJih2BMPbNmaTeuSTpCbHzPFwvd\",\"block_height\":224481136,\"logs\":[],\"result\":[34,48,34]},\"id\":\"near-parity-access-check\"}"
+    },
+    {
+      "name": "DefiLlama: dailyHoldersRevenue (proxy only)",
+      "url": "https://api.llama.fi/summary/fees/near-intents?dataType=dailyHoldersRevenue",
+      "method": "GET",
+      "request": null,
+      "fetched_at": "2026-11-14T11:15:45.137Z",
+      "http_status": 200,
+      "status": "ok",
+      "error": null,
+      "response_preview": "{\"id\":\"6225\",\"name\":\"NEAR Intents\",\"address\":null,\"symbol\":\"NEAR\",\"url\":\"https://near.com/\",\"description\":\"NEAR Intents are a new type of transaction that allow information, requests, assets, and actions to be exchanged between AI agents, services, and end users\",\"chain\":\"Near\",\"logo\":\"https://icons"
+    }
+  ],
+  "unexpected_errors": []
+}

@@ -1,0 +1,31 @@
+name: API access check
+
+on:
+  workflow_dispatch:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  api-check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Probe every candidate API (no keys or dependencies)
+        run: node --use-env-proxy scripts/check-apis.mjs "$RUNNER_TEMP/api-check.json"
+      - name: Save timestamped access results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: api-check-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/api-check.json
+          if-no-files-found: warn
+          retention-days: 14
