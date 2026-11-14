@@ -647,5 +647,5 @@
     }
   },
   "description": "Last block before each UTC instant (end-exclusive periods), with total supply and wallet balances. yoctoNEAR strings.",
-  "updated_at": "2026-11-14T21:13:57.192Z"
+  "updated_at": "2026-11-14T21:17:07.017Z"
 }
