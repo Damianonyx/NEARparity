@@ -44354,7 +44354,18 @@
       "success": true
     }
   ],
-  "description": "Receipts involving the candidate wallet, from NearBlocks (no key). Deposit amounts are NearBlocks floats (approximate) and used only for listing; balances come from the archival RPC.",
+  "description": "Receipts (txns) and fungible-token events (ft_txns) involving the buyback wallet, from NearBlocks (no key). Receipt deposits are NearBlocks floats (approximate); FT deltas are exact smallest-unit strings. Balances come from the archival RPC.",
   "source": "https://api.nearblocks.io/v1/account/buybacks.multisignature.near/txns?per_page=100",
-  "updated_at": "2026-11-14T15:01:10.396Z"
+  "updated_at": "2026-11-14T15:14:10.313Z",
+  "ft_txns": [
+    {
+      "event_index": "17832951238845625000000000051000001",
+      "tx_hash": "B5vYwQLZ1qjLFGfjoEoXTSh86UfvzLTfK4Dmv4e9nAjB",
+      "time": "2026-07-05T23:45:23.412Z",
+      "contract": "token.0xshitzu.near",
+      "counterparty": "kvshnir.tg",
+      "cause": "TRANSFER",
+      "delta_yocto": "69000000000000000000"
+    }
+  ]
 }

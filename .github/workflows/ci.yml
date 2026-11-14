@@ -1,0 +1,36 @@
+name: CI
+
+# Every push and pull request: lint, unit tests, integration tests against a simulated network,
+# the data contract for data/latest.json, and a headless-Chrome check of the rendered dashboard.
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v5
+        with:
+          node-version: '22'
+      - name: Lint (syntax + project rules)
+        run: node scripts/lint.mjs
+      - name: Unit tests
+        run: node scripts/test.mjs
+      - name: Integration tests (simulated NEAR chain and APIs)
+        run: node scripts/test-integration.mjs
+      - name: Data contract (data/latest.json)
+        run: node scripts/check-data.mjs
+      - name: UI smoke test (headless Chrome, real and degraded data)
+        run: node scripts/smoke-ui.mjs

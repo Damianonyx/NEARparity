@@ -255,3 +255,7 @@ details[open] > summary::before { transform: rotate(90deg); }
 }
 .rows .v .reason { white-space: normal; }
 .logo { min-height: 44px; }
+
+/* ---------- Data health: staleness banner and contained section errors ---------- */
+.banner { margin-top: 1.6rem; padding: 12px 14px; border: 1px dashed var(--ink); border-radius: 8px; font-size: 0.88rem; background: var(--panel); }
+.section-error { font-size: 0.85rem; color: var(--ink-2); border-left: 3px solid var(--ink); padding: 4px 10px; margin: 0.5rem 0; }

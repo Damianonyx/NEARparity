@@ -1,0 +1,10 @@
+# The site needs only index.html, style.css, app.js, og-image.png, data/, docs/ and scripts/lib/calc.mjs
+# (imported by app.js). Everything else stays in the repository but is not served.
+.github
+config
+package.json
+scripts/*
+!scripts/lib
+scripts/lib/*
+!scripts/lib/calc.mjs
+docs/api-access-local.json

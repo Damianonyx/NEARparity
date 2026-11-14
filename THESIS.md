@@ -83,14 +83,14 @@ NEAR's official revenue dashboard ([revenue.near.org](https://revenue.near.org/)
 
 ## 4. Limitations
 
-- **No verified purchases.** The wallet receives native NEAR transfers from `intents.near` every 30–90 minutes (3,408 receipts since creation). That is consistent with NEAR bought inside Intents and then withdrawn, but transfers do not show the swaps. Verified purchases and verified coverage therefore stay **unavailable**.
+- **No verified purchases.** The wallet receives native NEAR transfers from `intents.near` every 30–90 minutes (3,408 receipts since creation). Each one is a `native_withdraw` intent signed by a single operator account inside NEAR Intents (`23f0bb1c…ef24c74`, from the `dip4` event logs, e.g. tx `G6xuXw8AGcPj8CA4sF2va4Cp85nSLhTttERXBkFPsFHA`). The operator holds no balance between withdrawals, which is consistent with NEAR being bought inside Intents and then withdrawn. But its swap legs happen inside Intents and have no keyless public index, so the purchases themselves cannot be shown. Verified purchases and verified coverage therefore stay **unavailable**.
 - **The proxy is a label converted at a reference price.** It uses DefiLlama's "holders revenue" (equal to net revenue since 23 Feb 2026) divided by the 00:00 UTC price of each day. Actual execution prices and timing are not observed.
 - **The wallet reconciliation is mostly explained.** The wallet's on-chain holdings (2,281,072 NEAR) exceed the dashboard's all-time figure for it (1,781,812 NEAR) by 499,260 NEAR. Two items account for nearly all of the gap:
   - a **502,793 NEAR** transfer in from `1csfundsadmin.sputnik-dao.near` on 9 Sep 2026 (NearBlocks), an internal move between NEAR's own revenue wallets;
   - a smaller internal transfer (7,274 NEAR, 14 Jul 2026) and one outflow (12,000 NEAR, 10 Jul 2026).
 
   Excluding internal transfers, the wallet's net accumulation since February is **1,769,786 NEAR**. Adding back the 12,000 NEAR outflow gives 1,781,786 NEAR, within about 26 NEAR of the dashboard figure. That suggests the dashboard counts inflows from Intents without subtracting outflows. We infer this; NEAR has not stated it.
-- **Third-party data.** DefiLlama volume, fees and revenue are reported as published. A missing day makes a 30-day total unavailable rather than understated.
+- **Third-party data.** DefiLlama volume, fees and revenue are reported as published, and DefiLlama revises its history: in a later build the same day, gross fees for this same window read $6.27 M rather than $5.83 M, and net revenue $1.802 M rather than $1.807 M. This is why every number here cites a fixed snapshot. If DefiLlama has not yet filled the last day, the build keeps the previous value, marked stale, rather than understating it.
 - **The window is short.** The 30-day comparison reflects one market regime. Weekly history starts on 1 Feb 2026.
 
 ## 5. Findings that would invalidate the thesis

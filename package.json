@@ -1,0 +1,23 @@
+{
+  "name": "near-parity",
+  "version": "1.0.0",
+  "description": "Are NEAR Intents buybacks keeping pace with new NEAR issuance? Live on-chain research dashboard.",
+  "private": true,
+  "type": "module",
+  "license": "MIT",
+  "homepage": "https://nearparity.vercel.app/",
+  "repository": { "type": "git", "url": "https://github.com/Damianonyx/NEARparity.git" },
+  "engines": { "node": ">=22" },
+  "scripts": {
+    "start": "node scripts/serve.mjs",
+    "build": "node --use-env-proxy scripts/build-data.mjs",
+    "test": "node scripts/test.mjs && node scripts/test-integration.mjs",
+    "test:unit": "node scripts/test.mjs",
+    "test:integration": "node scripts/test-integration.mjs",
+    "test:ui": "node scripts/smoke-ui.mjs",
+    "lint": "node scripts/lint.mjs",
+    "check:data": "node scripts/check-data.mjs",
+    "check:apis": "node --use-env-proxy scripts/check-apis.mjs",
+    "verify:claims": "node --use-env-proxy scripts/verify-claims.mjs"
+  }
+}

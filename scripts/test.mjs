@@ -164,3 +164,49 @@ test('blockBefore finds the last block before a UTC instant, skipping missing he
     assert.ok(calls < 40, `too many calls: ${calls}`);
   }
 });
+
+// ---------- wallet accounting and source parsing ----------
+import { discoverStakingPools, firstPositiveDay, internalTransfers, walletCreatedAt } from './lib/wallet.mjs';
+import { parseDashboardRows, pricesByDay } from './lib/sources.mjs';
+
+test('staking pools are discovered from the wallet’s own stake calls only', () => {
+  const W = 'w.near';
+  const txns = [
+    { from: W, to: 'a.poolv1.near', actions: ['FUNCTION_CALL:deposit_and_stake'], success: true },
+    { from: W, to: 'b.pool.near', actions: ['FUNCTION_CALL:deposit'], success: true },
+    { from: W, to: 'c.poolv1.near', actions: ['FUNCTION_CALL:deposit_and_stake'], success: false },
+    { from: 'x.near', to: 'd.poolv1.near', actions: ['FUNCTION_CALL:deposit_and_stake'] },
+    { from: W, to: 'dex.near', actions: ['FUNCTION_CALL:swap'] },
+  ];
+  assert.deepEqual(discoverStakingPools(txns, W), ['a.poolv1.near', 'b.pool.near']);
+});
+
+test('internal transfers net native and wNEAR moves with related wallets, inside the window only', () => {
+  const W = 'w.near'; const R = new Set(['r.near']);
+  const txns = [
+    { time: '2026-11-10T00:00:00Z', from: 'r.near', to: W, deposit_near_approx: 500, success: true },
+    { time: '2026-11-11T00:00:00Z', from: W, to: 'r.near', deposit_near_approx: 100, success: true },
+    { time: '2026-11-12T00:00:00Z', from: 'intents.near', to: W, deposit_near_approx: 999, success: true },
+    { time: '2026-09-01T00:00:00Z', from: 'r.near', to: W, deposit_near_approx: 7, success: true },
+  ];
+  const ftTxns = [{ time: '2026-11-13T00:00:00Z', contract: 'wrap.near', counterparty: 'r.near', delta_yocto: '2000000000000000000000000000' }];
+  const it = internalTransfers({ txns, ftTxns, complete: true }, W, R, '2026-11-01T00:00:00Z', '2026-12-01T00:00:00Z');
+  assert.deepEqual(it, { inbound: 2500, outbound: 100, net: 2400, count: 3 });
+  // Incomplete history that does not reach the window start → unknown, not zero.
+  assert.equal(internalTransfers({ txns: txns.slice(0, 2), complete: false }, W, R, '2026-10-01T00:00:00Z', '2026-12-01T00:00:00Z'), null);
+});
+
+test('wallet creation date and first labelled day come from the data', () => {
+  assert.equal(walletCreatedAt([{ to: 'w.near', time: '2026-04-01T00:00:00Z', actions: ['TRANSFER'] }, { to: 'w.near', time: '2026-03-18T12:42:28Z', actions: ['CREATE_ACCOUNT', 'TRANSFER'] }], 'w.near'), '2026-03-18T12:42:28Z');
+  assert.equal(firstPositiveDay([[1771632000, 0], [1771718400, 0], [1771804800, 6275]]), '2026-02-23');
+  assert.equal(firstPositiveDay([[1771632000, 0]]), null);
+});
+
+test('dashboard rows parse from escaped page data; prices match the nearest UTC midnight', () => {
+  const html = String.raw`x\"rows\":[{\"name\":\"fefundsadmin.sputnik-dao.near\",\"nearAmount\":2015642.62,\"share\":46.3,\"pct\":46.3},{\"name\":\"buybacks.multisignature.near\",\"nearAmount\":1781811.8,\"share\":40.9}]`;
+  assert.deepEqual(parseDashboardRows(html).map((r) => [r.account, r.near_amount]), [['fefundsadmin.sputnik-dao.near', 2015642.62], ['buybacks.multisignature.near', 1781811.8]]);
+  const byDay = pricesByDay([[1794614399, 3.1], [1794614400 + 86400 + 900, 9], [1794614400 + 2 * 86400 + 30, 3.3]]);
+  assert.equal(byDay.get('2026-11-14'), 3.1); // 23:59:59 the day before → next midnight
+  assert.equal(byDay.has('2026-11-15'), false); // 15 minutes off → rejected, not guessed
+  assert.equal(byDay.get('2026-11-16'), 3.3);
+});

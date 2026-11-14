@@ -4,20 +4,33 @@ import { epochMint, expectedMaxMint, toYocto } from './calc.mjs';
 
 export const RPC_URL = 'https://rpc.mainnet.fastnear.com';
 export const ARCHIVAL_URL = 'https://archival-rpc.mainnet.fastnear.com';
+/** Archival endpoints in priority order. The fallback is used only when the primary keeps failing.
+ *  Override with NEAR_PARITY_RPC_URLS="url1,url2". */
+export const ARCHIVAL_URLS = (process.env.NEAR_PARITY_RPC_URLS || `${ARCHIVAL_URL},https://archival-rpc.mainnet.near.org`).split(',').map((u) => u.trim()).filter(Boolean);
 
-const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+// NEAR_PARITY_FAST=1 (tests) skips backoff waits.
+const sleep = (ms) => (process.env.NEAR_PARITY_FAST ? Promise.resolve() : new Promise((r) => setTimeout(r, ms)));
 
 export class RpcError extends Error {
   constructor(name, message, httpStatus = 200) { super(message); this.name = name; this.httpStatus = httpStatus; }
 }
 
-export function createRpc(url, { onStatus, timeoutMs = 30_000, retries = 8 } = {}) {
-  let calls = 0;
-  async function call(method, params) {
+// Deterministic answers (unknown block/account, contract errors) are final: never retried or failed over.
+const FINAL = /UNKNOWN_|NOT_FOUND|UNAVAILABLE|PARSE|CONTRACT_EXECUTION|NO_CONTRACT_CODE|NO_SYNCED_BLOCKS/;
+
+/**
+ * JSON-RPC client over one or more endpoints. Each endpoint gets its own retries with exponential
+ * backoff (longer after HTTP 429); if the primary is exhausted the next endpoint is tried.
+ * onStatus(ok, httpStatus, error, url) is called once per logical call outcome per endpoint.
+ */
+export function createRpc(urls, { onStatus, timeoutMs = 30_000, retries = 8, fallbackRetries = 3 } = {}) {
+  const list = Array.isArray(urls) ? urls : [urls];
+  let calls = 0; const usage = Object.fromEntries(list.map((u) => [u, { calls: 0, failures: 0, served: 0 }]));
+  async function callOne(url, method, params, tries) {
     let lastErr;
-    for (let attempt = 0; attempt <= retries; attempt++) {
+    for (let attempt = 0; attempt <= tries; attempt++) {
       if (attempt) await sleep(Math.min(30_000, (lastErr?.httpStatus === 429 ? 3000 : 500) * 2 ** (attempt - 1)));
-      calls++;
+      calls++; usage[url].calls++;
       let httpStatus = null;
       try {
         const res = await fetch(url, {
@@ -30,23 +43,33 @@ export function createRpc(url, { onStatus, timeoutMs = 30_000, retries = 8 } = {
         const body = await res.json();
         if (body.error) {
           const name = body.error.cause?.name || body.error.name || 'RPC_ERROR';
-          // Deterministic answers (unknown block/account/epoch) are not retried.
           const err = new RpcError(name, `${name}: ${body.error.data || body.error.message}`, res.status);
-          if (/UNKNOWN_|NOT_FOUND|UNAVAILABLE|PARSE/.test(name) || res.status === 400) { onStatus?.(true, res.status); throw Object.assign(err, { final: true }); }
+          if (FINAL.test(name) || res.status === 400) { usage[url].served++; onStatus?.(true, res.status, null, url); throw Object.assign(err, { final: true }); }
           throw err;
         }
-        onStatus?.(true, res.status);
+        usage[url].served++;
+        onStatus?.(true, res.status, null, url);
         return body.result;
       } catch (e) {
         if (e.final) throw e;
-        lastErr = e;
+        lastErr = e; usage[url].failures++;
         if (!e.httpStatus) e.httpStatus = httpStatus;
       }
     }
-    onStatus?.(false, lastErr?.httpStatus ?? null, lastErr?.message);
+    onStatus?.(false, lastErr?.httpStatus ?? null, lastErr?.message, url);
     throw lastErr;
   }
-  return { call, url, get calls() { return calls; } };
+  async function call(method, params) {
+    let lastErr;
+    for (const [i, url] of list.entries()) {
+      try { return await callOne(url, method, params, i === 0 ? retries : fallbackRetries); } catch (e) {
+        if (e.final) throw e;
+        lastErr = e;
+      }
+    }
+    throw lastErr;
+  }
+  return { call, urls: list, url: list[0], usage, get calls() { return calls; } };
 }
 
 /** Run `fn` over items with at most `limit` in flight. Preserves order. */
@@ -144,7 +167,9 @@ export async function walkEpochs(rpc, { backfillFrom, cached = [], save = async 
   }
   // Bottom segment (initial backfill or an interrupted one).
   const oldest = records[0];
-  if (oldest && BigInt(oldest.start_timestamp_ns) >= stopNs && BigInt(isoToNs(oldest.prev_time)) >= stopNs) {
+  // Extend until some boundary starts strictly before backfillFrom, so every UTC instant from then on
+  // has a cached boundary below it (an epoch can start exactly at backfillFrom).
+  if (oldest && BigInt(oldest.start_timestamp_ns) >= stopNs) {
     log(`  extending backfill below ${oldest.start_time}`);
     let cursorHash = oldest.prev_next_epoch_id ?? (await getBlock(rpc, oldest.prev_hash)).next_epoch_id;
     while (true) {
@@ -159,8 +184,9 @@ export async function walkEpochs(rpc, { backfillFrom, cached = [], save = async 
       records = [...recs, ...records].sort((a, b) => a.start_height - b.start_height);
       await save(records);
       log(`  backfilled to ${records[0].start_time} (${records.length} boundaries)`);
-      if (BigInt(batch.at(-1).timestamp_ns) < stopNs) break;
-      cursorHash = cursor.hash;
+      if (BigInt(records[0].start_timestamp_ns) < stopNs) break;
+      // The last block we reached is before backfillFrom but its epoch started at/after it: go one further.
+      cursorHash = BigInt(batch.at(-1).timestamp_ns) < stopNs ? batch.at(-1).next_epoch_id : cursor.hash;
     }
   }
   return { final, records };
@@ -263,15 +289,17 @@ export async function blockBefore(rpc, iso, records, final) {
 const b64 = (o) => Buffer.from(JSON.stringify(o)).toString('base64');
 const decodeResult = (r) => JSON.parse(Buffer.from(r.result).toString('utf8'));
 
-/** NEAR held by an account at a block: native (liquid + locked), wNEAR, and wNEAR inside intents.near. */
-export async function walletBalances(rpc, accountId, blockHash) {
+/** NEAR held by an account at a block: native (liquid + locked), wNEAR, wNEAR inside intents.near,
+ *  and NEAR delegated to the given staking pools (get_account_total_balance: staked + unstaked).
+ *  An account that did not exist yet has a genuine zero balance. */
+export async function walletBalances(rpc, accountId, blockHash, { pools = [] } = {}) {
   let native = 0n; let exists = true;
   try {
     const acc = await rpc.call('query', { request_type: 'view_account', account_id: accountId, block_id: blockHash });
     native = BigInt(acc.amount) + BigInt(acc.locked);
   } catch (e) {
     if (e.name !== 'UNKNOWN_ACCOUNT') throw e;
-    exists = false; // the account did not exist yet: its balance is genuinely zero
+    exists = false;
   }
   const call = async (contract, method, args) => {
     const r = await rpc.call('query', { request_type: 'call_function', account_id: contract, method_name: method, args_base64: b64(args), block_id: blockHash });
@@ -279,5 +307,16 @@ export async function walletBalances(rpc, accountId, blockHash) {
   };
   const wnear = await call('wrap.near', 'ft_balance_of', { account_id: accountId });
   const intents = await call('intents.near', 'mt_balance_of', { account_id: accountId, token_id: 'nep141:wrap.near' });
-  return { exists, native_yocto: native.toString(), wnear_yocto: wnear.toString(), intents_wnear_yocto: intents.toString(), total_yocto: (native + wnear + intents).toString() };
+  let staked = 0n; const byPool = {};
+  for (const pool of pools) {
+    let v = 0n;
+    try { v = await call(pool, 'get_account_total_balance', { account_id: accountId }); } catch (e) {
+      if (!/UNKNOWN_ACCOUNT|NO_CONTRACT_CODE/.test(e.name)) throw e; // pool not deployed yet at this block: zero
+    }
+    byPool[pool] = v.toString(); staked += v;
+  }
+  return {
+    exists, pools: [...pools], native_yocto: native.toString(), wnear_yocto: wnear.toString(), intents_wnear_yocto: intents.toString(),
+    staked_yocto: staked.toString(), staked_by_pool: byPool, total_yocto: (native + wnear + intents + staked).toString(),
+  };
 }

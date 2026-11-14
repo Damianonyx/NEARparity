@@ -34,8 +34,9 @@ const lastDay = (endIso) => new Date(Date.parse(endIso) - 86_400_000).toISOStrin
 const periodText = (m) => (m?.period_start && m?.period_end ? `${fmtDay(m.period_start)} – ${fmtDay(lastDay(m.period_end))} (UTC, end inclusive)` : '');
 
 function pill(m) {
-  if (!m) return el('span', { class: 'pill pill-unavailable' }, 'unavailable');
-  const frag = [el('span', { class: `pill pill-${m.status}`, title: statusHelp[m.status] }, m.derived ? 'measured · derived' : m.status)];
+  if (!m) return [el('span', { class: 'pill pill-unavailable' }, 'unavailable')]; // always a list: callers spread it
+  const label = m.derived ? 'measured · derived' : m.reported_by ? `${m.status} · ${m.reported_by}` : m.status;
+  const frag = [el('span', { class: `pill pill-${m.status}`, title: m.reported_by ? `${statusHelp[m.status] || ''} Reported by ${m.reported_by} (third-party data).` : statusHelp[m.status] }, label)];
   if (m.stale) frag.push(' ', el('span', { class: 'pill pill-stale', title: m.stale_reason || '' }, `stale since ${fmtDay(m.stale_since)}`));
   return frag;
 }
@@ -134,7 +135,7 @@ function renderCards(L) {
       ],
       source: 'DefiLlama (near-intents)',
       how: `<p>Daily DefiLlama values are summed over the same 30 UTC days. If any day is missing, the total is shown as unavailable rather than summed with a gap.</p>
-<p><strong>Gross fees</strong>: protocol plus affiliate fees on swaps. <strong>Net revenue</strong>: NEAR's captured revenue after partner and front-end distributions (DefiLlama measures it as NEAR/wNEAR swept into NEAR's revenue wallets). <strong>Labelled buyback revenue</strong>: DefiLlama's “holders revenue”, which labels captured revenue from 2026-02-23 as buyback money. It is a label, not a record of purchases, so it is kept separate from verified purchases and marked proxy.</p>
+<p><strong>Gross fees</strong>: protocol plus affiliate fees on swaps. <strong>Net revenue</strong>: NEAR's captured revenue after partner and front-end distributions (DefiLlama measures it as NEAR/wNEAR swept into NEAR's revenue wallets). <strong>Labelled buyback revenue</strong>: DefiLlama's “holders revenue”, which labels captured revenue from ${escapeHtml(L.meta?.holders_revenue_labelled_from ?? 'the start of the buyback program')} as buyback money. It is a label, not a record of purchases, so it is kept separate from verified purchases and marked proxy.</p>
 <p>Capture rate = net revenue ÷ volume. Allocation = labelled buyback revenue ÷ net revenue.</p>`,
     }),
     card({
@@ -326,8 +327,8 @@ function showTip(i, r, g) {
     el('div', { class: 'r' }, el('span', {}, 'Wallet net*'), el('span', {}, walletVal(r) != null ? fmtNear(walletVal(r)) + share(walletVal(r)) : 'unavailable')),
     Math.abs(r.wallet_internal_near ?? 0) >= 1 ? el('div', { class: 'small' }, `*Excludes ${fmtNear(r.wallet_internal_near)} moved in from NEAR's other revenue wallets (raw change ${fmtNear(r.wallet_net_near)}).`) : null,
     el('div', { class: 'r' }, el('span', {}, 'Supply change'), el('span', {}, fmtNear(r.supply_change_near))),
-    r.period_end <= '2026-03-18' ? el('div', { class: 'small' }, 'Wallet created 2026-03-18; zero before.') : null,
-    r.period_end <= '2026-02-23' ? el('div', { class: 'small' }, 'DefiLlama labels buyback revenue from 2026-02-23.') : null,
+    META.wallet_created_at && r.period_end <= META.wallet_created_at ? el('div', { class: 'small' }, `Wallet created ${META.wallet_created_at.slice(0, 10)}; zero before.`) : null,
+    META.holders_revenue_labelled_from && r.period_end.slice(0, 10) <= META.holders_revenue_labelled_from ? el('div', { class: 'small' }, `DefiLlama labels buyback revenue from ${META.holders_revenue_labelled_from}.`) : null,
   ].filter(Boolean));
   tip.hidden = false;
   const panel = tip.parentElement.getBoundingClientRect(); const gb = g.getBoundingClientRect();
@@ -357,7 +358,7 @@ function renderClaims(L) {
   const m = L.metrics; const v = (k) => (m[k]?.status !== 'unavailable' ? m[k]?.value : null);
   const sup = $('#supports'); const cant = $('#cannot'); sup.textContent = ''; cant.textContent = '';
   const add = (ul, ...parts) => ul.append(el('li', {}, ...parts));
-  if (v('issuance') != null) add(sup, `New issuance is measurable on-chain: ${fmtNear(v('issuance'))} in the window (${nf0.format(v('daily_issuance'))} NEAR/day), an observed ${fmtPct(v('issuance_annualised_rate'), 2)} annualised rate, below the ${m.issuance.reference_cap?.max_inflation_rate ?? ''} protocol cap.`);
+  if (v('issuance') != null) add(sup, `New issuance is measurable on-chain: ${fmtNear(v('issuance'))} in the window (${nf0.format(v('daily_issuance'))} NEAR/day), an observed ${fmtPct(v('issuance_annualised_rate'), 2)} annualised rate, below the ${m.issuance?.reference_cap?.max_inflation_rate ?? ''} protocol cap.`);
   if (v('supply_change') != null) add(sup, `Total supply still grew by ${fmtNear(v('supply_change'))}. Derived protocol burns (${fmtNear(v('derived_burns'))}) offset ${fmtPct(v('derived_burns') / v('issuance'))} of issuance.`);
   if (v('coverage_proxy') != null || v('coverage_wallet') != null) {
     const both = [v('coverage_proxy'), v('coverage_wallet')].filter((x) => x != null);
@@ -517,32 +518,84 @@ function renderScale(L) {
   box.setAttribute('aria-label', `Balance scale: newly issued NEAR outweighs the buyback proxy; proxy coverage ${c == null ? 'unavailable' : fmtPct(cov)}.`);
 }
 
+// ---------- data validation, staleness, resilient rendering ----------
+let META = {};
+const STALE_AFTER_HOURS = 36;
+
+/** Structural checks on latest.json. Returns a list of problems (empty when the shape is as expected). */
+function validateLatest(L) {
+  const problems = [];
+  if (!L || typeof L !== 'object') return ['latest.json is not an object'];
+  if (typeof L.schema_version !== 'number') problems.push('missing schema_version');
+  if (!L.window?.start || !L.window?.end) problems.push('missing window');
+  if (!L.metrics || typeof L.metrics !== 'object') problems.push('missing metrics');
+  for (const [k, m] of Object.entries(L.metrics || {})) {
+    if (k === 'epoch_checks') continue;
+    if (!['measured', 'estimate', 'proxy', 'unavailable'].includes(m?.status)) problems.push(`metrics.${k}: bad status`);
+    else if (m.status === 'unavailable' && (m.value !== null || !m.reason)) problems.push(`metrics.${k}: unavailable needs value null and a reason`);
+    else if (m.status !== 'unavailable' && typeof m.value !== 'number') problems.push(`metrics.${k}: value must be a number`);
+  }
+  for (const k of ['issuance', 'supply_change', 'coverage_proxy', 'intents_volume']) if (!L.metrics?.[k]) problems.push(`metrics.${k} missing`);
+  if (!Array.isArray(L.series_weekly)) problems.push('series_weekly missing');
+  return problems;
+}
+
+/** Render one section; on failure, show a contained notice instead of breaking the page. */
+function section(name, target, fn) {
+  try { fn(); } catch (e) {
+    console.error(`[${name}]`, e);
+    const box = typeof target === 'string' ? $(target) : target;
+    if (box) { box.textContent = ''; box.append(el('p', { class: 'section-error' }, `This section could not be rendered from the current data (${e.message}). The rest of the page is unaffected.`)); }
+  }
+}
+
+function renderBanner(L, problems) {
+  const host = $('#banner'); host.textContent = ''; host.hidden = true;
+  const msgs = [];
+  const last = Date.parse(L.last_successful_refresh || '');
+  const ageH = Number.isFinite(last) ? (Date.now() - last) / 3.6e6 : Infinity;
+  if (ageH > STALE_AFTER_HOURS) msgs.push(`Data may be stale: the last successful refresh was ${Number.isFinite(ageH) ? `${Math.round(ageH)} hours ago (${fmtTime(L.last_successful_refresh)})` : 'never recorded'}. Figures below are the last good values.`);
+  if (L.partial_refresh) msgs.push(`The latest refresh was partial (${Object.keys(L.failed_groups || {}).join(', ') || 'a source failed'}); affected figures are marked stale.`);
+  if (problems.length) msgs.push(`Data check: ${problems.slice(0, 3).join('; ')}${problems.length > 3 ? '…' : ''}. Affected sections show as unavailable.`);
+  if (!msgs.length) return;
+  host.hidden = false;
+  host.append(el('strong', {}, 'Heads up. '), msgs.join(' '));
+}
+
 // ---------- boot ----------
 setupTheme();
 renderPixelTitle();
 renderLegend();
-try {
-  const { latest, status } = await load();
-  renderMeta(latest);
-  renderScale(latest);
-  renderAnswer(latest);
-  renderCards(latest);
-  setupSimulator(latest);
-  renderChart(latest);
-  renderSeriesTable(latest);
-  renderClaims(latest);
-  renderWallet(latest);
-  renderSources(latest, status);
+let loaded = null;
+try { loaded = await load(); } catch (e) {
+  $('#refresh-meta').textContent = 'Data could not be loaded.';
+  section('scale', '#scale-art', () => renderScale(null));
+  $('#main').prepend(el('div', { class: 'error' }, `Could not load data/latest.json (${e.message}). If you opened index.html from disk, run: node scripts/serve.mjs`));
+}
+if (loaded) {
+  const { latest, status } = loaded;
+  latest.metrics ||= {};
+  META = latest.meta || {};
+  const problems = validateLatest(latest);
+  if (problems.length) console.warn('latest.json problems:', problems);
+  section('banner', '#banner', () => renderBanner(latest, problems));
+  section('meta', '#refresh-meta', () => renderMeta(latest));
+  section('scale', '#scale-art', () => renderScale(latest));
+  section('answer', '#answer', () => renderAnswer(latest));
+  section('cards', '#cards', () => renderCards(latest));
+  section('simulator', '#sim-out', () => setupSimulator(latest));
+  section('chart', '#chart', () => renderChart(latest));
+  section('table', '#series-table', () => renderSeriesTable(latest));
+  section('claims', '#supports', () => renderClaims(latest));
+  section('wallet', '#wallet', () => renderWallet(latest));
+  section('sources', '#sources', () => renderSources(latest, status));
   document.querySelectorAll('.seg button').forEach((x) => x.setAttribute('aria-pressed', String(x.dataset.range === chartRange)));
   document.querySelectorAll('.seg button').forEach((b) => b.addEventListener('click', () => {
     chartRange = b.dataset.range;
     document.querySelectorAll('.seg button').forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
-    hideTip(); renderChart(latest);
+    hideTip(); section('chart', '#chart', () => renderChart(latest));
   }));
-  let rt; new ResizeObserver(() => { clearTimeout(rt); rt = setTimeout(() => renderChart(latest), 120); }).observe($('#chart'));
+  let rt; new ResizeObserver(() => { clearTimeout(rt); rt = setTimeout(() => section('chart', '#chart', () => renderChart(latest)), 120); }).observe($('#chart'));
   document.addEventListener('click', (e) => { if (!e.target.closest('.chart')) hideTip(); });
-} catch (e) {
-  $('#refresh-meta').textContent = 'Data could not be loaded.';
-  renderScale(null);
-  $('#main').prepend(el('div', { class: 'error' }, `Could not load data/latest.json (${e.message}). If you opened index.html from disk, run: node scripts/serve.mjs`));
+  document.documentElement.dataset.ready = '1';
 }

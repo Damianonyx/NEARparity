@@ -1,42 +1,84 @@
 # NEAR Parity
 
+[![CI](https://github.com/Damianonyx/NEARparity/actions/workflows/ci.yml/badge.svg)](https://github.com/Damianonyx/NEARparity/actions/workflows/ci.yml)
+[![Refresh data](https://github.com/Damianonyx/NEARparity/actions/workflows/refresh.yml/badge.svg)](https://github.com/Damianonyx/NEARparity/actions/workflows/refresh.yml)
+[![License: MIT](https://img.shields.io/badge/license-MIT-black.svg)](LICENSE)
+
 **Are NEAR Intents buybacks keeping pace with new NEAR issuance?**
 
-NEAR Parity is an interactive research dashboard for the NEAR Hackathon (Investment Thesis track). It compares newly minted NEAR with NEAR Intents revenue, the evidence for buybacks, and the actual change in total supply, and it shows every calculation.
+NEAR Parity is a live, on-chain research dashboard for the NEAR Hackathon (Investment Thesis track). It compares newly minted NEAR with NEAR Intents revenue, the evidence for buybacks, and the actual change in total supply, and it shows every calculation.
 
-**Live site:** https://nearparity.vercel.app/ · **Thesis:** [THESIS.md](THESIS.md)
+**Live site:** https://nearparity.vercel.app/ · **Thesis:** [THESIS.md](THESIS.md) · **Data API:** [docs/data-api.md](docs/data-api.md)
 
 One distinction governs everything here: **buybacks do not automatically reduce total supply.** Purchased NEAR can stay in a treasury wallet. Matching issuance through purchases would not establish zero inflation or price appreciation.
 
-## What you can do with it (do X → see Y)
+## Quick start (do X → see Y)
 
-Requirements: Node 22 (22.21 or newer if you are behind an HTTP proxy). No `npm install`, no build step, no API keys.
+Requirements: Node 22 (22.21 or newer if you are behind an HTTP proxy). **No `npm install`, no build step, no API keys, no dependencies.** The `npm` scripts are shortcuts for plain `node` commands.
 
 | Do | See |
 |---|---|
-| `node scripts/test.mjs` | 13 offline tests pass (parity formula, zero denominator, BigInt conversions, burn reconciliation, 30-day windowing, block search, epoch checks). No network needed. |
-| `node scripts/serve.mjs` then open http://localhost:8080 | The dashboard, using the committed dataset in `data/`. |
-| `node scripts/build-data.mjs` (behind a proxy: `node --use-env-proxy scripts/build-data.mjs`) | Fresh data: `data/latest.json`, a new `data/snapshots/<UTC timestamp>.json`, and `data/status.json`. With the committed caches this takes well under a minute. The console prints every metric with its status. Exit code 0 = all core sources refreshed, 2 = partial refresh (failed sources keep their last good values, marked stale). |
-| `node scripts/check-apis.mjs` | An access check of every endpoint (HTTP status plus the first 300 characters of each response). |
-| `node scripts/verify-claims.mjs` | Re-fetches the primary sources cited in THESIS.md and prints the relevant passages. |
-| `NEAR_PARITY_SIMULATE_FAIL=chain,price node scripts/build-data.mjs` | The stale fallback in action: the named sources "fail", and their last good values are kept and marked stale with their date. Run this in a copy of the repo, since it rewrites `data/`. |
+| `npm test` | 17 unit tests and 4 integration tests pass, offline. The integration tests run the real build end to end against a simulated NEAR chain and simulated APIs, and check every result exactly (BigInt), including stale fallbacks, a paused-then-resumed NearBlocks backfill, and RPC failover. |
+| `npm start`, then open http://localhost:8080 | The dashboard, using the committed dataset in `data/`, served with the same security headers as production. |
+| `npm run build` | Fresh data from the live sources: `data/latest.json`, `data/status.json`, and the day's snapshot. With the committed caches this takes about 15 seconds. Exit code 0 = all core sources refreshed, 2 = partial refresh (failed sources keep their last good values, marked stale). |
+| `npm run test:ui` | Headless Chrome renders the page with the real data and with deliberately broken data, and checks that sections fail independently. |
+| `npm run lint` · `npm run check:data` | Syntax and project rules for every JS file; the data contract for `data/latest.json`. |
+| `npm run check:apis` · `npm run verify:claims` | Access check of every endpoint; re-fetch of the primary sources cited in THESIS.md. |
+| `NEAR_PARITY_SIMULATE_FAIL=chain,price npm run build` (in a copy of the repo) | The stale fallback in action: the named sources "fail", and their last good values are kept and marked stale with their date. |
 
-GitHub Actions does the same thing automatically: `.github/workflows/refresh.yml` runs the tests and the build on every push, by hand, and daily at 05:41 UTC, then commits `data/` on `main`. Vercel redeploys `main` on every push, so the site picks up each refresh.
+## Architecture
+
+```mermaid
+flowchart LR
+  subgraph Sources
+    RPC["NEAR archival RPC<br/>FastNEAR (+ fallback)"]
+    LL["DefiLlama<br/>volume · fees · revenue · price"]
+    NB["NearBlocks<br/>wallet receipts · FT events"]
+    RD["revenue.near.org<br/>official wallet breakdown"]
+  end
+  subgraph Build["scripts/build-data.mjs (GitHub Actions, twice daily)"]
+    W["Epoch walk via next_epoch_id<br/>exact mints (BigInt)"]
+    B["UTC boundary blocks<br/>supply + wallet balances"]
+    M["Metrics · stale fallback<br/>health · daily snapshot"]
+  end
+  RPC --> W --> B --> M
+  LL --> M
+  NB --> M
+  RD --> M
+  M --> D[("data/*.json<br/>public API, CORS")]
+  D --> V["Vercel static site<br/>index.html · app.js · style.css"]
+  D --> T["THESIS.md<br/>(cites a snapshot)"]
+```
+
+- **Sources → build.** The build walks every epoch boundary since 2026-01-31 from block headers, finds the last block before each UTC boundary, reads total supply and the buyback wallet's balances there, and combines them with DefiLlama, NearBlocks and NEAR's own dashboard. Caches mean a refresh only fetches what is new.
+- **Build → data.** Every metric is written in one shape (`value`, `unit`, `period_start`, `period_end`, `source`, `method`, `status`), with a public contract ([docs/data-api.md](docs/data-api.md)) enforced in CI.
+- **Data → site.** The page is static. It reads `data/latest.json` and `data/status.json`, renders each section independently, and shows a banner if the data is stale or malformed.
+
+## Engineering
+
+- **Tests.** Unit tests cover the formula, BigInt conversions, burn reconciliation, windowing, block search, epoch checks, wallet accounting, and source parsing. Integration tests run the build end to end against a simulated network (`scripts/fixtures/mock-network.mjs`). The UI test runs headless Chrome against real and degraded data. All run in CI on every push and pull request (`.github/workflows/ci.yml`).
+- **Resilience.** Each source is isolated, and a failed or incomplete source keeps its last good values, marked stale; it never becomes zero. The archival RPC fails over to a second endpoint. NearBlocks paging resumes where it stopped. The page renders each section independently.
+- **Monitoring.** `data/status.json` records every source's outcome. After two partial refreshes in a row, or any crash, the refresh workflow opens a `data-refresh` issue, and closes it on recovery. The site shows a banner when the last successful refresh is more than 36 hours old.
+- **Security.** The site is static with no third-party scripts, and is served with a strict Content-Security-Policy, `nosniff`, `frame-ancestors 'none'`, and related headers (`vercel.json`). Only the files the page needs are deployed (`.vercelignore`). There are no keys or secrets anywhere.
+- **Reproducibility.** Every figure is pinned to block heights and hashes, and one immutable snapshot is kept per UTC day.
 
 ## Repository map
 
 ```
 index.html, style.css, app.js     dashboard (no framework; app.js imports the tested formula from scripts/lib/calc.mjs)
-scripts/build-data.mjs            one command: fetch → compute → write data/
+scripts/build-data.mjs            orchestrates one build: fetch → compute → write data/
 scripts/lib/calc.mjs              pure calculations (parity formula, BigInt yoctoNEAR, burn reconciliation, windows)
-scripts/lib/near.mjs              NEAR RPC: epoch walk, timestamp → block search, wallet balances
-scripts/test.mjs, fixtures/       offline tests
-scripts/serve.mjs                 local static server
-scripts/check-apis.mjs            Phase 0 endpoint access check
-scripts/verify-claims.mjs         re-checks the primary sources cited in THESIS.md
-config/buyback-wallet.json        the buyback wallet and its official citation
-data/                             committed dataset (see "Data files")
-.github/workflows/                api-check.yml, refresh.yml, verify-claims.yml
+scripts/lib/near.mjs              NEAR RPC with failover: epoch walk, timestamp → block search, wallet balances (incl. staking)
+scripts/lib/sources.mjs           DefiLlama, prices, NearBlocks (receipts + FT events), revenue dashboard
+scripts/lib/wallet.mjs            wallet accounting: staking pools, internal transfers, creation date
+scripts/lib/io.mjs                file store, source status, HTTP helpers
+scripts/test.mjs                  unit tests        scripts/test-integration.mjs   end-to-end tests (simulated network)
+scripts/smoke-ui.mjs              headless-Chrome UI test    scripts/lint.mjs · check-data.mjs   lint and data contract
+scripts/serve.mjs                 local server (mirrors production headers)
+scripts/check-apis.mjs            endpoint access check      scripts/verify-claims.mjs     re-checks THESIS sources
+config/buyback-wallet.json        the buyback wallet, its official citation, related revenue wallets
+data/                             committed dataset and public API (docs/data-api.md)
+.github/workflows/                ci.yml, refresh.yml, api-check.yml, verify-claims.yml
 ```
 
 ## Data sources
@@ -76,20 +118,24 @@ All default comparisons use **one window: the 30 most recent complete UTC days**
 
 ## Data files
 
+Full field reference: [docs/data-api.md](docs/data-api.md).
+
+
 - `data/latest.json`: every metric, the weekly series since 2026-02-01, simulator defaults, the wallet reconciliation and the source list.
 - `data/status.json`: per source, ok or failed, HTTP code, error, fetched_at, last_ok_at.
-- `data/snapshots/<UTC timestamp>.json`: a copy of each build, so the site stays usable and the history is auditable.
+- `data/snapshots/<UTC timestamp>.json`: an immutable copy of the first successful build of each UTC day, so the history is auditable.
 - `data/epochs.json`, `data/boundaries.json`, `data/wallet-transfers.json`: caches, so refreshes only fetch new epochs, blocks and transfers.
 
 ## Limitations
 
-- **No verified purchases.** The wallet receives NEAR from `intents.near` every 30–90 minutes, but transfers do not show the swaps behind them, so verified purchases and verified coverage are unavailable. The wallet is listed on NEAR's official revenue dashboard, which confirms the account, not the purchases.
+- **No verified purchases.** The wallet receives NEAR from `intents.near` every 30–90 minutes. Each inflow is a `native_withdraw` intent signed by one operator account inside NEAR Intents (seen in the `dip4` event logs, e.g. tx `G6xuXw8AGcPj8CA4sF2va4Cp85nSLhTttERXBkFPsFHA`), but the operator's swap legs happen inside Intents and have no keyless public index. So verified purchases and verified coverage are unavailable. The wallet is listed on NEAR's official revenue dashboard, which confirms the account, not the purchases.
+- **Wallet scope.** Holdings include native NEAR, wNEAR, wNEAR inside `intents.near`, and NEAR delegated to any staking pool the wallet has called (none so far). Liquid-staking tokens are not counted.
 - **The proxy depends on a label.** DefiLlama's holders revenue equals its net revenue from 2026-02-23 onward. Converting it to NEAR at each day's 00:00 UTC price ignores execution prices and timing.
-- **DefiLlama figures are third-party aggregates**, reported as published. DefiLlama's daily values can lag by a day; a missing day makes a 30-day total unavailable rather than understated.
+- **DefiLlama figures are third-party aggregates**, reported as published and labelled with `reported_by`. DefiLlama revises history: between two builds on 14 Nov 2026, gross fees for the same 30 days moved from $5.83 M to $6.27 M. Daily values can also lag by a day; if so, the previous value is kept and marked stale rather than understated.
 - **Burns are derived**, not read from a burn event log. They include all protocol burns (gas and fees) and nothing else.
 - **The wallet reconciliation is only partly explained.** On-chain holdings differ from the dashboard's all-time figure, mostly because of an internal transfer from another NEAR revenue wallet and one outflow. About 26 NEAR remains unexplained (THESIS.md).
 - **Price source:** DefiLlama coins (coingecko:near), daily samples matched to the nearest UTC midnight within ±10 minutes.
-- **Rate limits:** FastNEAR and keyless NearBlocks rate-limit bursts. The build retries with backoff, saves progress, and resumes on the next run.
+- **Rate limits and providers:** FastNEAR and keyless NearBlocks rate-limit bursts. The build retries with backoff, fails over to a second archival RPC, saves progress, and resumes on the next run. The CoinGecko price fallback covers at most 365 days; older days would show as unavailable.
 
 ## Disclosure
 
