@@ -159,12 +159,15 @@ const price = await group('price', async () => {
     daily = body.prices.map(([ms, p]) => [Math.floor(ms / 1000), p]);
     source = { name: 'CoinGecko market_chart (fallback)', url };
   }
-  // Key by UTC day: the sample nearest that day's 00:00 UTC (within ±10 minutes after it).
-  const byDay = new Map();
+  // Key by UTC day: the sample nearest that day's 00:00 UTC, within ±10 minutes
+  // (DefiLlama samples sometimes land at 23:59:59 of the previous day).
+  const byDay = new Map(); const bestOff = new Map();
   for (const [ts, p] of daily) {
-    const day = new Date(ts * 1000).toISOString().slice(0, 10);
-    const off = ts - Date.parse(`${day}T00:00:00Z`) / 1000;
-    if (off <= 600 && !byDay.has(day)) byDay.set(day, p);
+    const midnight = Math.round(ts / 86_400) * 86_400;
+    const off = Math.abs(ts - midnight);
+    if (off > 600) continue;
+    const day = new Date(midnight * 1000).toISOString().slice(0, 10);
+    if (!bestOff.has(day) || off < bestOff.get(day)) { byDay.set(day, p); bestOff.set(day, off); }
   }
   let current = null;
   try {
@@ -193,15 +196,25 @@ const transfers = await group('nearblocks', async () => {
     success: t.outcomes?.status ?? null,
   });
   const base = `https://api.nearblocks.io/v1/account/${wallet.account_id}/txns?per_page=100`;
+  const saveProgress = () => writeJson('data/wallet-transfers.json', { ...fresh, updated_at: new Date().toISOString() });
   const page = async (cursor) => {
-    const body = await getJson('nearblocks', cursor ? `${base}&cursor=${cursor}` : base, { retries: 3 });
-    await new Promise((r) => setTimeout(r, 1200)); // stay well under the keyless rate limit
-    return body;
+    const url = cursor ? `${base}&cursor=${cursor}` : base;
+    // Keyless NearBlocks rate-limits bursts: pause between pages and back off on 429.
+    for (let attempt = 0; ; attempt++) {
+      try {
+        const body = await getJson('nearblocks', url, { retries: 0 });
+        await new Promise((r) => setTimeout(r, 4000));
+        return body;
+      } catch (e) {
+        if (e.http !== 429 || attempt >= 4) throw e;
+        await new Promise((r) => setTimeout(r, 20_000 * (attempt + 1)));
+      }
+    }
   };
   // 1) Newest pages until a known receipt (or the end of history on the first run).
   const added = [];
   let cursor = null; let reachedKnown = false; let pages = 0;
-  while (pages < 60) {
+  while (pages < (knownIds.size ? 60 : 1)) { // empty cache: one page here, then the saved backfill below
     const body = await page(cursor); pages++;
     const rows = body.txns || [];
     for (const t of rows) {
@@ -214,12 +227,19 @@ const transfers = await group('nearblocks', async () => {
   fresh.txns = [...added, ...fresh.txns];
   if (!knownIds.size) { fresh.resume_cursor = cursor; fresh.complete = !cursor; }
   // 2) Continue an incomplete backfill from where the last run stopped.
+  await saveProgress();
   while (!fresh.complete && fresh.resume_cursor && pages < 120) {
-    const body = await page(fresh.resume_cursor); pages++;
+    let body;
+    try { body = await page(fresh.resume_cursor); pages++; } catch (e) {
+      log(`  NearBlocks backfill paused at ${fresh.txns.at(-1)?.time} (${e.message}); next run resumes`);
+      groupErrors.nearblocks_backfill = e.message; // reported, but the cached pages are kept and used
+      break;
+    }
     const rows = body.txns || [];
     for (const t of rows) if (!knownIds.has(t.receipt_id)) fresh.txns.push(slim(t));
     fresh.resume_cursor = rows.length ? body.cursor || null : null;
     if (!fresh.resume_cursor) fresh.complete = true;
+    await saveProgress();
   }
   const ids = new Set();
   fresh.txns = fresh.txns.filter((t) => !ids.has(t.receipt_id) && ids.add(t.receipt_id)).sort((a, b) => b.time.localeCompare(a.time));
@@ -456,7 +476,7 @@ if (chain) {
 
 // ---------- stale fallback: never overwrite good data with nulls ----------
 // Optional cross-checks do not make a refresh "partial"; they are still reported in status.json.
-const OPTIONAL_GROUPS = new Set(['revenue_dashboard']);
+const OPTIONAL_GROUPS = new Set(['revenue_dashboard', 'nearblocks_backfill']);
 const failedGroups = new Set(Object.keys(groupErrors).filter((g) => !OPTIONAL_GROUPS.has(g)));
 const stale = {};
 for (const [key, rec] of Object.entries(M)) {
