@@ -1,0 +1,166 @@
+#!/usr/bin/env node
+// Offline tests (no network). Run: node scripts/test.mjs
+import assert from 'node:assert/strict';
+import { readFileSync } from 'node:fs';
+import { test } from 'node:test';
+import {
+  daysIn, epochMint, expectedMaxMint, metric, parityRequiredDailyVolume, reconcileBurns, safeRatio,
+  sumDaily, toYocto, utcWindow, weeklyBuckets, yoctoToNear, yoctoToNearString,
+} from './lib/calc.mjs';
+import { blockBefore, blockBurnt, epochChecks } from './lib/near.mjs';
+
+const fixture = (name) => JSON.parse(readFileSync(new URL(`./fixtures/${name}`, import.meta.url), 'utf8'));
+
+test('parity formula: issuance × price ÷ (capture rate × allocation)', () => {
+  const r = parityRequiredDailyVolume({ dailyIssuanceNear: 90_000, priceUsd: 3.33, captureRate: 0.000476, allocation: 1 });
+  assert.equal(r.finite, true);
+  assert.ok(Math.abs(r.value - 629_621_848.7394958) < 1e-3);
+  // Halving the allocation doubles the required volume.
+  const half = parityRequiredDailyVolume({ dailyIssuanceNear: 90_000, priceUsd: 3.33, captureRate: 0.000476, allocation: 0.5 });
+  assert.ok(Math.abs(half.value - 2 * r.value) < 1e-3);
+  // Basis points and percent convert to decimals before the formula.
+  const bps = 4.76; const pct = 100;
+  const conv = parityRequiredDailyVolume({ dailyIssuanceNear: 90_000, priceUsd: 3.33, captureRate: bps / 10_000, allocation: pct / 100 });
+  assert.ok(Math.abs(conv.value - r.value) < 1e-3);
+});
+
+test('parity formula: zero denominator has no finite answer', () => {
+  for (const [captureRate, allocation] of [[0, 1], [0.0005, 0], [0, 0]]) {
+    const r = parityRequiredDailyVolume({ dailyIssuanceNear: 90_000, priceUsd: 3.33, captureRate, allocation });
+    assert.equal(r.finite, false);
+    assert.equal(r.value, null);
+    assert.equal(r.reason, 'No finite volume achieves parity under these assumptions.');
+  }
+});
+
+test('parity formula: rejects missing, negative or non-finite inputs instead of guessing', () => {
+  for (const bad of [null, undefined, NaN, Infinity, -1, '3']) {
+    const r = parityRequiredDailyVolume({ dailyIssuanceNear: 90_000, priceUsd: bad, captureRate: 0.0005, allocation: 1 });
+    assert.equal(r.finite, false);
+    assert.equal(r.value, null);
+  }
+});
+
+test('BigInt yoctoNEAR conversions', () => {
+  assert.equal(toYocto('1000000000000000000000000'), 10n ** 24n);
+  assert.equal(yoctoToNear('1000000000000000000000000'), 1);
+  assert.equal(yoctoToNear(0n), 0);
+  assert.equal(yoctoToNear('-2500000000000000000000000'), -2.5);
+  assert.equal(yoctoToNearString('1311676559659316056050032373585614'), '1311676559.659316056050032373585614');
+  assert.equal(yoctoToNearString('1'), '0.000000000000000000000001');
+  assert.equal(yoctoToNearString('-1500000000000000000000000'), '-1.5');
+  // Precision beyond Number: the exact string keeps every digit.
+  assert.equal(String(toYocto('1311676559659316056050032373585614')), '1311676559659316056050032373585614');
+  assert.ok(Math.abs(yoctoToNear('1311676559659316056050032373585614') - 1311676559.659316) < 1e-3);
+  for (const bad of ['1.5', '1e24', 1e24, '', 'abc']) assert.throws(() => toYocto(bad));
+});
+
+test('epoch mint: supply jump + burns in the boundary block (real mainnet boundary)', () => {
+  const f = fixture('epochs.json').real_boundary;
+  const mint = epochMint({ supplyPrev: f.total_supply_prev, supplyStart: f.total_supply_start, boundaryBurnt: f.boundary_block_burnt });
+  assert.equal(mint.toString(), f.expected_mint_yocto);
+  assert.ok(Math.abs(yoctoToNear(mint) - 25_966.268718546264) < 1e-6);
+});
+
+test('blockBurnt counts only chunks newly included in the block', () => {
+  const block = { header: { height: 10 }, chunks: [
+    { height_included: 10, balance_burnt: '5' }, { height_included: 9, balance_burnt: '100' }, { height_included: 10, balance_burnt: '7' },
+  ] };
+  assert.equal(blockBurnt(block), 12n);
+});
+
+test('burn reconciliation: burns derived once, purchases never counted', () => {
+  const r = reconcileBurns({ mints: ['100', '200'], supplyStart: '1000', supplyEnd: '1250' });
+  assert.equal(r.issuance, 300n);
+  assert.equal(r.supplyChange, 250n);
+  assert.equal(r.derivedBurns, 50n);
+  // Identity: supply change = issuance − burns (no double counting).
+  assert.equal(r.supplyChange, r.issuance - r.derivedBurns);
+  // No mints in the period: all supply decline is burns.
+  const none = reconcileBurns({ mints: [], supplyStart: '1000', supplyEnd: '990' });
+  assert.equal(none.derivedBurns, 10n);
+});
+
+test('epoch sanity checks flag supply rising inside an epoch and mints above the cap', () => {
+  const { records } = fixture('epochs.json');
+  const checks = epochChecks(records);
+  assert.equal(checks.length, 2);
+  assert.ok(checks[0].issues.includes('mint above max_inflation_rate cap'), JSON.stringify(checks[0]));
+  assert.ok(checks[1].issues.includes('supply rose inside the epoch'), JSON.stringify(checks[1]));
+  assert.ok(checks[1].mint_to_cap_ratio > 0.99 && checks[1].mint_to_cap_ratio <= 1.001);
+  assert.ok(!checks[1].issues.some((i) => i.startsWith('boundary spacing')));
+  // A missing epoch shows up as a spacing gap.
+  const gap = epochChecks([records[0], { ...records[2], start_height: 1000 + 2 * 43_200 + 5 }]);
+  assert.ok(gap[0].issues.some((i) => i.startsWith('boundary spacing')));
+  // Cap formula: 1e9 NEAR × 2.5% × 7 h ÷ 31,556,952 s ≈ 19,963.9 NEAR.
+  const exp = expectedMaxMint({ supply: 10n ** 33n, rate: [1, 40], durationNs: 25_200n * 10n ** 9n });
+  assert.ok(Math.abs(yoctoToNear(exp) - 19_963.9) < 0.1);
+});
+
+test('30-day windowing uses complete UTC days, end exclusive', () => {
+  const w = utcWindow(new Date('2026-11-14T11:51:18Z'));
+  assert.equal(w.start, '2026-10-15T00:00:00.000Z');
+  assert.equal(w.end, '2026-11-14T00:00:00.000Z');
+  const days = daysIn(w.start, w.end);
+  assert.equal(days.length, 30);
+  assert.equal(days[0], '2026-10-15');
+  assert.equal(days.at(-1), '2026-11-13');
+  // Exactly at midnight: today is not complete, so it is excluded.
+  assert.deepEqual(utcWindow(new Date('2026-11-14T00:00:00Z')), w);
+});
+
+test('daily sums: missing days make the total unavailable, never zero; out-of-window days ignored', () => {
+  const { series } = fixture('llama-series.json');
+  const w = utcWindow(new Date('2026-11-14T06:00:00Z'));
+  const s = sumDaily(series, w.start, w.end);
+  assert.equal(s.sum, null);
+  assert.deepEqual(s.missing, ['2026-10-20']);
+  assert.equal(s.daysPresent, 29);
+  assert.equal(s.partialSum, 285); // 5 + 28 × 10; the 2026-11-14 value (99) is outside the window
+  const full = sumDaily([...series, [1792454400, 10]], w.start, w.end);
+  assert.equal(full.sum, 295);
+});
+
+test('weekly chart buckets are fixed from the anchor; the last may be partial', () => {
+  const b = weeklyBuckets('2026-02-01T00:00:00.000Z', '2026-02-20T00:00:00.000Z');
+  assert.equal(b.length, 3);
+  assert.deepEqual(b.map((x) => x.days), [7, 7, 5]);
+  assert.equal(b[2].partial, true);
+});
+
+test('metric records: unavailable means null + reason; ratios refuse zero denominators', () => {
+  const u = metric({ value: 0, unit: 'NEAR', source: 's', method: 'm', status: 'unavailable', reason: 'source failed' });
+  assert.equal(u.value, null);
+  assert.throws(() => metric({ value: null, unit: 'NEAR', source: 's', method: 'm', status: 'unavailable' }));
+  assert.throws(() => metric({ value: null, unit: 'NEAR', source: 's', method: 'm', status: 'measured' }));
+  assert.throws(() => metric({ value: 1, unit: 'NEAR', source: 's', method: 'm', status: 'guess' }));
+  assert.equal(safeRatio(1, 0), null);
+  assert.equal(safeRatio(null, 2), null);
+  assert.equal(safeRatio(1, 4), 0.25);
+});
+
+test('blockBefore finds the last block before a UTC instant, skipping missing heights', async () => {
+  // Fake chain: heights 1000..100000, ~0.6 s apart with jitter; every 7th height missing.
+  const base = Date.parse('2026-11-01T00:00:00Z') * 1e6;
+  const ns = (h) => BigInt(Math.round(base + (h - 1000) * 6e8 + ((h * 7919) % 97) * 1e6));
+  const exists = (h) => h >= 1000 && h <= 100_000 && h % 7 !== 0;
+  let calls = 0;
+  const rpc = { call: async (method, { block_id }) => {
+    calls++;
+    if (!exists(block_id)) throw Object.assign(new Error('UNKNOWN_BLOCK'), { name: 'UNKNOWN_BLOCK' });
+    return { header: { height: block_id, hash: `h${block_id}`, prev_hash: `h${block_id - 1}`, epoch_id: 'e', next_epoch_id: 'n',
+      timestamp_nanosec: ns(block_id).toString(), total_supply: String(block_id) }, chunks: [] };
+  } };
+  const rec = (h) => ({ start_height: h, start_hash: `h${h}`, start_time: new Date(Number(ns(h) / 1_000_000n)).toISOString(), start_timestamp_ns: ns(h).toString(), total_supply_start: String(h) });
+  const records = [rec(1000), rec(44201), rec(87401)];
+  const final = { height: 100_000, timestamp_ns: ns(100_000).toString() };
+  for (const iso of ['2026-11-01T03:00:00.000Z', '2026-11-01T12:00:00.000Z', '2026-11-01T16:00:00.000Z']) {
+    const t = BigInt(Date.parse(iso)) * 1_000_000n;
+    let expected = null;
+    for (let h = 1000; h <= 100_000; h++) if (exists(h) && ns(h) < t) expected = h;
+    calls = 0;
+    const b = await blockBefore(rpc, iso, records, final);
+    assert.equal(b.height, expected, iso);
+    assert.ok(calls < 40, `too many calls: ${calls}`);
+  }
+});

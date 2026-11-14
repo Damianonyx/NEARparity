@@ -1,6 +1,19 @@
 {
   "account_id": "buybacks.multisignature.near",
-  "label": "unconfirmed wallet",
-  "official_source": null,
-  "reason": "Candidate supplied for access testing. An official NEAR or NEAR Intents source has not yet been verified. Balances and net accumulation do not establish purchases or burns."
+  "label": "revenue wallet listed on revenue.near.org",
+  "official_source": {
+    "url": "https://revenue.near.org/",
+    "publisher": "NEAR (official revenue dashboard on near.org)",
+    "section": "Wallet Breakdown (All-time) — \"Traceable flow of revenue\"",
+    "quoted_row": "buybacks.multisignature.near | 1,781,811.8 NEAR | 40.9 %",
+    "checked_at": "2026-11-14T12:04:06Z",
+    "checked_via": "GitHub Actions run 43592968668 (scripts/check-apis.mjs, official-source probe)"
+  },
+  "confirmed": "NEAR's official revenue dashboard lists this account as one of three wallets in its all-time revenue wallet breakdown (with fefundsadmin.sputnik-dao.near and 1csfundsadmin.sputnik-dao.near).",
+  "not_confirmed": [
+    "That changes in its balance are open-market NEAR purchases (transfers from intents.near do not show the swap itself).",
+    "That it is the only wallet receiving buyback NEAR.",
+    "Why its on-chain balance differs from the dashboard's all-time figure."
+  ],
+  "reason": "Balances and net accumulation do not establish purchases or burns. Purchased NEAR held in a wallet is not burned and does not reduce total supply."
 }
