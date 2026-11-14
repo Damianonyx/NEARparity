@@ -73,33 +73,34 @@ function renderAnswer(L) {
   box.textContent = '';
   const proxy = m.coverage_proxy; const wallet = m.coverage_wallet; const verified = m.coverage_verified;
   box.append(
-    el('p', { class: 'small' }, `Buyback coverage, ${fmtDay(L.window.start)} – ${fmtDay(lastDay(L.window.end))} (30 UTC days)`),
+    el('p', { class: 'eyebrow' }, `Buyback coverage · ${fmtDay(L.window.start)} – ${fmtDay(lastDay(L.window.end))}`),
     el('div', { class: 'big' }, proxy?.value != null ? fmtPct(proxy.value) : 'Unavailable', ' ', ...pill(proxy)),
-    el('p', {}, 'of newly issued NEAR, using the DefiLlama revenue-based buyback ', el('strong', {}, 'proxy'), '.'),
-    el('p', { class: 'small' },
-      'Verified coverage: ', el('strong', {}, verified?.value != null ? fmtPct(verified.value) : 'unavailable'), ' — ', verified?.reason || '',
-      ' Wallet net accumulation covers ', el('strong', {}, wallet?.value != null ? fmtPct(wallet.value) : 'unavailable'), ' of issuance (net accumulation, not purchases).'),
+    el('p', { class: 'answer-line' }, 'of newly issued NEAR is matched by the revenue-based buyback proxy.'),
+    el('p', { class: 'small muted' },
+      `Verified coverage: ${verified?.value != null ? fmtPct(verified.value) : 'unavailable'}. Wallet net accumulation: ${wallet?.value != null ? fmtPct(wallet.value) : 'unavailable'} (not purchases).`),
   );
 }
 
 // ---------- cards ----------
-function row(label, m, { fmt = fmtNear, headline = false, sub = null, statusPill = true } = {}) {
-  const k = el('span', { class: 'k' }, label, statusPill && m ? [' ', ...pill(m)] : null);
-  let v;
-  if (!m || m.status === 'unavailable' || m.value == null) {
-    v = el('span', { class: 'v' }, 'Unavailable', el('span', { class: 'reason' }, m?.reason || 'No data.'));
-  } else {
-    v = el('span', { class: 'v' }, fmt(m.value), sub ? el('small', {}, sub) : null);
-  }
-  return el('li', { class: headline ? 'headline' : null }, k, v);
+const shortPeriod = (m) => (m?.period_start ? `${fmtDayShort(m.period_start)} – ${fmtDay(lastDay(m.period_end))}` : '');
+function row(label, m, { fmt = fmtNear, baseStatus = null } = {}) {
+  const showPill = m && (m.status !== baseStatus || m.stale || m.derived);
+  const k = el('span', { class: 'k' }, label, showPill ? [' ', ...pill(m)] : null);
+  const v = !m || m.status === 'unavailable' || m.value == null
+    ? el('span', { class: 'v' }, 'Unavailable', el('span', { class: 'reason' }, m?.reason || 'No data.'))
+    : el('span', { class: 'v' }, fmt(m.value));
+  return el('li', {}, k, v);
 }
 
-function card({ title, period, rows, source, how }) {
+function card({ title, hero, rows = [], source, how }) {
+  const hm = hero.m; const ok = hm && hm.status !== 'unavailable' && hm.value != null;
   return el('article', { class: 'card' },
-    el('h3', {}, title),
-    el('p', { class: 'period' }, period),
-    el('ul', { class: 'rows' }, rows),
-    el('p', { class: 'src' }, 'Source: ', source),
+    el('div', { class: 'card-head' }, el('h3', {}, title), el('span', { class: 'period' }, shortPeriod(hm))),
+    el('p', { class: 'hero-label' }, hero.label),
+    el('div', { class: 'hero-value' }, ok ? (hero.fmt || fmtNear)(hm.value) : 'Unavailable', ' ', ...pill(hm)),
+    ok && hero.note ? el('p', { class: 'hero-note' }, hero.note) : (!ok ? el('p', { class: 'hero-note' }, hm?.reason || '') : null),
+    rows.length ? el('ul', { class: 'rows' }, rows.map((r) => row(r[0], r[1], { ...(r[2] || {}), baseStatus: hm?.status }))) : null,
+    el('p', { class: 'src' }, `Source: ${source}`),
     el('details', {}, el('summary', {}, 'How this is calculated'), el('div', { class: 'how', html: how })),
   );
 }
@@ -112,51 +113,50 @@ function renderCards(L) {
   const ratio = m.issuance?.mint_to_cap_ratio_range;
   wrap.append(
     card({
-      title: 'Issuance', period: periodText(m.issuance),
+      title: 'Issuance',
+      hero: { label: 'Newly minted NEAR', m: m.issuance, note: m.issuance?.epochs_counted ? `${m.issuance.epochs_counted} epoch boundaries` : null },
       rows: [
-        row('Newly minted NEAR', m.issuance, { headline: true, sub: m.issuance?.epochs_counted ? `${m.issuance.epochs_counted} epoch boundaries` : null }),
-        row('Per day', m.daily_issuance, { fmt: (v) => `${nf0.format(v)} NEAR/day` }),
-        row('Observed annualised rate', m.issuance_annualised_rate, { fmt: (v) => fmtPct(v, 2), sub: cap ? `Protocol cap ${cap.max_inflation_rate} = ${fmtPct(eval_rate(cap.max_inflation_rate), 1)}: a maximum, not measured issuance` : null }),
+        ['Per day', m.daily_issuance, { fmt: (v) => `${nf0.format(v)} NEAR` }],
+        ['Observed annual rate', m.issuance_annualised_rate, { fmt: (v) => `${fmtPct(v, 2)}${cap ? ` (cap ${fmtPct(eval_rate(cap.max_inflation_rate), 1)})` : ''}` }],
       ],
-      source: m.issuance?.source || '—',
+      source: 'NEAR archival RPC (block headers)',
       how: `<p>NEAR mints new tokens at each epoch boundary (about every 7 hours). For every boundary whose first block falls in the window, the build reads <code>total_supply</code> of the first block and of the block before it, and adds back the protocol burns included in that first block: <code>mint = supply(first) − supply(previous) + burnt(first)</code>. These are exact yoctoNEAR integers, summed with BigInt.</p>
 <p>Sanity checks: within each epoch supply must only fall (burns), and each mint should sit just under <code>supply × max_inflation_rate × epoch duration ÷ year</code>. ${checks ? `${checks.epochs_checked} epochs checked since February, ${checks.epochs_flagged} flagged` : ''}${ratio ? `; in this window mints were ${fmtPct(ratio[0])}–${fmtPct(ratio[1])} of that cap.` : '.'} The cap is shown for comparison only and is never used as issuance.</p>
 <p>Epoch boundaries are cached in <a href="data/epochs.json">data/epochs.json</a>.</p>`,
     }),
     card({
-      title: 'Intents economics', period: periodText(m.intents_volume),
+      title: 'Intents economics',
+      hero: { label: 'Net revenue captured', m: m.intents_net_revenue, fmt: fmtUsd, note: m.net_revenue_capture_rate?.value != null ? `${nf2.format(m.net_revenue_capture_rate.value)} bps of swap volume` : null },
       rows: [
-        row('Swap volume', m.intents_volume, { fmt: fmtUsd, headline: true, sub: m.avg_daily_volume?.value != null ? `${fmtUsd(m.avg_daily_volume.value)}/day average` : null }),
-        row('Gross fees', m.intents_gross_fees, { fmt: fmtUsd }),
-        row('Net revenue captured', m.intents_net_revenue, { fmt: fmtUsd, sub: m.net_revenue_capture_rate?.value != null ? `${nf2.format(m.net_revenue_capture_rate.value)} bps of volume` : null }),
-        row('Labelled buyback revenue', m.intents_holders_revenue, { fmt: fmtUsd, sub: m.buyback_allocation?.value != null ? `${nf0.format(m.buyback_allocation.value)}% of net revenue (DefiLlama label)` : null }),
+        ['Swap volume', m.intents_volume, { fmt: fmtUsd }],
+        ['Gross fees', m.intents_gross_fees, { fmt: fmtUsd }],
+        ['Labelled as buyback money', m.intents_holders_revenue, { fmt: fmtUsd }],
       ],
-      source: 'DefiLlama, protocol near-intents (dexs and fees APIs)',
+      source: 'DefiLlama (near-intents)',
       how: `<p>Daily DefiLlama values are summed over the same 30 UTC days. If any day is missing, the total is shown as unavailable rather than summed with a gap.</p>
 <p><strong>Gross fees</strong>: protocol plus affiliate fees on swaps. <strong>Net revenue</strong>: NEAR's captured revenue after partner and front-end distributions (DefiLlama measures it as NEAR/wNEAR swept into NEAR's revenue wallets). <strong>Labelled buyback revenue</strong>: DefiLlama's “holders revenue”, which labels captured revenue from 2026-02-23 as buyback money. It is a label, not a record of purchases, so it is kept separate from verified purchases and marked proxy.</p>
 <p>Capture rate = net revenue ÷ volume. Allocation = labelled buyback revenue ÷ net revenue.</p>`,
     }),
     card({
-      title: 'Buyback coverage', period: periodText(m.coverage_proxy),
+      title: 'Buyback coverage',
+      hero: { label: 'Proxy ÷ issuance', m: m.coverage_proxy, fmt: (v) => fmtPct(v), note: m.buyback_proxy_near?.value != null ? `${fmtNear(m.buyback_proxy_near.value)} proxy vs ${fmtNear(m.issuance?.value)} issued` : null },
       rows: [
-        row('Verified purchases ÷ issuance', m.coverage_verified, { fmt: (v) => fmtPct(v) }),
-        row('Proxy ÷ issuance', m.coverage_proxy, { fmt: (v) => fmtPct(v), headline: true, sub: m.buyback_proxy_near?.value != null ? `${fmtNear(m.buyback_proxy_near.value)} proxy` : null }),
-        row('Wallet net accumulation ÷ issuance', m.coverage_wallet, { fmt: (v) => fmtPct(v), sub: m.wallet_net_excl_internal?.value != null ? `${fmtNear(m.wallet_net_excl_internal.value)} net, excl. internal transfers` : null }),
+        ['Verified ÷ issuance', m.coverage_verified, { fmt: (v) => fmtPct(v) }],
+        ['Wallet net ÷ issuance', m.coverage_wallet, { fmt: (v) => fmtPct(v) }],
       ],
-      source: 'Measured issuance (NEAR chain) with DefiLlama revenue ÷ daily price, and wallet balances (archival RPC)',
+      source: 'NEAR RPC · DefiLlama · daily price',
       how: `<p><strong>Verified coverage</strong> would be verified NEAR purchased ÷ newly issued NEAR over the same period. It is unavailable: ${escapeHtml(m.verified_purchases?.reason || '')}</p>
 <p><strong>Proxy</strong>: for each day, DefiLlama labelled buyback revenue (USD) ÷ that day's NEAR price, summed and divided by measured issuance over the same 30 days.</p>
 <p><strong>Wallet net accumulation</strong>: change in NEAR held by <code>${escapeHtml(L.wallet?.account_id || '')}</code> (native + wNEAR + wNEAR inside intents.near) between the window's boundary blocks, minus transfers from NEAR's other listed revenue wallets (${escapeHtml((L.wallet?.related_revenue_wallets?.accounts || []).join(', '))}; ${m.wallet_internal_transfers?.value != null ? fmtNear(m.wallet_internal_transfers.value) : 'unavailable'} in this window), ÷ measured issuance. A balance increase is net accumulation, not proof of purchases. Purchased NEAR held in a wallet is not burned.</p>`,
     }),
     card({
-      title: 'Actual supply change', period: periodText(m.supply_change),
+      title: 'Actual supply change',
+      hero: { label: 'Total supply change', m: m.supply_change, fmt: (v) => `${v >= 0 ? '+' : ''}${nf0.format(v)} NEAR`, note: m.supply_end?.value != null ? `Supply now ${nf0.format(m.supply_end.value)} NEAR` : null },
       rows: [
-        row('Total supply change', m.supply_change, { headline: true, fmt: (v) => `${v >= 0 ? '+' : ''}${nf0.format(v)} NEAR` }),
-        row('Issuance (minted)', m.issuance),
-        row('Protocol burns (derived)', m.derived_burns),
-        row('Supply at window end', m.supply_end),
+        ['Minted', m.issuance],
+        ['Burned (derived)', m.derived_burns],
       ],
-      source: m.supply_change?.source || '—',
+      source: 'NEAR archival RPC (block headers)',
       how: `<p>Supply change = <code>total_supply</code> of the last block before the window end − that of the last block before the window start. It already includes burns.</p>
 <p>Burns are derived: issuance − supply change. They are not subtracted again (no double counting). Buybacks do not appear here: NEAR bought and held in a treasury wallet stays in total supply, so treasury purchases are never counted as burns.</p>`,
     }),
@@ -374,6 +374,8 @@ function renderClaims(L) {
 function renderWallet(L) {
   const box = $('#wallet'); box.textContent = '';
   const w = L.wallet; if (!w) { box.append(el('p', {}, 'No wallet configured.')); return; }
+  const wm = L.metrics.wallet_net_excl_internal;
+  $('#wallet-summary').textContent = `${w.account_id} is listed on NEAR's official revenue dashboard. Over the last 30 days it accumulated ${wm?.value != null ? fmtNear(wm.value) : 'an unavailable amount'} net of internal transfers. That is accumulation, not proof of purchases.`;
   const src = w.official_source;
   box.append(el('p', {}, el('code', {}, w.account_id), ' · ', el('strong', {}, w.label_used || w.label)));
   if (src) {
@@ -409,7 +411,7 @@ function renderSources(L, S) {
   }
   t.append(tb);
   const ul = $('#sources'); ul.textContent = '';
-  for (const src of L.sources || []) ul.append(el('li', {}, el('strong', {}, src.name), ': ', el('a', { href: src.url }, src.url), ` — ${src.used_for}`));
+  for (const src of L.sources || []) ul.append(el('li', {}, el('a', { href: src.url }, src.name), ` — ${src.used_for}`));
 }
 
 // ---------- theme ----------

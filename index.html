@@ -30,7 +30,7 @@
       <div class="hero-copy">
         <h1 class="pixel-title"><span class="sr-only">NEAR Parity</span><span id="pixel-title" aria-hidden="true"></span></h1>
         <p class="hero-q">Are NEAR Intents buybacks keeping pace with new NEAR issuance?</p>
-        <p class="hero-lede">Measured issuance, Intents revenue, buyback evidence and actual supply change, with every calculation shown. Buybacks do not automatically reduce supply: purchased NEAR can sit in a treasury wallet, and matching issuance would not establish zero inflation or price appreciation.</p>
+        <p class="hero-lede">Measured issuance, Intents revenue and buyback evidence, with every calculation shown. Buybacks do not reduce supply by themselves: purchased NEAR can sit in a treasury wallet.</p>
         <div class="hero-cta">
           <a class="btn" href="#answer">See the numbers</a>
           <a class="btn-link" href="#cards-h">How it's calculated <span aria-hidden="true">›</span></a>
@@ -49,13 +49,14 @@
 
     <section aria-labelledby="cards-h">
       <h2 id="cards-h" class="section-h">Last 30 days <span class="muted" id="window-label"></span></h2>
+      <p class="section-sub">Thirty complete UTC days. Each figure carries its status: measured, proxy or unavailable.</p>
       <div class="cards" id="cards"></div>
     </section>
 
     <section aria-labelledby="sim-h" class="panel" id="simulator">
       <h2 id="sim-h">Buyback parity simulator</h2>
       <p class="tag-line"><span class="pill pill-scenario">Conditional scenario</span> Not a prediction, and not a supply-neutrality threshold.</p>
-      <p class="small">Required daily volume (USD) = daily issuance (NEAR) × NEAR price (USD) ÷ (net revenue capture rate × buyback allocation)</p>
+      <details class="formula"><summary>Formula</summary><p class="small">Required daily volume (USD) = daily issuance (NEAR) × NEAR price (USD) ÷ (net revenue capture rate × buyback allocation). Rates are converted to decimals: bps ÷ 10,000 and % ÷ 100.</p></details>
       <form id="sim-form" class="sim-grid" novalidate>
         <label>NEAR price (USD)
           <input id="sim-price" type="number" inputmode="decimal" min="0" step="0.01" required>
@@ -83,7 +84,7 @@
           <button type="button" data-range="12" aria-pressed="false">Last 12 weeks</button>
         </div>
       </div>
-      <p class="small">Weeks start 2026-02-01 (UTC). No verified purchase series exists, so the chart shows the two labelled alternatives: the DefiLlama revenue-based <strong>proxy</strong> and the <strong>net accumulation</strong> of the listed revenue wallet.</p>
+      <p class="small">No verified purchase series exists, so two labelled alternatives are shown. Tap a week for details.</p>
       <ul class="legend" id="legend"></ul>
       <div class="chart" id="chart" role="img" aria-label="Weekly bar chart of issuance, buyback proxy and wallet net accumulation"></div>
       <div class="tooltip" id="tooltip" role="status" hidden></div>
@@ -93,7 +94,7 @@
       </details>
     </section>
 
-    <section aria-labelledby="claims-h" class="panel">
+    <section aria-labelledby="claims-h" class="plain">
       <h2 id="claims-h">What this supports / What it can't establish</h2>
       <div class="two-col">
         <div>
@@ -107,15 +108,16 @@
       </div>
     </section>
 
-    <section aria-labelledby="wallet-h" class="panel">
+    <section aria-labelledby="wallet-h" class="plain">
       <h2 id="wallet-h">The buyback wallet</h2>
-      <div id="wallet"></div>
+      <p class="section-sub" id="wallet-summary"></p>
+      <details><summary>Wallet details, reconciliation and transfers</summary><div id="wallet"></div></details>
     </section>
 
-    <section aria-labelledby="sources-h" class="panel">
+    <section aria-labelledby="sources-h" class="plain">
       <h2 id="sources-h">Sources and refresh status</h2>
-      <div class="table-scroll"><table id="status-table"></table></div>
       <ul class="sources" id="sources"></ul>
+      <details><summary>Refresh status by source</summary><div class="table-scroll"><table id="status-table"></table></div></details>
       <p class="small">Raw data: <a href="data/latest.json">latest.json</a> · <a href="data/status.json">status.json</a> · <a href="data/epochs.json">epochs.json</a> · <a href="data/boundaries.json">boundaries.json</a> · <a href="data/wallet-transfers.json">wallet-transfers.json</a>. Missing data is shown as unavailable, never as zero.</p>
     </section>
   </main>
