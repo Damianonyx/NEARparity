@@ -394,6 +394,19 @@ set('buyback_proxy_near', ['llama_holders', 'price'], px?.value != null
 // Candidate wallet net accumulation (unconfirmed wallet).
 const walletLabel = wallet?.official_source ? wallet.label : 'unconfirmed wallet';
 let walletNet = null;
+// Transfers between the buyback wallet and NEAR's other listed revenue wallets (NearBlocks amounts).
+const related = new Set(wallet?.related_revenue_wallets?.accounts || []);
+function internalTransfers(start, end) {
+  if (!transfers || !wallet?.account_id) return null;
+  if (!transfers.complete && (transfers.txns.at(-1)?.time ?? '9') > start) return null; // history does not reach back far enough
+  let inbound = 0; let outbound = 0; let count = 0;
+  for (const t of transfers.txns) {
+    if (t.time < start || t.time >= end || t.success === false) continue;
+    if (t.to === wallet.account_id && related.has(t.from)) { inbound += t.deposit_near_approx; count++; }
+    if (t.from === wallet.account_id && related.has(t.to)) { outbound += t.deposit_near_approx; count++; }
+  }
+  return { inbound, outbound, net: inbound - outbound, count };
+}
 if (chain && wallet?.account_id) {
   const a = chain.boundaries[window.start].wallets?.[wallet.account_id]; const b = chain.boundaries[window.end].wallets?.[wallet.account_id];
   if (a && b) {
@@ -406,15 +419,31 @@ if (chain && wallet?.account_id) {
     }));
   }
 }
+{
+  const it = internalTransfers(window.start, window.end);
+  if (M.wallet_net_accumulation?.status === 'measured' && it) {
+    set('wallet_internal_transfers', ['chain', 'nearblocks'], metric({
+      value: it.net, unit: 'NEAR', ...W, source: `NearBlocks transfers between ${wallet.account_id} and ${[...related].join(', ')}`,
+      method: 'Inbound minus outbound transfers between the buyback wallet and the other revenue wallets listed on revenue.near.org. NearBlocks amounts.', status: 'measured', transfers: it.count,
+    }));
+    set('wallet_net_excl_internal', ['chain', 'nearblocks'], metric({
+      value: M.wallet_net_accumulation.value - it.net, unit: 'NEAR', ...W, source: `${M.wallet_net_accumulation.source}; NearBlocks transfers`,
+      method: 'Wallet net accumulation (archival RPC balances) minus net transfers from NEAR\'s other listed revenue wallets, so moves between NEAR\'s own wallets are not counted as new buyback NEAR. Still net accumulation, not proof of purchases.',
+      status: 'measured', derived: true, wallet: wallet.account_id, wallet_label: walletLabel,
+    }));
+  } else {
+    set('wallet_net_excl_internal', ['chain', 'nearblocks'], unavailable('NEAR', 'Archival RPC balances + NearBlocks transfers', 'Net accumulation minus internal transfers.', 'Wallet balances or transfer history unavailable.'));
+  }
+}
 if (!M.wallet_net_accumulation) set('wallet_net_accumulation', ['chain'], unavailable('NEAR', SRC_CHAIN, 'Balance change of the candidate wallet.', chain ? `Wallet balance lookups failed: ${chain.walletErrors.slice(0, 2).join('; ')}` : 'Chain data failed.', { wallet: wallet?.account_id ?? null, wallet_label: walletLabel }));
 
 set('verified_purchases', [], unavailable('NEAR', 'n/a', 'Would require swap records attributed to an officially confirmed buyback wallet.',
   wallet?.official_source
     ? `The wallet is listed on an official source (${wallet.official_source.url}), but its balance change is net accumulation: transfers from intents.near do not show the swaps, so purchases are not verified.`
     : `The candidate wallet (${wallet?.account_id ?? 'none'}) is not confirmed by an official NEAR or NEAR Intents source in this build, and balance changes alone do not prove purchases.`));
-set('coverage_verified', [], unavailable('ratio', 'n/a', 'Verified NEAR purchased ÷ newly issued NEAR.', 'Verified purchases are unavailable (see verified_purchases).'));
+set('coverage_verified', [], unavailable('ratio', 'n/a', 'Verified NEAR purchased ÷ newly issued NEAR.', 'No verified purchase record exists: wallet inflows from intents.near do not show the swaps behind them.'));
 ratioMetric('coverage_proxy', ['llama_holders', 'price', 'chain'], 'buyback_proxy_near', 'issuance', 'ratio', 'Proxy: revenue-based buyback estimate (NEAR) ÷ measured issuance (NEAR), same 30 UTC days.', 'proxy');
-ratioMetric('coverage_wallet', ['chain'], 'wallet_net_accumulation', 'issuance', 'ratio', `Net accumulation of the ${walletLabel} ÷ measured issuance, same 30 UTC days. Not verified purchases.`, 'proxy');
+ratioMetric('coverage_wallet', ['chain', 'nearblocks'], 'wallet_net_excl_internal', 'issuance', 'ratio', `Net accumulation of the ${walletLabel}, excluding transfers from NEAR's other listed revenue wallets, ÷ measured issuance, same 30 UTC days. Not verified purchases.`, 'proxy');
 
 // Transfers summary (NearBlocks)
 let transfersSummary = null;
@@ -453,10 +482,11 @@ if (chain) {
       issuance_near: yoctoToNear(rec.issuance), supply_change_near: yoctoToNear(rec.supplyChange), derived_burns_near: yoctoToNear(rec.derivedBurns),
       buyback_proxy_near: p?.value ?? null, buyback_proxy_status: p?.value != null ? 'proxy' : 'unavailable',
       wallet_net_near: wa && wb ? yoctoToNear(toYocto(wb.total_yocto) - toYocto(wa.total_yocto)) : null,
+      wallet_internal_near: internalTransfers(bk.start, bk.end)?.net ?? null,
       wallet_balance_end_near: wb ? yoctoToNear(wb.total_yocto) : null,
       verified_purchases_near: null,
     };
-  });
+  }).map((r) => ({ ...r, wallet_net_excl_internal_near: r.wallet_net_near != null && r.wallet_internal_near != null ? r.wallet_net_near - r.wallet_internal_near : null }));
 }
 
 // ---------- stale fallback: never overwrite good data with nulls ----------
