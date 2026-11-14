@@ -1,7 +1,7 @@
 {
   "schema_version": 2,
-  "generated_at": "2026-11-14T15:14:13.912Z",
-  "last_successful_refresh": "2026-11-14T15:14:13.912Z",
+  "generated_at": "2026-11-14T15:22:44.361Z",
+  "last_successful_refresh": "2026-11-14T15:22:44.361Z",
   "partial_refresh": false,
   "failed_groups": {},
   "notes": {},
@@ -270,10 +270,10 @@
       "reported_by": "DefiLlama"
     },
     "price_current": {
-      "value": 3.2118832885780257,
+      "value": 3.1985,
       "unit": "USD",
-      "period_start": "2026-11-14T15:14:01.000Z",
-      "period_end": "2026-11-14T15:14:01.000Z",
+      "period_start": "2026-11-14T15:22:36.000Z",
+      "period_end": "2026-11-14T15:22:36.000Z",
       "source": "DefiLlama coins API: https://coins.llama.fi/prices/current/coingecko:near",
       "method": "Latest price for coingecko:near.",
       "status": "measured",
@@ -385,14 +385,14 @@
     "label": "Conditional scenario under the stated assumptions. Not a prediction and not a supply-neutrality threshold.",
     "defaults": {
       "daily_issuance_near": 88934.8197390998,
-      "price_usd": 3.2118832885780257,
+      "price_usd": 3.1985,
       "net_revenue_capture_bps": 4.745619515601705,
       "buyback_allocation_pct": 100,
       "observed_avg_daily_volume_usd": 126582068.23333333
     },
     "default_result": {
       "finite": true,
-      "value": 601919855.465901,
+      "value": 599411773.3213254,
       "reason": null
     },
     "period_start": "2026-10-15T00:00:00.000Z",
@@ -1086,7 +1086,7 @@
   },
   "official_dashboard": {
     "source": "NEAR revenue dashboard (official): https://revenue.near.org/",
-    "fetched_at": "2026-11-14T15:14:13.544Z",
+    "fetched_at": "2026-11-14T15:22:43.699Z",
     "wallet_breakdown": [
       {
         "account": "fefundsadmin.sputnik-dao.near",
@@ -1110,8 +1110,8 @@
       "share_pct": 40.9
     },
     "onchain_now": {
-      "block_height": 224531423,
-      "block_time": "2026-11-14T15:14:08.404Z",
+      "block_height": 224532316,
+      "block_time": "2026-11-14T15:22:37.795Z",
       "total_near": 2282273.111386581,
       "native_near": 2282273.111386581,
       "wnear_near": 0,
