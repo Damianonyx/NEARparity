@@ -53,6 +53,7 @@ await run('real data', ROOT, 8731, (html) => {
   check('on-chain trace card shown', html.includes('On-chain buyback trace') && html.includes('lower bound'));
   check('headline coverage rendered', /class="big">[^<]*%/.test(html));
   check('chart SVG rendered', /<div class="chart" id="chart"[^>]*>\s*<svg/.test(html));
+  check('sensitivity table rendered', html.includes('Which assumption matters most?'));
   check('hero simulation running', /id="hero-canvas"/.test(html) && /id="ro-cov">[0-9.]+%</.test(html) && /id="ro-need">The revenue proxy reaches parity at/.test(html));
   check('simulator result rendered', /id="sim-out"[\s\S]{0,400}(per day|No finite volume)/.test(html));
   check('no section errors', !html.includes('class="section-error"'));

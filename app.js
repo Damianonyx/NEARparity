@@ -200,6 +200,34 @@ const eval_rate = (s) => { const [a, b] = String(s).split('/').map(Number); retu
 const escapeHtml = (s) => String(s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 
 // ---------- simulator ----------
+/** Sensitivity: which assumption moves the parity requirement most? Each row varies one input (low/high) and
+ *  holds the others at the 30-day defaults. Same formula as the calculator; every cell is a conditional scenario. */
+function renderSensitivity(L) {
+  const box = $('#sensitivity'); if (!box) return; box.textContent = '';
+  const d = L.simulator?.defaults || {}; const obs = d.observed_avg_daily_volume_usd;
+  const base = { iss: d.daily_issuance_near, price: d.price_usd, bps: d.net_revenue_capture_bps, pct: d.buyback_allocation_pct };
+  if (Object.values(base).some((v) => v == null) || !obs) return;
+  const req = (x) => parityRequiredDailyVolume({ dailyIssuanceNear: x.iss, priceUsd: x.price, captureRate: x.bps / 10_000, allocation: x.pct / 100 });
+  const cell = (x) => { const r = req(x); return r.finite ? `${nf2.format(r.value / obs)}×` : 'no finite volume'; };
+  const rows = [
+    ['NEAR price', 'price', [base.price * 0.5, base.price * 2], (v) => `${nf2.format(v)}`],
+    ['Net revenue capture', 'bps', [base.bps * 0.5, base.bps * 2], (v) => `${nf2.format(v)} bps`],
+    ['Buyback allocation', 'pct', [base.pct * 0.5, Math.min(100, base.pct * 2)], (v) => `${nf0.format(v)}%`],
+    ['Daily issuance', 'iss', [base.iss * 0.64, base.iss * 1.2], (v) => `${nf0.format(v)} NEAR`],
+  ];
+  const table = el('table', {},
+    el('thead', {}, el('tr', {}, ['Assumption', 'Low', 'Base', 'High'].map((t, i) => el('th', { class: i ? 'n' : null }, t)))),
+    el('tbody', {}, rows.map(([label, key, [lo, hi], f]) => el('tr', {}, el('th', { scope: 'row' }, label),
+      el('td', { class: 'n' }, `${f(lo)} → ${cell({ ...base, [key]: lo })}`),
+      el('td', { class: 'n' }, `${f(base[key])} → ${cell(base)}`),
+      el('td', { class: 'n' }, `${f(hi)} → ${cell({ ...base, [key]: hi })}`)))));
+  box.append(
+    el('h3', {}, 'Which assumption matters most?'),
+    el('p', { class: 'small' }, `Volume needed for parity, as a multiple of the observed 30-day average (${fmtUsd(obs)}/day), varying one input at a time and holding the others at their 30-day values. Price and capture rate scale the answer directly; allocation is already ${nf0.format(base.pct)}%, so it cannot rise much. Issuance “low” is 0.64× today (roughly the 1.6% target rate in HSP-029, a proposal not in effect). Every cell is a conditional scenario, not a forecast. The conclusion would change only if some combination brought the multiple to about 1× or below.`),
+    el('div', { class: 'table-scroll' }, table),
+  );
+}
+
 function setupSimulator(L) {
   const d = L.simulator?.defaults || {};
   const inputs = { price: $('#sim-price'), capture: $('#sim-capture'), alloc: $('#sim-alloc') };
@@ -246,6 +274,7 @@ function setupSimulator(L) {
   $('#sim-reset').addEventListener('click', reset);
   $('#sim-form').addEventListener('submit', (e) => e.preventDefault());
   reset();
+  renderSensitivity(L);
 }
 
 // ---------- chart (inline SVG) ----------

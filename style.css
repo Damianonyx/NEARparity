@@ -352,3 +352,8 @@ main h2, .section-h { font-family: ui-sans-serif, system-ui, "Helvetica Neue", A
 .lead-test { margin-top: 1.5rem; }
 .lead-test h3 { font-size: 1rem; margin: 0 0 .5rem; }
 .lead-test td.sig { font-weight: 700; color: var(--accent); }
+
+/* Sensitivity table */
+.sensitivity { margin-top: 1.5rem; }
+.sensitivity h3 { font-size: 1rem; margin: 0 0 .5rem; }
+.sensitivity th[scope="row"] { text-align: left; font-weight: 600; }

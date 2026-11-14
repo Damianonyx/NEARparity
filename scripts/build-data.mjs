@@ -15,7 +15,7 @@ import { DASHBOARD_URL, LLAMA, fetchDashboard, fetchLlamaSeries, fetchPrice, fet
 import { discoverStakingPools, firstPositiveDay, internalTransfers, walletCreatedAt } from './lib/wallet.mjs';
 import { traceMetrics, dailyTraceMetrics } from './lib/trace.mjs';
 import { DAILY_TRACE_SQL, DAILY_USAGE_SQL, FRESHNESS_SQL, daysToQuery, gcpAccessToken, mergeDaily, runQuery, sumDays } from './lib/bigquery.mjs';
-import { readFile } from 'node:fs/promises';
+import { readFile, writeFile } from 'node:fs/promises';
 
 export const SCHEMA_VERSION = 2;
 const BACKFILL_FROM = '2026-02-01T00:00:00.000Z';
@@ -661,6 +661,13 @@ if (!anyOk && prevLatest) {
   log('No fresh data at all; keeping the previous data/latest.json untouched.');
 } else {
   await store.writeJson('data/latest.json', latest);
+  // The weekly series as CSV (empty cell = unavailable, never zero).
+  if (latest.series_weekly?.length) {
+    const cols = ['period_start', 'period_end', 'days', 'partial', 'issuance_near', 'supply_change_near', 'derived_burns_near', 'buyback_proxy_near', 'wallet_net_excl_internal_near', 'verified_purchases_near', 'intents_volume_usd', 'price_avg_usd', 'active_accounts_avg', 'txns_avg', 'active_contracts_avg', 'usage_source'];
+    const cell = (v) => (v == null ? '' : typeof v === 'string' && /[",\n]/.test(v) ? `"${v.replace(/"/g, '""')}"` : String(v));
+    const csv = [cols.join(','), ...latest.series_weekly.map((row) => cols.map((c) => cell(row[c])).join(','))].join('\n');
+    await writeFile(store.url('data/weekly.csv'), `${csv}\n`);
+  }
   // One snapshot per UTC day (the first successful build of the day); earlier snapshots are never removed.
   const today = generatedAt.slice(0, 10);
   const existing = (await store.list('data/snapshots/')).filter((f) => f.startsWith(today));

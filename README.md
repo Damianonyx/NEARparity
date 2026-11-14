@@ -28,6 +28,7 @@ Requirements: Node 22 (22.21 or newer if you are behind an HTTP proxy). **No `np
 | `npm run check:apis` · `npm run verify:claims` | Access check of every endpoint; re-fetch of the primary sources cited in THESIS.md. |
 | `EXPLORER_JWT=… npm run check:explorer` (optional) | Key-gated check against the NEAR Intents Explorer API (1Click index): whether the withdrawing accounts' swaps are indexed (they are not) and which 1Click transactions name the buyback wallet. Saves `docs/explorer-check.json`. Get a key at partners.near-intents.org (key type: Explorer). |
 | `node scripts/check-bigquery.mjs` (needs Google sign-in; also a manual GitHub workflow) | BigQuery dataset freshness, the columns the SQL relies on, and free dry-run cost estimates for every query. Changes no data. |
+| `node scripts/check-deploy.mjs` | Checks that the live site serves the same `data/latest.json`, `app.js` and `index.html` as your checkout (exit 1 on a mismatch). Release, rollback and deployment notes: [docs/operations.md](docs/operations.md). |
 | `npm run check:withdrawers` (optional, keyless) | Reads the event logs of a sample of the wallet's inflows from the archival RPC: which NEAR Intents accounts withdraw to the wallet, and whether the purchase appears in the same transaction (it does not). Saves `docs/withdrawer-sample.json`. |
 | `NEAR_PARITY_SIMULATE_FAIL=chain,price npm run build` (in a copy of the repo) | The stale fallback in action: the named sources "fail", and their last good values are kept and marked stale with their date. |
 
@@ -137,6 +138,7 @@ Full field reference: [docs/data-api.md](docs/data-api.md).
 
 
 - `data/latest.json`: every metric, the weekly series since 2026-02-01, simulator defaults, the wallet reconciliation and the source list.
+- `data/weekly.csv`: the weekly series as a spreadsheet (empty cell = unavailable, never zero).
 - `data/status.json`: per source, ok or failed, HTTP code, error, fetched_at, last_ok_at.
 - `data/bigquery-usage.json`: per UTC day since 2026-02-01, from BigQuery: transactions, active accounts (distinct signers), active contracts (distinct `FUNCTION_CALL` receivers) and contract calls.
 - `data/bigquery-daily.json`: per UTC day, NEAR withdrawn to the buyback wallet and NEAR bought in swaps by the accounts that fund it (yoctoNEAR strings), plus those accounts and the first day each was seen.
