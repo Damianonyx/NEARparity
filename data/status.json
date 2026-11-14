@@ -1,100 +1,98 @@
 {
-  "generated_at": "2026-11-14T12:21:57.640Z",
-  "last_successful_refresh": "2026-11-14T12:21:57.640Z",
+  "generated_at": "2026-11-14T12:44:36.958Z",
+  "last_successful_refresh": "2026-11-14T12:44:36.958Z",
   "sources": {
     "near_archival_rpc": {
       "ok": true,
       "http_status": 200,
       "error": null,
-      "fetched_at": "2026-11-14T12:21:51.139Z",
+      "fetched_at": "2026-11-14T12:44:36.958Z",
       "url": "https://archival-rpc.mainnet.fastnear.com",
-      "calls": 2,
+      "calls": 5,
       "failures": 0,
-      "last_ok_at": "2026-11-14T12:21:51.139Z"
+      "last_ok_at": "2026-11-14T12:44:36.958Z"
     },
     "defillama_volume": {
       "ok": true,
       "http_status": 200,
       "error": null,
-      "fetched_at": "2026-11-14T12:21:51.561Z",
+      "fetched_at": "2026-11-14T12:44:28.284Z",
       "url": "https://api.llama.fi/summary/dexs/near-intents",
       "calls": 1,
       "failures": 0,
-      "last_ok_at": "2026-11-14T12:21:51.561Z"
+      "last_ok_at": "2026-11-14T12:44:28.284Z"
     },
     "defillama_fees": {
       "ok": true,
       "http_status": 200,
       "error": null,
-      "fetched_at": "2026-11-14T12:21:51.616Z",
+      "fetched_at": "2026-11-14T12:44:28.868Z",
       "url": "https://api.llama.fi/summary/fees/near-intents?dataType=dailyFees",
       "calls": 1,
       "failures": 0,
-      "last_ok_at": "2026-11-14T12:21:51.616Z"
+      "last_ok_at": "2026-11-14T12:44:28.868Z"
     },
     "defillama_revenue": {
       "ok": true,
       "http_status": 200,
       "error": null,
-      "fetched_at": "2026-11-14T12:21:51.667Z",
+      "fetched_at": "2026-11-14T12:44:29.453Z",
       "url": "https://api.llama.fi/summary/fees/near-intents?dataType=dailyRevenue",
       "calls": 1,
       "failures": 0,
-      "last_ok_at": "2026-11-14T12:21:51.667Z"
+      "last_ok_at": "2026-11-14T12:44:29.453Z"
     },
     "defillama_holders_revenue": {
       "ok": true,
       "http_status": 200,
       "error": null,
-      "fetched_at": "2026-11-14T12:21:51.716Z",
+      "fetched_at": "2026-11-14T12:44:30.028Z",
       "url": "https://api.llama.fi/summary/fees/near-intents?dataType=dailyHoldersRevenue",
       "calls": 1,
       "failures": 0,
-      "last_ok_at": "2026-11-14T12:21:51.716Z"
+      "last_ok_at": "2026-11-14T12:44:30.028Z"
     },
     "price_defillama_chart": {
       "ok": true,
       "http_status": 200,
       "error": null,
-      "fetched_at": "2026-11-14T12:21:52.061Z",
+      "fetched_at": "2026-11-14T12:44:30.522Z",
       "url": "https://coins.llama.fi/chart/coingecko:near?start=1769904000&span=287&period=1d&searchWidth=600",
       "calls": 1,
       "failures": 0,
-      "last_ok_at": "2026-11-14T12:21:52.061Z"
+      "last_ok_at": "2026-11-14T12:44:30.522Z"
     },
     "price_defillama_current": {
       "ok": true,
       "http_status": 200,
       "error": null,
-      "fetched_at": "2026-11-14T12:21:52.235Z",
+      "fetched_at": "2026-11-14T12:44:30.549Z",
       "url": "https://coins.llama.fi/prices/current/coingecko:near",
       "calls": 1,
       "failures": 0,
-      "last_ok_at": "2026-11-14T12:21:52.235Z"
+      "last_ok_at": "2026-11-14T12:44:30.549Z"
     },
     "nearblocks": {
       "ok": true,
       "http_status": 200,
       "error": null,
-      "fetched_at": "2026-11-14T12:21:53.302Z",
+      "fetched_at": "2026-11-14T12:44:31.765Z",
       "url": "https://api.nearblocks.io/v1/account/buybacks.multisignature.near/txns?per_page=100",
       "calls": 1,
       "failures": 0,
-      "last_ok_at": "2026-11-14T12:21:53.302Z"
+      "last_ok_at": "2026-11-14T12:44:31.765Z"
     },
     "near_revenue_dashboard": {
-      "ok": false,
-      "http_status": null,
-      "error": "fetch failed",
-      "fetched_at": "2026-11-14T12:21:57.560Z",
+      "ok": true,
+      "http_status": 200,
+      "error": null,
+      "fetched_at": "2026-11-14T12:44:36.528Z",
       "url": "https://revenue.near.org/",
       "calls": 1,
-      "failures": 1,
-      "last_ok_at": null
+      "failures": 0,
+      "last_ok_at": "2026-11-14T12:44:36.528Z"
     }
   },
-  "failed_groups": {
-    "revenue_dashboard": "fetch failed"
-  },
-  "rpc_calls": 2
+  "failed_groups": {},
+  "rpc_calls": 5
 }
