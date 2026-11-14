@@ -1,0 +1,78 @@
+name: Refresh data and deploy
+
+# Runs the offline tests, rebuilds data/, commits it (main only) and deploys GitHub Pages from main.
+# A partial refresh (some source failed) exits 2: the stale fallbacks are still committed, and the
+# run shows a warning instead of failing, so the site keeps its last good values.
+on:
+  push:
+  workflow_dispatch:
+  schedule:
+    - cron: '41 5 * * *' # daily, after DefiLlama has filled the previous UTC day
+
+permissions:
+  contents: read
+
+concurrency:
+  group: refresh-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Offline tests
+        run: node scripts/test.mjs
+      - name: Build data (no keys, no dependencies)
+        run: |
+          set +e
+          node --use-env-proxy scripts/build-data.mjs
+          code=$?
+          if [ "$code" = "2" ]; then
+            echo "::warning::Partial refresh: at least one source failed; previous good values were kept and marked stale (see data/status.json)."
+          elif [ "$code" != "0" ]; then
+            exit "$code"
+          fi
+      - name: Upload data (all branches)
+        uses: actions/upload-artifact@v4
+        with:
+          name: data-${{ github.run_id }}-${{ github.run_attempt }}
+          path: data/
+          retention-days: 14
+      - name: Commit refreshed data (main only)
+        if: github.ref == 'refs/heads/main'
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add data/
+          if git diff --cached --quiet; then echo 'No data changes.'; exit 0; fi
+          git commit -m "Data refresh $(date -u +%Y-%m-%dT%H:%MZ)"
+          git pull --rebase origin main
+          git push origin HEAD:main
+
+  deploy:
+    if: github.ref == 'refs/heads/main'
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main # includes the data commit pushed by the build job
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: .
+      - id: deployment
+        uses: actions/deploy-pages@v4

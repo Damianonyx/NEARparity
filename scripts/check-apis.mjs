@@ -151,6 +151,70 @@ async function probeRpc(prefix, url, archival = false) {
   await balances(`${prefix} historical`, url, blockReference);
 }
 
+// Backfill depth: the issuance method needs archival blocks and validators back to 2026-02-01.
+// The height is estimated from the current block rate; this is an access probe, not a lookup.
+async function probeArchiveDepth(url) {
+  const name = 'FastNEAR archival: header walk near 2026-02-01 (backfill depth)';
+  const final = await rpc('FastNEAR archival: block (final, for depth estimate)', url, 'block', { finality: 'final' }, blockShape);
+  if (!final) return skip(name, url, 'Final block unavailable; cannot estimate a 2026-02-01 height');
+  const nowS = Number(BigInt(final.result.header.timestamp_nanosec) / 1_000_000_000n);
+  const target = final.result.header.height - Math.round((nowS - Date.UTC(2026, 1, 1) / 1000) / 0.6);
+  const old = await rpc(`${name}: block ~${target}`, url, 'block', { block_id: target }, blockShape);
+  if (!old) return skip(`${name}: epoch walk`, url, 'Old block unavailable');
+  console.log(`Old block timestamp: ${new Date(Number(BigInt(old.result.header.timestamp_nanosec) / 1_000_000n)).toISOString()}`);
+  // `validators` returns UNKNOWN_EPOCH for epochs this old, so the data build walks block headers:
+  // next_epoch_id of a block is the hash of the previous epoch's last block.
+  await rpc(`${name}: block(next_epoch_id) = previous epoch's last block`, url, 'block', { block_id: old.result.header.next_epoch_id }, blockShape);
+  await rpc(`${name}: EXPERIMENTAL_protocol_config at that block`, url, 'EXPERIMENTAL_protocol_config', { block_id: old.result.header.hash }, protocolShape);
+}
+
+// Official-source check for the candidate buyback wallet. revenue.near.org is NEAR's revenue
+// dashboard. This probe only reports whether the page or its same-origin scripts mention the
+// account; a human must still read the context before the wallet is labelled confirmed.
+async function probeOfficialWalletSource() {
+  const base = 'https://revenue.near.org/';
+  const name = `Official source: ${base} mentions ${wallet.account_id}`;
+  const result = { name, url: base, method: 'GET', request: null, fetched_at: new Date().toISOString(),
+    http_status: null, status: 'failed', error: null, response_preview: null, mentions: [] };
+  try {
+    const page = await fetch(base, { signal: AbortSignal.timeout(timeoutMs) });
+    result.http_status = page.status;
+    const html = await page.text();
+    result.response_preview = html.slice(0, 300);
+    requireShape(page.ok, `HTTP ${page.status}`);
+    const assets = [...html.matchAll(/(?:src|href)="([^"]+\.(?:js|json)[^"]*)"/g)].map((m) => new URL(m[1], base).href)
+      .filter((u) => u.startsWith(base)).slice(0, 30);
+    const texts = [[base, html]];
+    for (const asset of assets) {
+      try { const r = await fetch(asset, { signal: AbortSignal.timeout(timeoutMs) }); if (r.ok) texts.push([asset, await r.text()]); } catch {}
+    }
+    for (const [source, text] of texts) {
+      let i = text.indexOf(wallet.account_id);
+      while (i > -1 && result.mentions.length < 8) {
+        result.mentions.push({ source, context: text.slice(Math.max(0, i - 200), i + 200) });
+        i = text.indexOf(wallet.account_id, i + 1);
+      }
+    }
+    // Visible text around the first mention in the page (tags stripped), to read headings and labels.
+    const first = html.indexOf(wallet.account_id);
+    if (first > -1) {
+      result.page_text_context = html.slice(Math.max(0, first - 6000), first + 1500)
+        .replace(/<script[\s\S]*?<\/script>/g, ' ').replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim().slice(-2500);
+      console.log(`Visible text before/around the first mention:\n  ${result.page_text_context}`);
+    }
+    const headings = [...html.matchAll(/<h[1-4][^>]*>([\s\S]*?)<\/h[1-4]>/g)].map((m) => m[1].replace(/<[^>]+>/g, '').trim()).filter(Boolean);
+    console.log(`Page headings: ${JSON.stringify(headings)}`);
+    console.log(`Searched ${texts.length} documents (page + same-origin scripts).`);
+    for (const m of result.mentions) console.log(`Mention in ${m.source}:\n  ${JSON.stringify(m.context)}`);
+    requireShape(result.mentions.length > 0, 'Account not found in page or same-origin scripts (may be loaded from another API)');
+    result.status = 'ok';
+  } catch (error) {
+    result.error = [error.message, error.cause?.message].filter(Boolean).join(': ');
+  }
+  results.push(result);
+  printResult(result);
+}
+
 async function probeLlama() {
   await probe('DefiLlama: Intents swap volume', 'https://api.llama.fi/summary/dexs/near-intents', { validate: seriesShape });
   for (const dataType of ['dailyFees', 'dailyRevenue', 'dailyHoldersRevenue']) {
@@ -196,6 +260,8 @@ const groups = await Promise.allSettled([
       validate: (body) => requireShape(Array.isArray(body.prices) && body.prices.length > 0, 'Missing price series'),
     }),
   probeNearBlocks(),
+  probeArchiveDepth('https://archival-rpc.mainnet.fastnear.com'),
+  probeOfficialWalletSource(),
 ]);
 const unexpectedErrors = groups.filter((group) => group.status === 'rejected').map((group) => String(group.reason));
 const report = {
@@ -214,7 +280,8 @@ const summary = [
   ...results.map((result) => `| ${cell(result.name)} | ${cell(result.http_status)} | ${cell(result.status)} | ${cell(result.error)} |`),
   '', 'The logs and JSON artifact include each URL, request body, HTTP status, and first 300 response characters.',
   'HTTP 200 with an API error or missing expected fields is a failed probe.',
-  'Archive probes cover a recent epoch boundary only; historical backfill depth and full series completeness remain untested.',
+  'Archive probes cover a recent epoch boundary and one block near 2026-02-01; full series completeness is checked by the data build.',
+  'The revenue.near.org probe only reports mentions of the wallet; a person must read the context before labelling it confirmed.',
   'The wallet is unconfirmed; balances are not verified purchases. DefiLlama holders revenue is a proxy only.',
   ...unexpectedErrors.map((error) => `Unexpected runner error: ${cell(error)}`), '',
 ].join('\n');

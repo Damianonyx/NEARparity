@@ -1,0 +1,21 @@
+{
+  "description": "Real mainnet values for the epoch boundary at height 224481137 (2026-11-14), plus two synthetic neighbours for the sanity checks.",
+  "real_boundary": {
+    "start_height": 224481137,
+    "total_supply_prev": "1311650593397030627003736293001137",
+    "total_supply_start": "1311676559659316056050032373585614",
+    "boundary_block_burnt": "6433117217853600000000",
+    "expected_mint_yocto": "25966268718546264149680584477"
+  },
+  "records": [
+    { "start_height": 1000, "start_time": "2026-11-01T00:00:00.000Z", "start_timestamp_ns": "1793491200000000000", "prev_hash": "A",
+      "total_supply_prev": "999000000000000000000000000000000", "total_supply_start": "1000000000000000000000000000000000",
+      "mint_yocto": "1000000000000000000000000000000", "max_inflation_rate": [1, 40] },
+    { "start_height": 44200, "start_time": "2026-11-01T07:00:00.000Z", "start_timestamp_ns": "1793516400000000000", "prev_hash": "B",
+      "total_supply_prev": "999999000000000000000000000000000", "total_supply_start": "1000019960000000000000000000000000",
+      "mint_yocto": "20960000000000000000000000000", "max_inflation_rate": [1, 40] },
+    { "start_height": 87400, "start_time": "2026-11-01T14:00:00.000Z", "start_timestamp_ns": "1793541600000000000", "prev_hash": "C",
+      "total_supply_prev": "1000019970000000000000000000000000", "total_supply_start": "1000039930000000000000000000000000",
+      "mint_yocto": "19960000000000000000000000000", "max_inflation_rate": [1, 40] }
+  ]
+}

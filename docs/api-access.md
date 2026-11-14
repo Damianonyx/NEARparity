@@ -1,10 +1,38 @@
 # Phase 0: API access
 
-Local check: **2026-11-14 11:15:42–11:15:45 UTC**, Node **v22.23.5**.
+Local check (Codex): **2026-11-14 11:15:42–11:15:45 UTC**, Node **v22.23.5**.
 All **28 probes passed**, with HTTP **200** and the expected basic JSON shape.
 The [timestamped local report](api-access-local.json) records every request, HTTP
 status, and the first 300 characters of each response. These are access diagnostics,
 not dashboard metrics or evidence of buyback purchases.
+
+**GitHub Actions:** all 28 original probes passed on `ubuntu-latest` (Node 22) in
+[run 43590419004](https://github.com/Damianonyx/NEARparity/actions/runs/43590419004)
+on `main`, and all **33** probes, including the two additions below, passed in
+[run 43592968668](https://github.com/Damianonyx/NEARparity/actions/runs/43592968668)
+(2026-11-14 12:04 UTC).
+
+## Additions after the first check
+
+| Probe | Here (Claude Code session) | GitHub Actions |
+| --- | --- | --- |
+| Archival header walk near 2026-02-01: `block` at an estimated height, `block(next_epoch_id)`, `EXPERIMENTAL_protocol_config` at that block | Yes, HTTP 200 | Yes, HTTP 200 |
+| Official source: `https://revenue.near.org/` (page + same-origin scripts) mentions `buybacks.multisignature.near` | **No**: the session's network policy blocks the host (proxy 403) | Yes, HTTP 200: account found |
+
+Why the depth probe changed: on the archival node, `validators` returns
+`UNKNOWN_EPOCH` for epochs near 2026-02-01, so it cannot be used to find old
+epoch starts. A block's `next_epoch_id` is the hash of the previous epoch's last
+block, so the data build walks headers instead. This was verified back to January 2026.
+
+What the official source shows (Actions run 43592968668): under the heading
+**"Wallet Breakdown (All-time)"**, subtitled "Traceable flow of revenue", the table
+lists `fefundsadmin.sputnik-dao.near` (2,015,642.6 NEAR, 46.3 %),
+`buybacks.multisignature.near` (1,781,811.8 NEAR, 40.9 %) and
+`1csfundsadmin.sputnik-dao.near` (555,348.3 NEAR, 12.8 %). The wallet is therefore
+recorded in [`config/buyback-wallet.json`](../config/buyback-wallet.json) as a
+**revenue wallet listed on revenue.near.org**. That confirms the account, not
+purchases: its on-chain holdings (about 2.28 M NEAR) differ from the dashboard's
+all-time figure, and balance changes remain net accumulation.
 
 ## Endpoint results
 
@@ -69,17 +97,15 @@ The run summary contains the results table; the probe step contains URLs, reques
 bodies, HTTP statuses, and response previews. A JSON artifact is uploaded even
 when probes fail. Paste the summary and any failed probe details for the next task.
 
-GitHub runner access has **not yet been tested** in this phase's local run.
 
 ## Limits and later work
 
-- The archival check follows one recent epoch boundary via `prev_hash`. It does
-  not establish full archival coverage back to 2026-02-01 or historical state at
-  the eventual 30-day boundaries. No issuance or burn calculation runs in Phase 0.
-- `buybacks.multisignature.near` remains an **unconfirmed wallet**, recorded in
-  [`config/buyback-wallet.json`](../config/buyback-wallet.json). Official attribution
-  has not been verified. A returned balance or an increase in balance does not
-  prove purchases; treasury purchases are not burns.
+- The archival checks follow one recent epoch boundary and one header-walk step
+  near 2026-02-01. Full coverage is established by the data build, which caches
+  every boundary in `data/epochs.json`.
+- `buybacks.multisignature.near` is listed on NEAR's official revenue dashboard
+  (see above). A returned balance or an increase in balance still does not prove
+  purchases; treasury purchases are not burns.
 - DefiLlama holders revenue remains a **proxy**. Endpoint access does not verify
   purchases, the classification start date, or how gross fees and distributions
   map to net revenue. Those definitions require source review in the data phase.
