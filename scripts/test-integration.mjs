@@ -9,7 +9,7 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { test } from 'node:test';
 import { fileURLToPath } from 'node:url';
-import { CHAIN, USAGE, WALLET, existingIn, heightAt, missing, supplyAt } from './fixtures/mock-network.mjs';
+import { BQ, CHAIN, USAGE, WALLET, existingIn, heightAt, missing, supplyAt } from './fixtures/mock-network.mjs';
 
 const ROOT = fileURLToPath(new URL('..', import.meta.url));
 const NOW = '2026-11-14T12:00:00.000Z';
@@ -138,6 +138,52 @@ test('run 4: when the primary RPC is down, the fallback endpoint serves', async 
   assert.equal(S.sources.near_archival_rpc.ok, false);
   assert.equal(S.sources.near_archival_rpc_fallback.ok, true);
   assert.equal(S.consecutive_partial_runs, 0);
+});
+
+const GCP = { NEAR_PARITY_GCP_PROVIDER: 'projects/123/locations/global/workloadIdentityPools/github/providers/nearparity', ACTIONS_ID_TOKEN_REQUEST_URL: 'https://fake-oidc.test/token?api-version=2.0', ACTIONS_ID_TOKEN_REQUEST_TOKEN: 'req-token' };
+
+test('run 5: daily BigQuery trace (keyless sign-in) backfills the window and replaces the snapshot', async () => {
+  const r = build(GCP);
+  assert.equal(r.status, 0, r.stdout.slice(-2000));
+  assert.match(r.stdout, /BigQuery: 2026-10-15 → 2026-11-14 \(30 days\)/);
+  const D = await read('bigquery-daily.json');
+  assert.equal(Object.keys(D.days).length, 30); assert.equal(D.last_day, '2026-11-13');
+  assert.deepEqual(D.accounts, { 'acc-a': '2026-10-15', 'acc-b': '2026-10-15' });
+  const L = await read('latest.json'); const m = L.metrics;
+  const bought = near(BQ.boughtPerDay * 30n);
+  assert.equal(m.verified_purchases.status, 'measured');
+  assert.equal(m.verified_purchases.value_yocto, (BQ.boughtPerDay * 30n).toString(), 'BigInt sum of daily yocto strings');
+  assert.ok(Math.abs(m.verified_purchases.value - bought) < 1e-6);
+  assert.ok(m.verified_purchases.daily, 'rolling, not the fixed snapshot');
+  assert.equal(m.verified_purchases.period_start, WIN.start);
+  assert.ok(Math.abs(m.coverage_verified.value - bought / near(expIssuance)) < 1e-12, 'divided by this window’s issuance');
+  assert.ok(Math.abs(m.trace_withdrawn_to_wallet.value - near(BQ.withdrawnPerDay * 30n)) < 1e-6);
+  assert.match(L.queries.trace[0].code, /@known/);
+  const wk = L.series_weekly.find((w) => w.period_start.startsWith('2026-10-18'));
+  assert.ok(Math.abs(wk.verified_purchases_near - near(BQ.boughtPerDay * 7n)) < 1e-6, 'weekly verified series where every day is traced');
+  assert.equal(L.series_weekly.find((w) => w.period_start.startsWith('2026-02-01')).verified_purchases_near, null, 'untraced weeks stay null');
+  assert.equal((await read('status.json')).sources.bigquery.ok, true);
+});
+
+test('run 6: nothing new to query → no BigQuery trace query, figures kept', async () => {
+  const r = build(GCP);
+  assert.equal(r.status, 0, r.stdout.slice(-2000));
+  assert.doesNotMatch(r.stdout, /BigQuery: \d{4}/);
+  assert.ok((await read('latest.json')).metrics.verified_purchases.daily);
+});
+
+test('run 7: next day → queries one new day with the known accounts; sign-in failure is optional, never partial', async () => {
+  const r = build({ ...GCP, NEAR_PARITY_NOW: '2026-11-15T12:00:00.000Z' });
+  assert.equal(r.status, 0, r.stdout.slice(-2000));
+  assert.match(r.stdout, /BigQuery: 2026-11-14 → 2026-11-15 \(1 days\)/);
+  const D = await read('bigquery-daily.json');
+  assert.equal(D.last_day, '2026-11-14'); assert.equal(Object.keys(D.accounts).length, 2);
+  const L = await read('latest.json');
+  assert.equal(L.metrics.verified_purchases.period_start, '2026-10-16T00:00:00.000Z');
+  const bad = build({ ...GCP, NEAR_PARITY_NOW: '2026-11-15T12:00:00.000Z', ACTIONS_ID_TOKEN_REQUEST_TOKEN: 'wrong' });
+  assert.equal(bad.status, 0, 'BigQuery is an optional source');
+  assert.equal((await read('latest.json')).partial_refresh, false);
+  assert.match((await read('latest.json')).failed_groups.bigquery, /OIDC/);
 });
 
 test.after(() => rm(dir, { recursive: true, force: true }));

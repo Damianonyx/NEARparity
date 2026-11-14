@@ -114,3 +114,23 @@ when probes fail. Paste the summary and any failed probe details for the next ta
   precision remain unvalidated.
 - Series completeness, freshness, historical backfill, snapshot fallback, metrics,
   dashboard, and thesis documentation belong to the subsequent phases.
+
+## BigQuery (daily on-chain buyback trace, optional)
+
+The refresh workflow can query the BigQuery public NEAR dataset each day (`scripts/lib/bigquery.mjs`). It signs in to Google with **Workload Identity Federation**: GitHub's short-lived OIDC token is exchanged for a Google token, so there is no key file, password or GitHub secret. The free BigQuery sandbox is enough (no billing account); each run queries only the new UTC day, about 1.2 GB, under a hard `maximumBytesBilled` cap.
+
+One-time setup, pasted into Cloud Shell in your Google Cloud project (replace `near-parity` and the repository name for a fork):
+
+```sh
+gcloud config set project near-parity
+gcloud services enable iam.googleapis.com iamcredentials.googleapis.com sts.googleapis.com bigquery.googleapis.com
+gcloud iam service-accounts create nearparity-refresh --display-name="NEAR Parity refresh"
+gcloud projects add-iam-policy-binding near-parity --member="serviceAccount:nearparity-refresh@near-parity.iam.gserviceaccount.com" --role="roles/bigquery.jobUser" --condition=None
+gcloud iam workload-identity-pools create github --location=global --display-name="GitHub Actions"
+gcloud iam workload-identity-pools providers create-oidc nearparity --location=global --workload-identity-pool=github --display-name="NEARparity repo" --issuer-uri="https://token.actions.githubusercontent.com" --attribute-mapping="google.subject=assertion.sub,attribute.repository=assertion.repository" --attribute-condition="assertion.repository=='Damianonyx/NEARparity'"
+PN=$(gcloud projects describe near-parity --format='value(projectNumber)')
+gcloud iam service-accounts add-iam-policy-binding nearparity-refresh@near-parity.iam.gserviceaccount.com --role="roles/iam.workloadIdentityUser" --member="principalSet://iam.googleapis.com/projects/$PN/locations/global/workloadIdentityPools/github/attribute.repository/Damianonyx/NEARparity"
+echo "projects/$PN/locations/global/workloadIdentityPools/github/providers/nearparity"
+```
+
+Put the printed provider name in `config/bigquery.json` (`workload_identity_provider`). It is an address, not a secret. Only workflows in this repository can use it, because of the attribute condition. To run the trace locally instead, set `NEAR_PARITY_GCP_TOKEN` to an access token (`gcloud auth print-access-token`).
