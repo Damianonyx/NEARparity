@@ -1,0 +1,25 @@
+name: Verify thesis sources
+
+# Re-fetches the primary sources cited in THESIS.md and prints the relevant passages.
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'scripts/verify-claims.mjs'
+      - '.github/workflows/verify-claims.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: node scripts/verify-claims.mjs
