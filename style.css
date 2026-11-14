@@ -347,3 +347,8 @@ main h2, .section-h { font-family: ui-sans-serif, system-ui, "Helvetica Neue", A
 @media (prefers-reduced-motion: reduce) { .ro-parity { animation: none; } }
 .card > .src { margin-left: 20px; margin-right: 20px; }
 .chart-head .eyebrow-label { flex-basis: 100%; margin-bottom: 0; }
+
+/* Leading-indicator test */
+.lead-test { margin-top: 1.5rem; }
+.lead-test h3 { font-size: 1rem; margin: 0 0 .5rem; }
+.lead-test td.sig { font-weight: 700; color: var(--accent); }

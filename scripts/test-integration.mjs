@@ -164,6 +164,20 @@ test('run 5: daily BigQuery trace (keyless sign-in) backfills the window and rep
   assert.ok(Math.abs(wk.verified_purchases_near - near(BQ.boughtPerDay * 7n)) < 1e-6, 'weekly verified series where every day is traced');
   assert.equal(L.series_weekly.find((w) => w.period_start.startsWith('2026-02-01')).verified_purchases_near, null, 'untraced weeks stay null');
   assert.equal((await read('status.json')).sources.bigquery.ok, true);
+  // Network usage from BigQuery (backfilled since backfill_from), NearBlocks kept as a cross-check.
+  assert.match(r.stdout, /BigQuery usage: 2026-02-01 → 2026-11-14 \(286 days\)/);
+  assert.equal(m.usage_active_accounts.reported_by, 'BigQuery');
+  assert.equal(m.usage_active_accounts.value, BQ.usage.active_accounts);
+  assert.equal(m.usage_active_accounts.nearblocks_value, USAGE.accounts);
+  assert.equal(m.usage_txns.value, BQ.usage.txns); assert.equal(m.usage_function_calls.value, BQ.usage.function_calls);
+  assert.equal(L.meta.usage_source, 'BigQuery');
+  assert.equal(L.series_weekly[0].usage_source, 'BigQuery'); assert.equal(L.series_weekly[0].txns_avg, BQ.usage.txns);
+  assert.match(L.queries.usage[0].code, /block_date >= @start/);
+  // The leading-indicator test runs on the BigQuery weekly series (flat simulated usage → no lead).
+  const li = L.meta.leading_indicator;
+  assert.equal(li.usage_source, 'BigQuery'); assert.equal(li.active_accounts.volume.length, 5);
+  assert.equal(li.active_accounts.verdict.supports_hypothesis, false);
+  assert.ok(typeof L.series_weekly[0].price_avg_usd === 'number');
 });
 
 test('run 6: nothing new to query → no BigQuery trace query, figures kept', async () => {
@@ -177,6 +191,7 @@ test('run 7: next day → queries one new day with the known accounts; sign-in f
   const r = build({ ...GCP, NEAR_PARITY_NOW: '2026-11-15T12:00:00.000Z' });
   assert.equal(r.status, 0, r.stdout.slice(-2000));
   assert.match(r.stdout, /BigQuery: 2026-11-14 → 2026-11-15 \(1 days\)/);
+  assert.match(r.stdout, /BigQuery usage: 2026-11-14 → 2026-11-15 \(1 days\)/);
   const D = await read('bigquery-daily.json');
   assert.equal(D.last_day, '2026-11-14'); assert.equal(Object.keys(D.accounts).length, 2);
   const L = await read('latest.json');

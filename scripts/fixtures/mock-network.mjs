@@ -143,7 +143,7 @@ function dashboardHtml() {
 // Google sign-in (GitHub OIDC → STS → service account) and BigQuery jobs.query, for the daily trace.
 // Each simulated day: 2 withdrawals of 500 NEAR to the wallet, 3 swaps buying 250 NEAR in total; two accounts
 // appear on the first queried day. The first query response is incomplete, to exercise job polling.
-export const BQ = { withdrawnPerDay: 10n ** 27n, boughtPerDay: 250n * 10n ** 24n, swapsPerDay: 3, withdrawalsPerDay: 2 };
+export const BQ = { withdrawnPerDay: 10n ** 27n, boughtPerDay: 250n * 10n ** 24n, swapsPerDay: 3, withdrawalsPerDay: 2, usage: { txns: 2e6, active_accounts: 2e5, active_contracts: 3e3, function_calls: 4e6 } };
 let bqPending = null;
 function bigquery(url, init) {
   const auth = (init.headers || {}).authorization;
@@ -155,6 +155,15 @@ function bigquery(url, init) {
   const ref = { projectId: 'near-parity', jobId: `job${Date.now()}`, location: 'us-east1' };
   if (body.query.includes('.blocks`')) {
     return json({ jobComplete: true, jobReference: ref, schema: { fields: [{ name: 'latest', type: 'INTEGER' }] }, rows: [{ f: [{ v: String(nowS() - 3600) }] }], totalBytesProcessed: '5000000' });
+  }
+  if (body.query.includes('.transactions`')) { // daily usage
+    const rows = [];
+    for (let t = Date.parse(p.start); t < Date.parse(p.end); t += DAY * 1000) {
+      const u = BQ.usage;
+      rows.push({ f: [{ v: new Date(t).toISOString().slice(0, 10) }, { v: String(u.txns) }, { v: String(u.active_accounts) }, { v: String(u.active_contracts) }, { v: String(u.function_calls) }] });
+    }
+    const fields = ['day', 'txns', 'active_accounts', 'active_contracts', 'function_calls'].map((name) => ({ name, type: 'STRING' }));
+    return json({ jobComplete: true, jobReference: ref, schema: { fields }, rows, totalBytesProcessed: String(rows.length * 0.22e9) });
   }
   const known = (p.known || []).filter(Boolean);
   const rows = [];

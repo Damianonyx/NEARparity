@@ -3,9 +3,6 @@ name: BigQuery check
 # Freshness, columns and free dry-run cost estimates for the project's BigQuery SQL. Changes no data.
 on:
   workflow_dispatch:
-  push:
-    branches: [ccr-0dd19858-anumb1]
-    paths: ['scripts/check-bigquery.mjs', 'scripts/lib/bigquery.mjs', '.github/workflows/bigquery-check.yml']
 
 permissions:
   contents: read

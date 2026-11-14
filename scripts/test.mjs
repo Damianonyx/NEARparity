@@ -276,3 +276,21 @@ test('daily BigQuery trace: which days to query, merge, BigInt sums', async () =
   assert.equal(s.withdrawn, 10n ** 31n); assert.equal(s.bought, 5n); assert.equal(s.days, 2);
   assert.equal(sumDays(st, '2026-10-31T00:00:00.000Z', '2026-11-03T00:00:00.000Z'), null, 'a missing day → no total');
 });
+
+test('leading-indicator test: lagged correlations, noise band and verdict', async () => {
+  const { leadLag, leadVerdict } = await import('./lib/usage.mjs');
+  // y copies x's moves two weeks later: the lag-2 row must stand out.
+  const x = [100, 120, 90, 130, 100, 150, 110, 140, 95, 125, 105, 135, 100, 145, 115, 125];
+  const y = [50, 50, ...x.slice(0, -2).map((v) => v / 2)];
+  const L = leadLag(x, y);
+  assert.equal(L.length, 5);
+  const l2 = L.find((r) => r.lag === 2);
+  assert.ok(l2.r > 0.99 && l2.rho > 0.99, JSON.stringify(l2));
+  assert.ok(Math.abs(l2.band - 1.96 / Math.sqrt(l2.n)) < 1e-12);
+  const flat = leadLag(x, x.map(() => 7));
+  assert.equal(flat[1].r, null, 'no variation → no correlation, not zero');
+  assert.equal(leadVerdict(L, flat, 'usage').supports_hypothesis, true);
+  assert.match(leadVerdict(L, flat, 'usage').text, /^Intents volume leads usage \(r = 1\.00/);
+  assert.match(leadVerdict(flat, flat, 'usage').text, /^Neither/);
+  assert.equal(leadVerdict(flat, L, 'usage').supports_hypothesis, false);
+});
