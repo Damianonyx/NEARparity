@@ -20,7 +20,8 @@ await mkdir(join(dir, 'data'), { recursive: true });
 
 function build(env = {}) {
   const r = spawnSync(process.execPath, ['--import', join(dir, 'scripts/fixtures/mock-network.mjs'), join(dir, 'scripts/build-data.mjs')], {
-    env: { ...process.env, NEAR_PARITY_FAST: '1', NEAR_PARITY_NOW: NOW, NEAR_PARITY_RPC_URLS: 'https://fake-archival.test,https://fake-fallback.test', ...env },
+    // Never use a real Google sign-in from the test runs (the refresh job has an OIDC token): only the fakes in run 5+.
+    env: { ...process.env, ACTIONS_ID_TOKEN_REQUEST_URL: '', ACTIONS_ID_TOKEN_REQUEST_TOKEN: '', NEAR_PARITY_GCP_TOKEN: '', NEAR_PARITY_FAST: '1', NEAR_PARITY_NOW: NOW, NEAR_PARITY_RPC_URLS: 'https://fake-archival.test,https://fake-fallback.test', ...env },
     encoding: 'utf8', timeout: 300_000,
   });
   if (r.status !== 0 && r.status !== 2) console.error(r.stdout, r.stderr);
