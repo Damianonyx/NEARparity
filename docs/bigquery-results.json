@@ -1,0 +1,31 @@
+{
+  "dataset": "bigquery-public-data.crypto_near_mainnet_us",
+  "run_on": "2026-11-14",
+  "run_by": "BigQuery console, free sandbox (results copied from the console's JSON tab)",
+  "window": { "start": "2026-10-15", "end_exclusive": "2026-11-14" },
+  "checks": {
+    "01-freshness": {
+      "sql": "queries/bigquery/01-freshness.sql",
+      "result": [{ "latest_day": "2026-11-14", "blocks_since_march": "36934440" }],
+      "bytes_processed": "281.79 MB"
+    },
+    "02-buybacks-30d": {
+      "sql": "queries/bigquery/02-buybacks-30d.sql",
+      "result": [
+        {
+          "month": "2026-10", "withdrawals": "477", "withdraw_accounts": "272",
+          "near_withdrawn": "167114.634669381561841067571483", "buys": "6758",
+          "near_bought": "66374.261907061576714018665246", "near_sold": "0",
+          "paid_with": "nep141:eth-0xdac17f958d2ee523a2206206994597c13d831ec7.omft.near, nep141:aptos-34ee497f210c5a511e8d5b53bc56d75b63612bb5.omft.near, nep141:plasma-0xb8ce59fc3717ada4c02eadf9682a9e934f625ebb.omft.near, nep245:v2_1.omni.hot.tg:196_2fezDCvVYRsG8wrK6deJ2VRPiAS1, nep141:sol-5ce3bf3a31af18be40ba30f721101b4341690186.omft.near, nep141:sui-c1b81ecaf27933252d31a963bc5e9458f13c18ce.omft.near"
+        },
+        {
+          "month": "2026-11", "withdrawals": "294", "withdraw_accounts": "232",
+          "near_withdrawn": "133893.580224982429599323889358", "buys": "1221",
+          "near_bought": "6793.924629050818617030609796", "near_sold": "0",
+          "paid_with": "nep141:bnb-0x2494b603319d4d9f9715c9f4496d9e0364b59d93.omdep.near, nep141:zec.omft.near, nep141:plasma-0xb8ce59fc3717ada4c02eadf9682a9e934f625ebb.omft.near, nep141:bnb-0xa9ee28c80f960b889dfbd1902055218cba016f75.omdep.near, nep141:base-0x833589fcd6edb6e08f4c7c32d4f71b54bda02913.omft.near, nep141:sui.omft.near"
+        }
+      ],
+      "bytes_processed": null
+    }
+  }
+}
