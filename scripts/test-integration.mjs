@@ -87,6 +87,14 @@ test('run 1: fresh build from an empty data directory', async () => {
   // Every section ships the query behind it, with the actual blocks used.
   for (const k of ['issuance', 'supply', 'intents', 'coverage', 'weekly', 'usage', 'simulator']) assert.ok(L.queries[k]?.length, `queries.${k}`);
   assert.match(L.queries.supply[0].code, new RegExp(String(L.metrics.supply_start.block_height)));
+  // On-chain trace (config/bigquery-trace.json): fixed window equal to this run's window, measured lower bound.
+  const trace = JSON.parse(await readFile(join(dir, 'config/bigquery-trace.json'), 'utf8'));
+  assert.equal(m.verified_purchases.status, 'measured');
+  assert.equal(m.verified_purchases.value, trace.near_bought_in_swaps);
+  assert.equal(m.coverage_verified.value, trace.near_bought_in_swaps / trace.issuance_near_in_window, 'divided by the snapshot window issuance');
+  assert.equal(m.coverage_verified.snapshot.window_matches_dashboard, true);
+  assert.ok(L.queries.trace?.length, 'queries.trace');
+  assert.equal(L.onchain_trace.run_on, trace.run_on);
   assert.equal((await readdir(join(dir, 'data/snapshots'))).length, 1);
   const S = await read('status.json');
   assert.equal(S.consecutive_partial_runs, 0);

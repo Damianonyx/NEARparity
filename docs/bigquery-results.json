@@ -1,0 +1,254 @@
+{
+  "dataset": "bigquery-public-data.crypto_near_mainnet_us",
+  "run_on": "2026-11-14",
+  "run_by": "BigQuery console, free sandbox (results copied from the console's JSON tab)",
+  "window": {
+    "start": "2026-10-15",
+    "end_exclusive": "2026-11-14"
+  },
+  "checks": {
+    "01-freshness": {
+      "sql": "queries/bigquery/01-freshness.sql",
+      "result": [
+        {
+          "latest_day": "2026-11-14",
+          "blocks_since_march": "36934440"
+        }
+      ],
+      "bytes_processed": "281.79 MB"
+    },
+    "02-buybacks-30d": {
+      "sql": "queries/bigquery/02-buybacks-30d.sql",
+      "result": [
+        {
+          "month": "2026-10",
+          "withdrawals": "477",
+          "withdraw_accounts": "272",
+          "near_withdrawn": "167114.634669381561841067571483",
+          "buys": "6758",
+          "near_bought": "66374.261907061576714018665246",
+          "near_sold": "0",
+          "paid_with": "nep141:eth-0xdac17f958d2ee523a2206206994597c13d831ec7.omft.near, nep141:aptos-34ee497f210c5a511e8d5b53bc56d75b63612bb5.omft.near, nep141:plasma-0xb8ce59fc3717ada4c02eadf9682a9e934f625ebb.omft.near, nep245:v2_1.omni.hot.tg:196_2fezDCvVYRsG8wrK6deJ2VRPiAS1, nep141:sol-5ce3bf3a31af18be40ba30f721101b4341690186.omft.near, nep141:sui-c1b81ecaf27933252d31a963bc5e9458f13c18ce.omft.near"
+        },
+        {
+          "month": "2026-11",
+          "withdrawals": "294",
+          "withdraw_accounts": "232",
+          "near_withdrawn": "133893.580224982429599323889358",
+          "buys": "1221",
+          "near_bought": "6793.924629050818617030609796",
+          "near_sold": "0",
+          "paid_with": "nep141:bnb-0x2494b603319d4d9f9715c9f4496d9e0364b59d93.omdep.near, nep141:zec.omft.near, nep141:plasma-0xb8ce59fc3717ada4c02eadf9682a9e934f625ebb.omft.near, nep141:bnb-0xa9ee28c80f960b889dfbd1902055218cba016f75.omdep.near, nep141:base-0x833589fcd6edb6e08f4c7c32d4f71b54bda02913.omft.near, nep141:sui.omft.near"
+        }
+      ],
+      "bytes_processed": "35.59 GB",
+      "duration": "4.4 s"
+    },
+    "03-funding-sources-30d": {
+      "sql": "queries/bigquery/03-funding-sources-30d.sql",
+      "result": [
+        {
+          "event": "mt_transfer",
+          "from_acct": "51e8f94d77b5e90dc9852ca6113771e11e8382ce69473a75e313e41665de7cbe",
+          "n": "500",
+          "near": "191433.899958379925390208424119"
+        },
+        {
+          "event": "mt_transfer",
+          "from_acct": "blockzen-1-main.near",
+          "n": "7556",
+          "near": "47417.328443837042739145492911"
+        },
+        {
+          "event": "mt_transfer",
+          "from_acct": "crux-solver.near",
+          "n": "1267",
+          "near": "18581.503119773010056224217688"
+        },
+        {
+          "event": "mt_transfer",
+          "from_acct": "s1.anyliq-solver.near",
+          "n": "51",
+          "near": "6302.082719354205937538497034"
+        },
+        {
+          "event": "mt_transfer",
+          "from_acct": "bb1fc1510b7e472729de67795f8bbd1164d806ca0dd89a0ef8fc6b01fae01b0e",
+          "n": "1",
+          "near": "2239.892107844596930739612624"
+        },
+        {
+          "event": "mt_transfer",
+          "from_acct": "cea65fa2a7d0be1b079c50eb08a04d1a9042a481d42240db92ec73bcc45b3365",
+          "n": "1",
+          "near": "1885.154089058234467376651388"
+        },
+        {
+          "event": "mt_transfer",
+          "from_acct": "99ecb105f3db7fdad5a8c65707ba3ab30c8ec6d0c5161e4ea5278d123067c851",
+          "n": "1",
+          "near": "1523.532596226977101073385314"
+        },
+        {
+          "event": "mt_transfer",
+          "from_acct": "e9b39748113ff49371d4a38112bde791ccf7d955e27e6aeba8accae135fdeedf",
+          "n": "1",
+          "near": "1301.0952927384787649274"
+        },
+        {
+          "event": "mt_transfer",
+          "from_acct": "079b2431e27c12a1e9e9c0f8e1ff450999dcbed6515f2f6970cc64c1403cd559",
+          "n": "1",
+          "near": "1151.010906809880884047341386"
+        },
+        {
+          "event": "mt_transfer",
+          "from_acct": "345ca3afb8745731fa9daff6f01334d2dd8b320d364a4bcd61f37594dbc5f1d6",
+          "n": "1",
+          "near": "1023.0281253114516594"
+        },
+        {
+          "event": "mt_transfer",
+          "from_acct": "84a75c1025f9527066518080ba5c956bb4be9823d37b795bba5301bf84efd074",
+          "n": "1",
+          "near": "801.901454308342935018125455"
+        },
+        {
+          "event": "mt_transfer",
+          "from_acct": "ded8707bb662670ecb0294692c504d0b920869570d292b6fcb3a651857f91b51",
+          "n": "1",
+          "near": "800.17431110106807382065"
+        },
+        {
+          "event": "mt_transfer",
+          "from_acct": "607ffb8f3d79e7ea4cf676b2031cc2d6a5ea875d2dbb09cb06929c2d73d1a0bc",
+          "n": "1",
+          "near": "686.0085575982654924909"
+        },
+        {
+          "event": "mt_transfer",
+          "from_acct": "6247d9c671ca6a80cf2c75e26edb8cd75ebf00fcd3c56c39107d6ca20c9cfb29",
+          "n": "24",
+          "near": "671.762980397048891200026008"
+        },
+        {
+          "event": "mt_transfer",
+          "from_acct": "020d61dc7ca7029c08e7b17aefed9c0da97dfb3d46dc050aba111bd6ec1670f3",
+          "n": "1",
+          "near": "648.075241043336404845841825"
+        }
+      ],
+      "bytes_processed": "34.71 GB",
+      "duration": "2.1 s"
+    },
+    "04-hub-account-30d": {
+      "sql": "queries/bigquery/04-hub-account-30d.sql",
+      "result": [
+        {
+          "flow": "sent to other accounts",
+          "n": "31736",
+          "near": "17683629.242121173537530496012723"
+        },
+        {
+          "flow": "received from solver-priv-liq.near",
+          "n": "75428",
+          "near": "6526946.85418161140349199227749"
+        },
+        {
+          "flow": "received from 9e1bb7223262aa121140c89ab9b464e622929a173de874b35dd0b153f90c8db7",
+          "n": "2",
+          "near": "1442618"
+        },
+        {
+          "flow": "received from fc2624c899f96d549aadeb12ce129b39335a71058ae519c5d5d74ebce1af376a",
+          "n": "12",
+          "near": "982695"
+        },
+        {
+          "flow": "received from 20338d625dfd16affd2dcad8b28679af5b2bd19b51626de1736b788f5a54cb78",
+          "n": "1",
+          "near": "601744.117730026977982457914718"
+        },
+        {
+          "flow": "received from 1f84de4a9387495ff30d20a51b86ae3d5099f5c5f6683a420ddfc4d1256ae36c",
+          "n": "1",
+          "near": "438281.86"
+        },
+        {
+          "flow": "received from 6247d9c671ca6a80cf2c75e26edb8cd75ebf00fcd3c56c39107d6ca20c9cfb29",
+          "n": "253",
+          "near": "258659.103552207079686754760556"
+        },
+        {
+          "flow": "received from 1e05a0110376c52628aca3c976108d3a1712f6265c9a62acb935ebffc188b596",
+          "n": "2",
+          "near": "200000"
+        },
+        {
+          "flow": "received from 1b2ff1665c97c6174b522eab289cfe6ac5d411aed5c00187801da457e33b1cb4",
+          "n": "1",
+          "near": "133311.18"
+        },
+        {
+          "flow": "received from 9136e62396dd21cf2cf11348d0060ba65f658754bde011701e84e6be2653b0ec",
+          "n": "1",
+          "near": "128299.999999999999999999999997"
+        },
+        {
+          "flow": "received from d629abf0f5c45c98f7da442dea54a74ef4c28eec7a8cecf84bbbd552a57872df",
+          "n": "1",
+          "near": "112623.999999999999999999999999"
+        },
+        {
+          "flow": "received from bcbaba2176762242343d706f6833bbe5849ecceeaaeeef98056ba15793d2daac",
+          "n": "1",
+          "near": "110239.029666641"
+        },
+        {
+          "flow": "received from prod.sadgeaystar.near",
+          "n": "2",
+          "near": "100090"
+        },
+        {
+          "flow": "received from 6c281d1a80d3fdb08344d0a332e7b34693b519d18461de73984a9f0090a0897a",
+          "n": "1",
+          "near": "100000"
+        },
+        {
+          "flow": "received from d0b3a1f97d986501b08dcd254907e851266b84d594eaaedf520ce5f99327d3b3",
+          "n": "74",
+          "near": "87060.7046970813392849999999"
+        },
+        {
+          "flow": "received from 348751731e67aca6a1ed5b0a76bb77a75149761dae4d4862e9b8937f03480049",
+          "n": "1",
+          "near": "80000"
+        },
+        {
+          "flow": "received from eb3a91631ceb968388189351cfc9a9d521bcf29552ec098d8e841eb97deff542",
+          "n": "1",
+          "near": "79999.999999999999999999999999"
+        },
+        {
+          "flow": "received from 7a58371401366db841101605a141e2911ad626f38672f36488d6bd0c044a59e5",
+          "n": "15",
+          "near": "79982"
+        },
+        {
+          "flow": "received from ad36bee6be1516a5151a2bdc016078b59da868be739408f09f157ac7c861140a",
+          "n": "1",
+          "near": "73274.978594759768138085928998"
+        },
+        {
+          "flow": "received from a9fedab6f15409cbc208b5f08df2c772984793589f252006dbbda619076442a8",
+          "n": "1",
+          "near": "72000"
+        }
+      ],
+      "bytes_processed": "34.71 GB",
+      "duration": "1.4 s",
+      "note": "No swap (token_diff) rows and no mint/burn rows: the account made no swaps and no deposits/withdrawals of wNEAR in the window."
+    }
+  },
+  "total_bytes_processed": "105.29 GB (plus 0.29 GB for the freshness and schema checks)"
+}

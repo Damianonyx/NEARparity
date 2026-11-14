@@ -8,7 +8,7 @@
 
 ## 1. The claim
 
-1. **Buybacks cover a minority of issuance.** Over the default 30-day window, NEAR bought (or set aside to buy) with Intents revenue is roughly one-sixth of newly minted NEAR on the best available measure, and about one-ninth on the wallet measure.
+1. **Buybacks cover a minority of issuance.** Over the default 30-day window, NEAR bought (or set aside to buy) with Intents revenue is roughly one-sixth of newly minted NEAR on the revenue-based proxy and about one-ninth on the wallet measure. Purchases that can be verified on-chain swap by swap cover at least 2.7% (§2.7).
 2. **Supply is still growing at close to the protocol cap.** Observed issuance runs at an annualised **2.48%** of supply, just under the **2.5%** maximum. Protocol burns offset under 1% of it.
 3. **Parity needs about 5× today's Intents volume**, under today's price, capture rate and allocation.
 4. **"Buyback" here means "held", not "burned".** Total supply does not fall when the wallet accumulates NEAR.
@@ -33,7 +33,8 @@ This is an investment-thesis claim about *flows*. It is not a price prediction.
 
 | Measure (same 30 days) | NEAR | ÷ issuance | Status |
 |---|---|---|---|
-| Verified purchases | — | — | **unavailable** (see §4) |
+| Verified purchases: on-chain swaps by the accounts that fund the wallet (BigQuery trace, §2.7) | 73,168 | **2.7%** | measured, lower bound |
+| NEAR delivered to the wallet by `native_withdraw` intents (BigQuery trace, §2.7) | 301,008 | **11.3%** | measured |
 | Revenue-based proxy: Σ DefiLlama holders revenue (USD) ÷ daily NEAR price | 421,221 | **15.8%** | proxy |
 | Buyback wallet net accumulation, excluding transfers from NEAR's other revenue wallets | 301,992 | **11.3%** | measured, used as a proxy |
 
@@ -73,6 +74,17 @@ With the snapshot defaults (88,935 NEAR/day, $3.32 per NEAR, **4.76 bps** net re
 
 NEAR's official revenue dashboard ([revenue.near.org](https://revenue.near.org/)) says that NEAR "captures a growing share of fees, feeding buybacks that permanently remove NEAR from circulation". The NEAR in the buyback wallet is held, not burned. Total supply rose by 2.64 M NEAR in the window, and burns explain only 25 k NEAR of the difference from issuance. "Removed from circulation" is accurate only in the sense of "held by a NEAR-controlled multisig", and that is reversible: the wallet has sent NEAR out (17 outbound receipts in its history, including 12,000 NEAR on 10 Jul 2026, NearBlocks).
 
+### 2.7 On-chain trace of the buyback (BigQuery, measured)
+
+We traced the buyback wallet's funding through the NEAR BigQuery public dataset (`bigquery-public-data.crypto_near_mainnet_us`, `execution_outcomes` event logs of `intents.near`), for the same 30-day window (15 Oct – 13 Nov 2026). The dataset was current to 14 Nov 2026 when queried. The SQL is in [`queries/bigquery/`](queries/bigquery/) and the results are in [`docs/bigquery-results.json`](docs/bigquery-results.json); each query scanned about 35 GB and ran in the free BigQuery sandbox.
+
+- **Who funds the wallet.** 771 `native_withdraw` intents delivered **301,008 NEAR** to the wallet, signed by at least 272 different NEAR Intents accounts. This matches the wallet's balance change from the archival RPC (301,992 NEAR) to within 0.3%.
+- **What those accounts bought.** They made **7,979 swaps** (`token_diff` events) that gained **73,168 NEAR**, paying with tokens including USDT (Ethereum), USDT0 (Plasma), USDC (Base), ZEC and SUI. They sold no NEAR. This is **2.7% of the window's issuance** (2,668,045 NEAR), and it is the first swap-level, verified measure of the buyback.
+- **The cross-check holds.** The solvers' wNEAR transfers to these accounts (blockzen 47,417, crux 18,582, anyliq 6,302; together 72,301 NEAR) match the swaps to within 1%.
+- **Most of the rest came from one high-volume account.** One NEAR Intents account sent them **191,434 NEAR in 500 transfers**. In the same window that account sent 17.7M NEAR to many accounts in 31,736 transfers, was funded mainly by `solver-priv-liq.near` (6.5M NEAR), and made no swaps itself. That fits a market maker filling orders, but the payment side of those transfers is not visible in these events, so they are not counted as verified purchases.
+
+So verified purchases are a **lower bound of 2.7%**. Counting every NEAR delivered to the wallet as bought gives 11.3%, and the revenue-based proxy gives 15.7–15.8%. On every measure, buybacks are a small fraction of issuance.
+
 ### 2.6 Network usage behind the buyback (measured, as reported by NearBlocks)
 
 The buyback is funded by Intents fees, so it helps to know whether activity on NEAR is growing alongside it. These figures come from NearBlocks' daily network charts. Every daily row is in [`data/usage.json`](data/usage.json), and the figures below can be recomputed from the rows for the dates given.
@@ -102,7 +114,7 @@ What this means for the claim: the buyback depends on cross-chain swap volume th
 
 ## 4. Limitations
 
-- **No verified purchases.** The wallet receives native NEAR transfers from `intents.near` every 30–90 minutes (3,408 receipts since creation). Each one is a `native_withdraw` intent signed by an account inside NEAR Intents (from the `dip4` event logs). They are not one operator: an evenly spaced sample of 120 inflows (April–November 2026) found **47 different withdrawing accounts**, two of which (`5880ad2b…f9247dd`, `143f2bb4…d3cfb31`) made 75 of the 120 withdrawals. **None** of the 120 carried its purchase in the same transaction; 42 included only dust swaps ([`docs/withdrawer-sample.json`](docs/withdrawer-sample.json), re-run with `npm run check:withdrawers`). So the NEAR is bought earlier, in separate transactions, and finding them means searching every `intents.near` event by account, which needs an indexer (such as the BigQuery NEAR dataset); there is no keyless public index. We also checked the first-party **NEAR Intents Explorer API** (the 1Click swap index, accessed with a Partner Dashboard key, 14 Nov 2026): it has **no transactions by the accounts checked**, including the two behind most withdrawals ([`docs/explorer-check.json`](docs/explorer-check.json)), so the buybacks cannot be verified there either. Verified purchases and verified coverage therefore stay **unavailable**.
+- **Verified purchases are a lower bound, for one window.** The BigQuery trace (§2.7) verifies 73,168 NEAR of swaps for the 15 Oct – 13 Nov window only; it is a one-off snapshot, not part of the daily build (each query scans about 35 GB, so running it daily would use most of the free 1 TB monthly sandbox allowance). On the dashboard its figures keep their own window and are labelled as such once the dashboard window moves on. Before BigQuery, we tried keyless routes. The wallet receives native NEAR transfers from `intents.near` every 30–90 minutes (3,408 receipts since creation). Each one is a `native_withdraw` intent signed by an account inside NEAR Intents (from the `dip4` event logs). They are not one operator: an evenly spaced sample of 120 inflows (April–November 2026) found **47 different withdrawing accounts**, two of which (`5880ad2b…f9247dd`, `143f2bb4…d3cfb31`) made 75 of the 120 withdrawals. **None** of the 120 carried its purchase in the same transaction; 42 included only dust swaps ([`docs/withdrawer-sample.json`](docs/withdrawer-sample.json), re-run with `npm run check:withdrawers`). So the NEAR is bought earlier, in separate transactions, and finding them means searching every `intents.near` event by account, which needs an indexer (such as the BigQuery NEAR dataset); there is no keyless public index. We also checked the first-party **NEAR Intents Explorer API** (the 1Click swap index, accessed with a Partner Dashboard key, 14 Nov 2026): it has **no transactions by the accounts checked**, including the two behind most withdrawals ([`docs/explorer-check.json`](docs/explorer-check.json)), so the buybacks cannot be verified there either. Verified purchases and verified coverage therefore stay **unavailable**.
 - **A small overstatement in the wallet measure.** The same Explorer check lists four successful third-party 1Click transfers of wNEAR *into* the buyback wallet (3,988.7 NEAR in total, June–September 2026). They are not buybacks, but the wallet measure counts them as accumulation, about 0.2% of its growth since February. None fall in the 30-day window.
 - **The proxy is a label converted at a reference price.** It uses DefiLlama's "holders revenue" (equal to net revenue since 23 Feb 2026) divided by the 00:00 UTC price of each day. Actual execution prices and timing are not observed.
 - **The wallet reconciliation is mostly explained.** The wallet's on-chain holdings (2,281,072 NEAR) exceed the dashboard's all-time figure for it (1,781,812 NEAR) by 499,260 NEAR. Two items account for nearly all of the gap:
@@ -113,13 +125,13 @@ What this means for the claim: the buyback depends on cross-chain swap volume th
 - **Third-party data.** DefiLlama volume, fees and revenue are reported as published, and DefiLlama revises its history: in a later build the same day, gross fees for this same window read $6.27 M rather than $5.83 M, and net revenue $1.802 M rather than $1.807 M. This is why every number here cites a fixed snapshot. If DefiLlama has not yet filled the last day, the build keeps the previous value, marked stale, rather than understating it.
 - **The window is short.** The 30-day comparison reflects one market regime. Weekly history starts on 1 Feb 2026.
 
-- **Network usage comes from NearBlocks, not BigQuery.** The track prompt suggests the NEAR BigQuery public dataset, which needs a Google Cloud billing project. NearBlocks' keyless daily charts provide the same three measures (active accounts, transactions, contract activity). The definitions are NearBlocks' own and are not formally documented, so the absolute levels should be read as NearBlocks-reported.
+- **Network usage comes from NearBlocks, not BigQuery.** The daily build stays keyless, so it uses NearBlocks' daily charts for active accounts, transactions and contract activity. BigQuery (free sandbox, no billing account needed) is used for the one-off buyback trace in §2.7. The definitions are NearBlocks' own and are not formally documented, so the absolute levels should be read as NearBlocks-reported.
 
 ## 5. Findings that would invalidate the thesis
 
 The claim "buybacks are not keeping pace with issuance" would be wrong, or would stop being true, if any of the following held:
 
-1. **Verified purchases exceed the proxy materially.** Swap-level evidence (for example, attributed `intents.near` swap records for the buyback wallet) showing purchases of 50% or more of issuance in a 30-day window would overturn the "minority offset" finding.
+1. **Verified purchases exceed the proxy materially.** Swap-level evidence showing purchases of 50% or more of issuance in a 30-day window would overturn the "minority offset" finding. The BigQuery trace (§2.7) verifies 2.7% swap by swap; even if every NEAR delivered to the wallet were counted as bought, it would be 11.3%.
 2. **Coverage reaches parity.** Proxy or verified coverage of 100% or more of issuance in three consecutive 30-day windows would mean buybacks are keeping pace.
 3. **Supply stops growing because of the buyback.** If purchased NEAR were burned, so that the 30-day total supply change fell to zero or below while issuance continued, the "held, not burned" point would no longer apply.
 4. **Undercounting is shown.** If other NEAR wallets were shown to hold buyback NEAR not captured by either measure, coverage would need restating.
@@ -148,4 +160,5 @@ node scripts/serve.mjs                   # http://localhost:8080
 
 - **Weekly figures** in §2 come from `series_weekly` in the snapshot. The 30-day figures come from `metrics`.
 - **Network-usage figures** in §2.6 come from the NearBlocks daily rows in `data/usage.json` for the stated dates, and from `meta.usage_correlation` and `meta.usage_largest_txn_drop` in `data/latest.json` (build of 2026-11-14 16:19 UTC onward). Every section on the dashboard has a *Query* panel with the exact requests.
+- **The on-chain trace** in §2.7: run the SQL in `queries/bigquery/` in the BigQuery console (free sandbox). Results are in `docs/bigquery-results.json`; the summary the dashboard reads is `config/bigquery-trace.json`.
 - **Epoch-level mints** are in `data/epochs.json`. Boundary blocks and wallet balances are in `data/boundaries.json`. Wallet transfers are in `data/wallet-transfers.json`.

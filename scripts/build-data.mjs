@@ -13,6 +13,8 @@ import { USAGE_FIELDS, USAGE_URL, changeCorrelation, changePct, llamaWindowSum, 
 import { ARCHIVAL_URLS, blockBefore, createRpc, epochChecks, mapLimit, sampleInflationRates, walkEpochs, walletBalances } from './lib/near.mjs';
 import { DASHBOARD_URL, LLAMA, fetchDashboard, fetchLlamaSeries, fetchPrice, fetchTransfers } from './lib/sources.mjs';
 import { discoverStakingPools, firstPositiveDay, internalTransfers, walletCreatedAt } from './lib/wallet.mjs';
+import { traceMetrics } from './lib/trace.mjs';
+import { readFile } from 'node:fs/promises';
 
 export const SCHEMA_VERSION = 2;
 const BACKFILL_FROM = '2026-02-01T00:00:00.000Z';
@@ -25,6 +27,7 @@ const startedAt = new Date();
 const now = process.env.NEAR_PARITY_NOW ? new Date(process.env.NEAR_PARITY_NOW) : startedAt;
 const window = utcWindow(now, WINDOW_DAYS);
 const wallet = await store.readJson('config/buyback-wallet.json', null);
+const trace = await store.readJson('config/bigquery-trace.json', null);
 const prevLatest = await store.readJson('data/latest.json', null);
 const prevStatus = await store.readJson('data/status.json', { sources: {} });
 
@@ -275,11 +278,16 @@ if (!M.wallet_net_accumulation) set('wallet_net_accumulation', ['chain'], unavai
     set('wallet_net_excl_internal', ['chain', 'nearblocks'], unavailable('NEAR', 'Archival RPC balances + NearBlocks transfers', 'Net accumulation minus internal transfers.', 'Wallet balances or transfer history unavailable.'));
   }
 }
-set('verified_purchases', [], unavailable('NEAR', 'n/a', 'Would require swap records attributed to the buyback wallet.',
-  wallet?.official_source
-    ? `The wallet is listed on an official source (${wallet.official_source.url}). Its inflows are native_withdraw intents from many accounts inside NEAR Intents (docs/withdrawer-sample.json); the purchases happen in separate transactions with no keyless public index, so they are not verified.`
-    : `The wallet (${wallet?.account_id ?? 'none'}) is not confirmed by an official source, and balance changes alone do not prove purchases.`));
-set('coverage_verified', [], unavailable('ratio', 'n/a', 'Verified NEAR purchased ÷ newly issued NEAR.', 'No verified purchase record exists: wallet inflows from intents.near do not show the swaps behind them.'));
+const traced = traceMetrics(trace, window);
+if (traced) {
+  for (const [k, rec] of Object.entries(traced)) set(k, [], rec);
+} else {
+  set('verified_purchases', [], unavailable('NEAR', 'n/a', 'Would require swap records attributed to the buyback wallet.',
+    wallet?.official_source
+      ? `The wallet is listed on an official source (${wallet.official_source.url}). Its inflows are native_withdraw intents from many accounts inside NEAR Intents (docs/withdrawer-sample.json); the purchases happen in separate transactions with no keyless public index, so they are not verified.`
+      : `The wallet (${wallet?.account_id ?? 'none'}) is not confirmed by an official source, and balance changes alone do not prove purchases.`));
+  set('coverage_verified', [], unavailable('ratio', 'n/a', 'Verified NEAR purchased ÷ newly issued NEAR.', 'No verified purchase record exists: wallet inflows from intents.near do not show the swaps behind them.'));
+}
 ratioMetric('coverage_proxy', ['llama_holders', 'price', 'chain'], 'buyback_proxy_near', 'issuance', 'ratio', 'Proxy: revenue-based buyback estimate (NEAR) ÷ measured issuance (NEAR), same 30 UTC days.', 'proxy');
 ratioMetric('coverage_wallet', ['chain', 'nearblocks'], 'wallet_net_excl_internal', 'issuance', 'ratio', `Net accumulation of the ${walletLabel}, excluding transfers from NEAR's other listed revenue wallets, ÷ measured issuance, same 30 UTC days. Not verified purchases.`, 'proxy');
 
@@ -431,6 +439,13 @@ const curlRpc = (body) => `curl -s ${RPC0} -H 'content-type: application/json' \
 const firstEpoch = chain?.records.find((r) => Date.parse(r.start_time) >= Date.parse(window.start));
 const bS = chain?.boundaries[window.start]; const bE = chain?.boundaries[window.end];
 const b64 = (o) => Buffer.from(JSON.stringify(o)).toString('base64');
+const sqlText = async (rel) => { try { return (await readFile(store.url(rel), 'utf8')).trim(); } catch { return null; } };
+const traceSql = [];
+for (const [rel, label] of [
+  ['queries/bigquery/02-buybacks-30d.sql', 'BigQuery: NEAR delivered to the buyback wallet, and what the accounts behind it bought (swaps)'],
+  ['queries/bigquery/03-funding-sources-30d.sql', 'BigQuery: where the rest of their NEAR came from (transfers and deposits, by source)'],
+  ['queries/bigquery/04-hub-account-30d.sql', 'BigQuery: every NEAR flow of the hub account behind most of those transfers'],
+]) { const code = trace ? await sqlText(rel) : null; if (code) traceSql.push({ label, code }); }
 const queries = {
   issuance: firstEpoch ? [
     { label: `First epoch boundary in the window: its first block (${firstEpoch.start_height}) and the block before it (${firstEpoch.prev_height})`, code: `${curlRpc({ method: 'block', params: { block_id: firstEpoch.start_height } })}\n${curlRpc({ method: 'block', params: { block_id: firstEpoch.prev_height } })}` },
@@ -449,6 +464,7 @@ const queries = {
     { label: 'Buyback proxy: labelled buyback revenue (USD) ÷ that day’s NEAR price', code: `curl -s '${LLAMA.holders[1]}'\ncurl -s '${price?.source?.url ?? 'https://coins.llama.fi/chart/coingecko:near'}'\nproxy_near = Σ_day holders_usd(day) ÷ price(day, 00:00 UTC)\ncoverage = proxy_near ÷ issuance` },
     ...(bS && bE && wallet?.account_id ? [{ label: `Buyback wallet holdings at the window’s boundary blocks (${bS.block_height}, ${bE.block_height}); repeat for both`, code: `${curlRpc({ method: 'query', params: { request_type: 'view_account', account_id: wallet.account_id, block_id: bE.block_height } })}\n${curlRpc({ method: 'query', params: { request_type: 'call_function', account_id: 'wrap.near', method_name: 'ft_balance_of', args_base64: b64({ account_id: wallet.account_id }), block_id: bE.block_height } })}\n${curlRpc({ method: 'query', params: { request_type: 'call_function', account_id: 'intents.near', method_name: 'mt_balance_of', args_base64: b64({ account_id: wallet.account_id, token_id: 'nep141:wrap.near' }), block_id: bE.block_height } })}\n# net = Δ(native + locked + wNEAR + wNEAR in intents + staked) − transfers from NEAR's other revenue wallets (NearBlocks)` }] : []),
   ],
+  trace: traceSql.length ? traceSql : (trace ? [{ label: 'BigQuery SQL', code: (trace.sql || []).join('\n') }] : []),
   weekly: [{ label: 'The same calculations per 7-day bucket from 2026-02-01 (boundary blocks in data/boundaries.json)', code: 'issuance_week = Σ mint for boundaries in the week\nproxy_week = Σ_day holders_usd ÷ price\nwallet_week = Δ wallet holdings − internal transfers' }],
   usage: [
     { label: 'NearBlocks daily network charts (keyless)', code: `curl -s '${USAGE_URL}'` },
@@ -484,6 +500,7 @@ const latest = {
   series_weekly: series,
   wallet_transfers: finalTransfers,
   official_dashboard: dashboardOut,
+  onchain_trace: trace ? (({ description, ...t }) => t)(trace) : null,
   queries,
   sources: [
     { name: 'NEAR mainnet archival RPC (FastNEAR)', url: ARCHIVAL_URLS[0], used_for: 'Epoch boundaries, total supply, burns, protocol config, wallet balances', fallbacks: ARCHIVAL_URLS.slice(1) },

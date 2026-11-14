@@ -38,6 +38,7 @@ function pill(m) {
   const label = m.derived ? 'measured · derived' : m.reported_by ? `${m.status} · ${m.reported_by}` : m.status;
   const frag = [el('span', { class: `pill pill-${m.status}`, title: m.reported_by ? `${statusHelp[m.status] || ''} Reported by ${m.reported_by} (third-party data).` : statusHelp[m.status] }, label)];
   if (m.stale) frag.push(' ', el('span', { class: 'pill pill-stale', title: m.stale_reason || '' }, `stale since ${fmtDay(m.stale_since)}`));
+  if (m.snapshot && !m.snapshot.window_matches_dashboard) frag.push(' ', el('span', { class: 'pill pill-stale', title: `One-off BigQuery trace run ${m.snapshot.run_on}; its window differs from the dashboard window.` }, `fixed window ${fmtDayShort(m.period_start)} – ${fmtDay(lastDay(m.period_end))}`));
   return frag;
 }
 const statusHelp = {
@@ -78,7 +79,7 @@ function renderAnswer(L) {
     el('div', { class: 'big' }, proxy?.value != null ? fmtPct(proxy.value) : 'Unavailable', ' ', ...pill(proxy)),
     el('p', { class: 'answer-line' }, 'of newly issued NEAR is matched by the revenue-based buyback proxy.'),
     el('p', { class: 'small muted' },
-      `Verified coverage: ${verified?.value != null ? fmtPct(verified.value) : 'unavailable'}. Wallet net accumulation: ${wallet?.value != null ? fmtPct(wallet.value) : 'unavailable'} (not purchases).`),
+      `Verified on-chain purchases: ${verified?.value != null ? `${fmtPct(verified.value)} (lower bound)` : 'unavailable'}. Wallet net accumulation: ${wallet?.value != null ? fmtPct(wallet.value) : 'unavailable'} (not purchases).`),
   );
 }
 
@@ -151,14 +152,15 @@ function renderCards(L) {
       title: 'Buyback coverage', query: L.queries?.coverage,
       hero: { label: 'Proxy ÷ issuance', m: m.coverage_proxy, fmt: (v) => fmtPct(v), note: m.buyback_proxy_near?.value != null ? `${fmtNear(m.buyback_proxy_near.value)} proxy vs ${fmtNear(m.issuance?.value)} issued` : null },
       rows: [
-        ['Verified ÷ issuance', m.coverage_verified, { fmt: (v) => fmtPct(v) }],
+        ['Verified purchases ÷ issuance (lower bound)', m.coverage_verified, { fmt: (v) => fmtPct(v) }],
         ['Wallet net ÷ issuance', m.coverage_wallet, { fmt: (v) => fmtPct(v) }],
       ],
       source: 'NEAR RPC · DefiLlama · daily price',
-      how: `<p><strong>Verified coverage</strong> would be verified NEAR purchased ÷ newly issued NEAR over the same period. It is unavailable: ${escapeHtml(m.verified_purchases?.reason || '')}</p>
+      how: `<p><strong>Verified purchases</strong> ${m.coverage_verified?.value != null ? `are NEAR bought on-chain in swaps by the accounts that fund the buyback wallet, ÷ issuance over the same window. It is a lower bound; see the on-chain trace card below.` : `would be verified NEAR purchased ÷ newly issued NEAR over the same period. It is unavailable: ${escapeHtml(m.verified_purchases?.reason || '')}`}</p>
 <p><strong>Proxy</strong>: for each day, DefiLlama labelled buyback revenue (USD) ÷ that day's NEAR price, summed and divided by measured issuance over the same 30 days.</p>
 <p><strong>Wallet net accumulation</strong>: change in NEAR held by <code>${escapeHtml(L.wallet?.account_id || '')}</code> (native + wNEAR + wNEAR inside intents.near) between the window's boundary blocks, minus transfers from NEAR's other listed revenue wallets (${escapeHtml((L.wallet?.related_revenue_wallets?.accounts || []).join(', '))}; ${m.wallet_internal_transfers?.value != null ? fmtNear(m.wallet_internal_transfers.value) : 'unavailable'} in this window), ÷ measured issuance. A balance increase is net accumulation, not proof of purchases. Purchased NEAR held in a wallet is not burned.</p>`,
     }),
+    traceCard(L),
     card({
       title: 'Actual supply change', query: L.queries?.supply,
       hero: { label: 'Total supply change', m: m.supply_change, fmt: (v) => `${v >= 0 ? '+' : ''}${nf0.format(v)} NEAR`, note: m.supply_end?.value != null ? `Supply now ${nf0.format(m.supply_end.value)} NEAR` : null },
@@ -171,6 +173,24 @@ function renderCards(L) {
 <p>Burns are derived: issuance − supply change. They are not subtracted again (no double counting). Buybacks do not appear here: NEAR bought and held in a treasury wallet stays in total supply, so treasury purchases are never counted as burns.</p>`,
     }),
   );
+}
+function traceCard(L) {
+  const m = L.metrics; const t = L.onchain_trace; const f = t?.funding_sources || {};
+  const n0 = (v) => nf0.format(v);
+  return card({
+    title: 'On-chain buyback trace', query: L.queries?.trace,
+    hero: { label: 'NEAR bought in on-chain swaps (lower bound)', m: m.verified_purchases, note: t ? `${n0(t.swaps)} swaps by the accounts that fund the wallet, paid with ${t.paid_with_examples.slice(0, 3).join(', ')} and others; ${n0(t.near_sold_in_swaps)} NEAR sold` : null },
+    rows: [
+      ['Delivered to the buyback wallet', m.trace_withdrawn_to_wallet],
+      ['Not matched to a swap', m.trace_untraced_near],
+      ['Verified purchases ÷ issuance', m.coverage_verified, { fmt: (v) => fmtPct(v, 1) }],
+    ],
+    source: 'BigQuery public NEAR dataset (intents.near event logs)',
+    how: t ? `<p>The wallet is funded by <code>native_withdraw</code> intents signed by many accounts inside NEAR Intents (at least ${n0(t.withdrawing_accounts_min)} in this window). The SQL finds every such withdrawal to <code>${escapeHtml(L.wallet?.account_id || 'the wallet')}</code>, then every <code>token_diff</code> swap by those accounts. NEAR they gained in swaps is counted as <strong>verified purchases</strong>; the token they gave up shows what they paid with.</p>
+<p><strong>Cross-check:</strong> the ${n0(t.withdrawals)} withdrawals total ${n0(t.near_withdrawn_to_wallet)} NEAR, within 0.3% of the wallet's balance change from the archival RPC. The solvers' transfers to these accounts (${n0(f.solvers_near)} NEAR) match the swaps to within 1%.</p>
+<p><strong>Why it is a lower bound:</strong> most of the remaining NEAR reached these accounts by transfer from one high-volume account (${n0(f.hub_near)} NEAR in ${n0(f.hub_transfers)} transfers). That account moved ${(f.hub_total_outflow_near / 1e6).toFixed(1)}M NEAR to many accounts in the window, was funded mainly by <code>${escapeHtml(f.hub_main_source || '')}</code>, and made no swaps. That fits market-maker fills, but the payment side is not visible, so it is not counted.</p>
+<p>This is a one-off trace run on ${escapeHtml(t.run_on)} for one 30-day window, compared with issuance measured for that same window. Results: <a href="https://github.com/Damianonyx/NEARparity/blob/main/docs/bigquery-results.json">docs/bigquery-results.json</a>; SQL: <a href="https://github.com/Damianonyx/NEARparity/tree/main/queries/bigquery">queries/bigquery</a>. It ran in the free BigQuery sandbox (about 35 GB per query).</p>` : '<p>No on-chain trace is configured.</p>',
+  });
 }
 const eval_rate = (s) => { const [a, b] = String(s).split('/').map(Number); return b ? a / b : null; };
 const escapeHtml = (s) => String(s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));

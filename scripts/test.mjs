@@ -242,3 +242,21 @@ test('week-over-week change correlation', () => {
   assert.ok(Math.abs(changeCorrelation([1, 2, 1, 2, 1], [2, 1, 2, 1, 2]).r + 1) < 1e-9);
   assert.deepEqual(changeCorrelation([1, 2], [1, 2]), { r: null, n: 1 });
 });
+
+test('on-chain trace: fixed snapshot window, own issuance, lower bound, never re-divided', async () => {
+  const { traceMetrics } = await import('./lib/trace.mjs');
+  const trace = JSON.parse(readFileSync(new URL('../config/bigquery-trace.json', import.meta.url), 'utf8'));
+  const same = traceMetrics(trace, { start: trace.window.start, end: trace.window.end });
+  assert.equal(same.verified_purchases.status, 'measured');
+  assert.equal(same.verified_purchases.lower_bound, true);
+  assert.equal(same.verified_purchases.value, trace.near_bought_in_swaps);
+  assert.equal(same.coverage_verified.value, trace.near_bought_in_swaps / trace.issuance_near_in_window);
+  assert.equal(same.trace_untraced_near.value, trace.near_withdrawn_to_wallet - trace.near_bought_in_swaps);
+  assert.equal(same.coverage_verified.snapshot.window_matches_dashboard, true);
+  const later = traceMetrics(trace, { start: '2026-10-16T00:00:00.000Z', end: '2026-11-15T00:00:00.000Z' });
+  assert.equal(later.coverage_verified.value, same.coverage_verified.value, 'a moved window must not change the snapshot ratio');
+  assert.equal(later.coverage_verified.period_start, trace.window.start, 'figures keep their own window');
+  assert.equal(later.coverage_verified.snapshot.window_matches_dashboard, false);
+  assert.equal(traceMetrics(null, { start: 'x', end: 'y' }), null);
+  assert.equal(traceMetrics({ ...trace, issuance_near_in_window: 0 }, trace.window), null, 'no division by zero');
+});

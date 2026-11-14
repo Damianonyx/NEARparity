@@ -48,7 +48,8 @@ async function run(label, dir, port, expectations) {
 await run('real data', ROOT, 8731, (html) => {
   check('page finished booting', html.includes('data-ready="1"'));
   check('no global load error', !html.includes('class="error"'));
-  check('four cards rendered', count(html, /<article class="card"/g) === 4, `${count(html, /<article class="card"/g)} cards`);
+  check('five cards rendered', count(html, /<article class="card"/g) === 5, `${count(html, /<article class="card"/g)} cards`);
+  check('on-chain trace card shown', html.includes('On-chain buyback trace') && html.includes('lower bound'));
   check('headline coverage rendered', /class="big">[^<]*%/.test(html));
   check('chart SVG rendered', /<div class="chart" id="chart"[^>]*>\s*<svg/.test(html));
   check('hero simulation running', /id="hero-canvas"/.test(html) && /id="ro-cov">[0-9.]+%</.test(html) && /id="ro-need">Parity needs/.test(html));
@@ -70,7 +71,7 @@ try {
   await writeFile(join(tmp, 'data/latest.json'), JSON.stringify(latest));
   await run('degraded data', tmp, 8732, (html) => {
     check('page still boots', html.includes('data-ready="1"'));
-    check('still four cards', count(html, /<article class="card"/g) === 4);
+    check('still five cards', count(html, /<article class="card"/g) === 5);
     check('missing figures shown as Unavailable', html.includes('Unavailable'));
     check('staleness banner shown', /id="banner"(?![^>]*hidden)[^>]*>[\s\S]{0,200}Data may be stale/.test(html));
     check('data-check warning shown', html.includes('Data check:'));

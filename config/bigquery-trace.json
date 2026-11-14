@@ -1,0 +1,29 @@
+{
+  "description": "Summary of a one-off on-chain trace of the buyback wallet's funding, run on the BigQuery public NEAR dataset. Read by scripts/build-data.mjs. Raw results: docs/bigquery-results.json. SQL: queries/bigquery/. Re-run the SQL and update these numbers to refresh it.",
+  "dataset": "bigquery-public-data.crypto_near_mainnet_us",
+  "run_on": "2026-11-14",
+  "window": { "start": "2026-10-15T00:00:00.000Z", "end": "2026-11-14T00:00:00.000Z" },
+  "issuance_near_in_window": 2668044.592172994,
+  "issuance_source": "data/latest.json of 2026-11-14 (measured, same window)",
+  "near_withdrawn_to_wallet": 301008.214894364,
+  "withdrawals": 771,
+  "withdrawing_accounts_min": 272,
+  "near_bought_in_swaps": 73168.1865361124,
+  "swaps": 7979,
+  "near_sold_in_swaps": 0,
+  "paid_with_examples": ["USDT (Ethereum)", "USDT0 (Plasma)", "USDC (Base)", "ZEC", "SUI"],
+  "funding_sources": {
+    "solvers_near": 72300.91428296425,
+    "solvers": ["blockzen-1-main.near", "crux-solver.near", "s1.anyliq-solver.near"],
+    "hub_account": "51e8f94d77b5e90dc9852ca6113771e11e8382ce69473a75e313e41665de7cbe",
+    "hub_near": 191433.899958379925,
+    "hub_transfers": 500,
+    "hub_total_outflow_near": 17683629.242121173,
+    "hub_total_transfers_out": 31736,
+    "hub_main_source": "solver-priv-liq.near",
+    "hub_swaps": 0,
+    "top15_senders_near": 276466.4499037818
+  },
+  "sql": ["queries/bigquery/02-buybacks-30d.sql", "queries/bigquery/03-funding-sources-30d.sql", "queries/bigquery/04-hub-account-30d.sql"],
+  "results": "docs/bigquery-results.json"
+}
