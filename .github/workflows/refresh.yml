@@ -1,6 +1,7 @@
-name: Refresh data and deploy
+name: Refresh data
 
-# Runs the offline tests, rebuilds data/, commits it (main only) and deploys GitHub Pages from main.
+# Runs the offline tests, rebuilds data/ and commits it (main only). The site is deployed by Vercel,
+# which redeploys main on every push, including these data commits.
 # A partial refresh (some source failed) exits 2: the stale fallbacks are still committed, and the
 # run shows a warning instead of failing, so the site keeps its last good values.
 on:
@@ -55,24 +56,3 @@ jobs:
           git commit -m "Data refresh $(date -u +%Y-%m-%dT%H:%MZ)"
           git pull --rebase origin main
           git push origin HEAD:main
-
-  deploy:
-    if: github.ref == 'refs/heads/main'
-    needs: build
-    runs-on: ubuntu-latest
-    permissions:
-      pages: write
-      id-token: write
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          ref: main # includes the data commit pushed by the build job
-      - uses: actions/configure-pages@v5
-      - uses: actions/upload-pages-artifact@v3
-        with:
-          path: .
-      - id: deployment
-        uses: actions/deploy-pages@v4

@@ -423,12 +423,102 @@ function setupTheme() {
   });
 }
 
+
+// ---------- hero: bitmap headline + scanline scale ----------
+const GLYPHS = {
+  N: ['10001', '11001', '10101', '10101', '10011', '10001', '10001'],
+  E: ['11111', '10000', '10000', '11110', '10000', '10000', '11111'],
+  A: ['01110', '11011', '10001', '11111', '10001', '10001', '10001'],
+  R: ['11110', '10001', '10001', '11110', '10100', '10010', '10001'],
+  P: ['11110', '10001', '10001', '11110', '10000', '10000', '10000'],
+  I: ['11111', '00100', '00100', '00100', '00100', '00100', '11111'],
+  T: ['11111', '00100', '00100', '00100', '00100', '00100', '00100'],
+  Y: ['10001', '10001', '01010', '00100', '00100', '00100', '00100'],
+};
+function renderPixelTitle(lines = ['NEAR', 'PARITY']) {
+  const cols = Math.max(...lines.map((l) => l.length * 6 - 1)); const rows = lines.length * 7 + (lines.length - 1) * 3;
+  let d = '';
+  lines.forEach((line, li) => [...line].forEach((ch, ci) => (GLYPHS[ch] || []).forEach((bits, ry) => {
+    const y = li * 10 + ry; let x = ci * 6;
+    for (const run of bits.matchAll(/1+/g)) d += `M${x + run.index} ${y}h${run[0].length}v1h-${run[0].length}z`;
+  })));
+  const svg = s('svg', { viewBox: `0 0 ${cols} ${rows}`, 'shape-rendering': 'crispEdges', 'aria-hidden': 'true' });
+  svg.append(s('path', { d }));
+  $('#pixel-title').append(svg);
+}
+
+// Deterministic PRNG for the decorative streaks.
+const rng = (seed) => () => ((seed = (seed * 1664525 + 1013904223) >>> 0) / 2 ** 32);
+const segDist = (px, py, ax, ay, bx, by) => {
+  const dx = bx - ax; const dy = by - ay; const t = Math.max(0, Math.min(1, ((px - ax) * dx + (py - ay) * dy) / (dx * dx + dy * dy)));
+  return Math.hypot(px - (ax + t * dx), py - (ay + t * dy));
+};
+
+/** Balance scale rasterised to a 64×46 grid and drawn as horizontal scanlines.
+ *  Left pan = issuance (fixed weight); right pan = buyback proxy, weight ∝ coverage; tilt ∝ (1 − coverage). */
+function renderScale(L) {
+  const cov = L?.metrics?.coverage_proxy?.value ?? null;
+  const c = cov == null ? null : Math.max(0, Math.min(1, cov));
+  const Wd = 64; const Ht = 46; const u = 10;
+  const theta = c == null ? 0 : 0.28 * (1 - c);
+  const P = { x: 32, y: 9 }; const arm = 22;
+  const Lend = { x: P.x - arm * Math.cos(theta), y: P.y + arm * Math.sin(theta) };
+  const Rend = { x: P.x + arm * Math.cos(theta), y: P.y - arm * Math.sin(theta) };
+  const pans = [Lend, Rend].map((e) => ({ x: e.x, y: e.y + 14, e }));
+  const wL = { w: 12, h: 8 }; const k = c == null ? 0 : Math.sqrt(c);
+  const wR = { w: Math.max(c ? 1.5 : 0, 12 * k), h: Math.max(c ? 1.5 : 0, 8 * k) };
+  const shade = (x, y) => {
+    if (Math.hypot(x - P.x, y - P.y) <= 2.3) return 1;
+    if (segDist(x, y, Lend.x, Lend.y, Rend.x, Rend.y) <= 1.05) return 1;
+    for (const [i, pan] of pans.entries()) {
+      const wt = i === 0 ? wL : wR;
+      if (wt.w && x >= pan.x - wt.w / 2 && x < pan.x + wt.w / 2 && y >= pan.y - wt.h && y < pan.y) return 0.95;
+      const ex = (x - pan.x) / 9.5; const ey = (y - pan.y) / 3.4;
+      if (y >= pan.y && ex * ex + ey * ey <= 1) return 0.7;
+      if (segDist(x, y, pan.e.x, pan.e.y, pan.x - 8.5, pan.y) <= 0.45 || segDist(x, y, pan.e.x, pan.e.y, pan.x + 8.5, pan.y) <= 0.45) return 0.4;
+    }
+    if (x >= 30.9 && x < 33.1 && y >= P.y && y < 41) return 0.8;
+    if (y >= 41 && y < 45 && Math.abs(x - 32) <= 4 + (y - 41) * 2.6) return 0.85;
+    return 0;
+  };
+  const svg = s('svg', { viewBox: `0 0 ${Wd * u} ${(Ht + 1) * u}`, 'aria-hidden': 'true' });
+  const rand = rng(7);
+  for (let i = 0; i < 12; i++) { // decorative streaks, upper left (clear of the beam and pans)
+    const y = Math.floor(rand() * 9); const len = 5 + Math.floor(rand() * 16); const x0 = Math.floor(rand() * Math.max(1, 27 - len));
+    svg.append(s('rect', { class: 'streak', x: x0 * u, y: y * u + 4, width: len * u, height: 2 }));
+  }
+  for (let y = 0; y < Ht; y++) {
+    let x = 0;
+    while (x < Wd) {
+      const sh = Math.round(shade(x + 0.5, y + 0.5) * 4) / 4;
+      if (!sh) { x++; continue; }
+      let x2 = x + 1;
+      while (x2 < Wd && Math.round(shade(x2 + 0.5, y + 0.5) * 4) / 4 === sh) x2++;
+      const h = u * (0.22 + 0.58 * sh);
+      svg.append(s('rect', { class: 'ink', x: x * u, y: y * u + (u - h) / 2, width: (x2 - x) * u, height: h }));
+      x = x2;
+    }
+  }
+  svg.append(s('rect', { class: 'streak', x: 0, y: 45 * u + 3, width: Wd * u, height: 2 }));
+  const label = (txt, x, y) => { const t = s('text', { x: x * u, y: y * u, 'text-anchor': 'middle', style: 'fill: var(--muted); font: 600 15px var(--mono); letter-spacing: 1px' }); t.textContent = txt; svg.append(t); };
+  label('ISSUED', pans[0].x, Math.min(Ht, pans[0].y + 6.2));
+  label(c == null ? 'PROXY N/A' : 'BUYBACK PROXY', pans[1].x, Math.min(Ht, pans[1].y + 6.2));
+  const box = $('#scale-art'); box.textContent = ''; box.append(svg);
+  const m = L?.metrics || {};
+  $('#scale-caption').textContent = c == null
+    ? 'Scale shown level only as an outline: buyback coverage is unavailable, so nothing is weighed.'
+    : `Drawn to data, last 30 days: left pan = NEAR issued (${fmtNear(m.issuance?.value)}, measured); right pan = revenue-based buyback proxy (${fmtNear(m.buyback_proxy_near?.value)}, proxy). Weight area and tilt scale with proxy coverage (${fmtPct(cov)}); a level beam would mean parity.`;
+  box.setAttribute('aria-label', `Balance scale: newly issued NEAR outweighs the buyback proxy; proxy coverage ${c == null ? 'unavailable' : fmtPct(cov)}.`);
+}
+
 // ---------- boot ----------
 setupTheme();
+renderPixelTitle();
 renderLegend();
 try {
   const { latest, status } = await load();
   renderMeta(latest);
+  renderScale(latest);
   renderAnswer(latest);
   renderCards(latest);
   setupSimulator(latest);
@@ -446,5 +536,6 @@ try {
   document.addEventListener('click', (e) => { if (!e.target.closest('.chart')) hideTip(); });
 } catch (e) {
   $('#refresh-meta').textContent = 'Data could not be loaded.';
+  renderScale(null);
   $('#main').prepend(el('div', { class: 'error' }, `Could not load data/latest.json (${e.message}). If you opened index.html from disk, run: node scripts/serve.mjs`));
 }
