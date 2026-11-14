@@ -93,7 +93,14 @@ function row(label, m, { fmt = fmtNear, baseStatus = null } = {}) {
   return el('li', {}, k, v);
 }
 
-function card({ title, hero, rows = [], source, how }) {
+/** "Query" disclosure: the exact, runnable request(s) behind a figure (from latest.json `queries`). */
+function queryBlock(items, summary = 'Query') {
+  if (!items?.length) return null;
+  return el('details', { class: 'query' }, el('summary', {}, summary),
+    ...items.map((q) => el('div', { class: 'q' }, el('p', { class: 'q-label' }, q.label), el('pre', {}, el('code', {}, q.code)))));
+}
+
+function card({ title, hero, rows = [], source, how, query }) {
   const hm = hero.m; const ok = hm && hm.status !== 'unavailable' && hm.value != null;
   return el('article', { class: 'card' },
     el('div', { class: 'card-head' }, el('h3', {}, title), el('span', { class: 'period' }, shortPeriod(hm))),
@@ -103,6 +110,7 @@ function card({ title, hero, rows = [], source, how }) {
     rows.length ? el('ul', { class: 'rows' }, rows.map((r) => row(r[0], r[1], { ...(r[2] || {}), baseStatus: hm?.status }))) : null,
     el('p', { class: 'src' }, `Source: ${source}`),
     el('details', {}, el('summary', {}, 'How this is calculated'), el('div', { class: 'how', html: how })),
+    queryBlock(query),
   );
 }
 
@@ -114,7 +122,7 @@ function renderCards(L) {
   const ratio = m.issuance?.mint_to_cap_ratio_range;
   wrap.append(
     card({
-      title: 'Issuance',
+      title: 'Issuance', query: L.queries?.issuance,
       hero: { label: 'Newly minted NEAR', m: m.issuance, note: m.issuance?.epochs_counted ? `${m.issuance.epochs_counted} epoch boundaries` : null },
       rows: [
         ['Per day', m.daily_issuance, { fmt: (v) => `${nf0.format(v)} NEAR` }],
@@ -126,7 +134,7 @@ function renderCards(L) {
 <p>Epoch boundaries are cached in <a href="data/epochs.json">data/epochs.json</a>.</p>`,
     }),
     card({
-      title: 'Intents economics',
+      title: 'Intents economics', query: L.queries?.intents,
       hero: { label: 'Net revenue captured', m: m.intents_net_revenue, fmt: fmtUsd, note: m.net_revenue_capture_rate?.value != null ? `${nf2.format(m.net_revenue_capture_rate.value)} bps of swap volume` : null },
       rows: [
         ['Swap volume', m.intents_volume, { fmt: fmtUsd }],
@@ -139,7 +147,7 @@ function renderCards(L) {
 <p>Capture rate = net revenue ÷ volume. Allocation = labelled buyback revenue ÷ net revenue.</p>`,
     }),
     card({
-      title: 'Buyback coverage',
+      title: 'Buyback coverage', query: L.queries?.coverage,
       hero: { label: 'Proxy ÷ issuance', m: m.coverage_proxy, fmt: (v) => fmtPct(v), note: m.buyback_proxy_near?.value != null ? `${fmtNear(m.buyback_proxy_near.value)} proxy vs ${fmtNear(m.issuance?.value)} issued` : null },
       rows: [
         ['Verified ÷ issuance', m.coverage_verified, { fmt: (v) => fmtPct(v) }],
@@ -151,7 +159,7 @@ function renderCards(L) {
 <p><strong>Wallet net accumulation</strong>: change in NEAR held by <code>${escapeHtml(L.wallet?.account_id || '')}</code> (native + wNEAR + wNEAR inside intents.near) between the window's boundary blocks, minus transfers from NEAR's other listed revenue wallets (${escapeHtml((L.wallet?.related_revenue_wallets?.accounts || []).join(', '))}; ${m.wallet_internal_transfers?.value != null ? fmtNear(m.wallet_internal_transfers.value) : 'unavailable'} in this window), ÷ measured issuance. A balance increase is net accumulation, not proof of purchases. Purchased NEAR held in a wallet is not burned.</p>`,
     }),
     card({
-      title: 'Actual supply change',
+      title: 'Actual supply change', query: L.queries?.supply,
       hero: { label: 'Total supply change', m: m.supply_change, fmt: (v) => `${v >= 0 ? '+' : ''}${nf0.format(v)} NEAR`, note: m.supply_end?.value != null ? `Supply now ${nf0.format(m.supply_end.value)} NEAR` : null },
       rows: [
         ['Minted', m.issuance],
@@ -222,7 +230,8 @@ function niceTicks(min, max, count = 4) {
   const step0 = span / count; const mag = 10 ** Math.floor(Math.log10(step0));
   const step = [1, 2, 2.5, 5, 10].map((m) => m * mag).find((x) => span / x <= count) || 10 * mag;
   const ticks = [];
-  for (let t = Math.floor(min / step) * step; t <= max + 1e-9; t += step) ticks.push(t);
+  // Always end on a tick at or above max, so no mark can rise above the plot.
+  for (let t = Math.floor(min / step) * step; ; t += step) { ticks.push(t); if (t >= max - 1e-9) break; }
   return ticks;
 }
 const compactNear = (v) => (Math.abs(v) >= 1e6 ? `${(v / 1e6).toFixed(1)}M` : Math.abs(v) >= 1e3 ? `${Math.round(v / 1e3)}k` : `${Math.round(v)}`);
@@ -431,6 +440,141 @@ function setupTheme() {
 }
 
 
+// ---------- chart takeaways ----------
+function renderChartNotes(L) {
+  const rows = (L.series_weekly || []).filter((r) => r.issuance_near != null);
+  const tot = (f) => rows.reduce((a, r) => a + (r[f] ?? 0), 0);
+  const iss = tot('issuance_near'); const px = tot('buyback_proxy_near');
+  const best = rows.reduce((b, r) => (r.buyback_proxy_near != null && r.issuance_near && r.buyback_proxy_near / r.issuance_near > (b?.c ?? -1) ? { c: r.buyback_proxy_near / r.issuance_near, w: r.period_start } : b), null);
+  const parityWeeks = rows.filter((r) => r.buyback_proxy_near != null && r.buyback_proxy_near >= r.issuance_near).length;
+  $('#chart-takeaway').textContent = rows.length && iss
+    ? `Since ${fmtDay(rows[0].period_start)}, the buyback proxy equalled ${fmtPct(px / iss)} of issuance (${fmtNear(px)} against ${fmtNear(iss)}); its best week, starting ${fmtDayShort(best.w)}, reached ${fmtPct(best.c)}, and ${parityWeeks ? `${parityWeeks} week(s) reached parity` : 'no week reached parity'}.`
+    : '';
+  const wq = $('#weekly-query'); wq.textContent = '';
+  const q = queryBlock(L.queries?.weekly); if (q) wq.append(q);
+}
+
+// ---------- network usage ----------
+const indexTo100 = (vals) => { const base = vals.find((v) => v != null && v !== 0); return vals.map((v) => (v == null || base == null ? null : (v / base) * 100)); };
+const signedPct = (x) => (x == null ? '—' : `${x > 0 ? '+' : x < 0 ? '−' : ''}${Math.abs(x * 100).toFixed(1)}%`);
+
+function renderUsage(L) {
+  const m = L.metrics;
+  const tiles = $('#usage-tiles'); tiles.textContent = '';
+  const tile = (label, mm, fmt) => el('div', { class: 'tile' },
+    el('p', { class: 'tile-label' }, label),
+    el('div', { class: 'tile-value' }, mm && mm.status !== 'unavailable' && mm.value != null ? fmt(mm.value) : 'Unavailable'),
+    el('p', { class: 'tile-change' }, mm?.change_pct != null ? `${signedPct(mm.change_pct)} vs previous 30 days` : (mm?.reason || '')),
+    el('div', {}, ...pill(mm)));
+  tiles.append(
+    tile('Intents volume / day', m.avg_daily_volume ? { ...m.avg_daily_volume, change_pct: m.intents_volume?.change_pct } : m.intents_volume, fmtUsd),
+    tile('Active accounts / day', m.usage_active_accounts, (v) => nf0.format(v)),
+    tile('Transactions / day', m.usage_txns, (v) => nf0.format(v)),
+    tile('Active contracts / day', m.usage_active_contracts, (v) => nf0.format(v)),
+  );
+  const ch = (k) => m[k]?.change_pct;
+  $('#usage-takeaway').textContent = [ch('intents_volume'), ch('usage_active_accounts'), ch('usage_txns')].every((x) => x != null)
+    ? `Over the last 30 days against the 30 before, Intents volume moved ${signedPct(ch('intents_volume'))}, daily active accounts ${signedPct(ch('usage_active_accounts'))} and daily transactions ${signedPct(ch('usage_txns'))}.`
+    : '';
+  const br = L.meta?.usage_largest_txn_drop;
+  $('#usage-break').textContent = br
+    ? `Largest one-day change since ${fmtDay(L.meta.backfill_from)}: on ${fmtDay(br.to)}, transactions went from ${nf0.format(br.txns_before)} to ${nf0.format(br.txns_after)} (${signedPct(br.change)}) and active contracts from ${nf0.format(br.active_contracts_before)} to ${nf0.format(br.active_contracts_after)}, while active accounts went from ${nf0.format(br.active_accounts_before)} to ${nf0.format(br.active_accounts_after)}. The step is in activity per account, not in the number of accounts; its cause is not verified here.`
+    : '';
+  renderUsageChart(L);
+  const t = $('#usage-table'); t.textContent = '';
+  t.append(el('thead', {}, el('tr', {}, ['Week (UTC)', 'Intents volume / day', 'Active accounts / day', 'Transactions / day', 'Active contracts / day'].map((h, i) => el('th', { class: i ? 'n' : null }, h)))));
+  const tb = el('tbody');
+  for (const r of L.series_weekly || []) {
+    tb.append(el('tr', {}, el('td', {}, `${fmtDayShort(r.period_start)} – ${fmtDayShort(lastDay(r.period_end))}${r.partial ? ' (partial)' : ''}`),
+      el('td', { class: 'n' }, r.intents_volume_usd == null ? 'unavailable' : fmtUsd(r.intents_volume_usd / r.days)),
+      ...[r.active_accounts_avg, r.txns_avg, r.active_contracts_avg].map((v) => el('td', { class: 'n' }, v == null ? 'unavailable' : nf0.format(v)))));
+  }
+  t.append(tb);
+  const uq = $('#usage-query'); uq.textContent = '';
+  const q = queryBlock(L.queries?.usage); if (q) uq.append(q);
+}
+
+function usageSeries(L) {
+  const rows = L.series_weekly || [];
+  const vol = rows.map((r) => (r.intents_volume_usd != null ? r.intents_volume_usd / r.days : null));
+  const acc = rows.map((r) => r.active_accounts_avg ?? null);
+  const tx = rows.map((r) => r.txns_avg ?? null);
+  return { rows, series: [
+    { label: 'Intents volume', src: 'DefiLlama', idx: indexTo100(vol), raw: vol, fmt: (v) => `${fmtUsd(v)}/day`, style: 'stroke: var(--ink); stroke-width: 2.5', dash: '' },
+    { label: 'Active accounts', src: 'NearBlocks', idx: indexTo100(acc), raw: acc, fmt: (v) => `${nf0.format(v)}/day`, style: 'stroke: var(--ink-2); stroke-width: 2', dash: '7 4' },
+    { label: 'Transactions', src: 'NearBlocks', idx: indexTo100(tx), raw: tx, fmt: (v) => `${nf0.format(v)}/day`, style: 'stroke: var(--muted); stroke-width: 2', dash: '2 3' },
+  ] };
+}
+
+function renderUsageLegend(series) {
+  const ul = $('#usage-legend'); ul.textContent = '';
+  for (const sr of series) {
+    const svg = s('svg', { width: 26, height: 10, viewBox: '0 0 26 10', 'aria-hidden': 'true' });
+    svg.append(s('line', { x1: 1, x2: 25, y1: 5, y2: 5, style: sr.style, 'stroke-dasharray': sr.dash, 'stroke-linecap': 'round' }));
+    ul.append(el('li', {}, svg, `${sr.label} (${sr.src})`));
+  }
+}
+
+function renderUsageChart(L) {
+  const { rows, series } = usageSeries(L);
+  renderUsageLegend(series);
+  const box = $('#usage-chart'); box.textContent = '';
+  if (!rows.length || series.every((sr) => sr.idx.every((v) => v == null))) { box.append(el('p', {}, 'Usage series unavailable.')); return; }
+  const W = Math.max(300, box.clientWidth); const H = Math.round(Math.min(300, Math.max(210, W * 0.45)));
+  const m = { l: 40, r: 74, t: 22, b: 28 };
+  const pw = W - m.l - m.r; const ph = H - m.t - m.b;
+  const all = series.flatMap((sr) => sr.idx).filter((v) => v != null);
+  const ticks = niceTicks(0, Math.max(110, ...all) * 1.04, 4);
+  const y = (v) => m.t + ph - (v / ticks.at(-1)) * ph;
+  const step = rows.length > 1 ? pw / (rows.length - 1) : 0;
+  const x = (i) => m.l + i * step;
+  const svg = s('svg', { viewBox: `0 0 ${W} ${H}`, width: W, height: H });
+  const grid = s('g', { class: 'grid' }); const axis = s('g', { class: 'axis' });
+  for (const t of ticks) {
+    grid.append(s('line', { x1: m.l, x2: W - m.r, y1: y(t), y2: y(t) }));
+    const tx = s('text', { x: m.l - 6, y: y(t) + 4, 'text-anchor': 'end' }); tx.textContent = String(t); axis.append(tx);
+  }
+  const unit = s('text', { x: 0, y: 10 }); unit.textContent = 'Index, week of 1 Feb = 100'; axis.append(unit);
+  svg.append(grid, s('line', { class: 'baseline', x1: m.l, x2: W - m.r, y1: y(100), y2: y(100), 'stroke-dasharray': '3 3' }));
+  const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+  let lastMonth = null; let lastLabelX = -1e9;
+  rows.forEach((r, i) => {
+    const mo = r.period_start.slice(0, 7);
+    if (mo !== lastMonth) { lastMonth = mo; if (x(i) - lastLabelX >= 30) { const t = s('text', { x: x(i), y: H - 10, 'text-anchor': 'start' }); t.textContent = MONTHS[new Date(r.period_start).getUTCMonth()]; axis.append(t); lastLabelX = x(i); } }
+  });
+  const ends = [];
+  for (const sr of series) {
+    let d = ''; let pen = false;
+    sr.idx.forEach((v, i) => { if (v == null) { pen = false; return; } d += `${pen ? 'L' : 'M'}${x(i).toFixed(1)},${y(v).toFixed(1)}`; pen = true; });
+    svg.append(s('path', { d, fill: 'none', style: sr.style, 'stroke-dasharray': sr.dash, 'stroke-linejoin': 'round', 'stroke-linecap': 'round' }));
+    const li = sr.idx.findLastIndex((v) => v != null);
+    if (li >= 0) ends.push({ sr, yv: y(sr.idx[li]), v: sr.idx[li], xv: x(li) });
+  }
+  // Direct end labels, nudged apart so they never overlap.
+  ends.sort((a, b) => a.yv - b.yv);
+  for (let i = 1; i < ends.length; i++) if (ends[i].yv - ends[i - 1].yv < 13) ends[i].yv = ends[i - 1].yv + 13;
+  for (const e of ends) { const t = s('text', { x: e.xv + 6, y: e.yv + 4, class: 'end-label' }); t.textContent = `${e.sr.label.split(' ')[0]} ${Math.round(e.v)}`; axis.append(t); }
+  svg.append(axis);
+  // Hover/tap targets per week.
+  rows.forEach((r, i) => {
+    const g = s('g', { class: 'col' });
+    g.append(s('rect', { class: 'hit', x: x(i) - step / 2, y: m.t, width: Math.max(step, 6), height: ph }));
+    const show = () => {
+      const tip = $('#usage-tooltip'); tip.textContent = '';
+      tip.append(...[el('div', { class: 't' }, `${fmtDayShort(r.period_start)} – ${fmtDayShort(lastDay(r.period_end))}${r.partial ? ' · partial' : ''}`),
+        ...series.map((sr) => el('div', { class: 'r' }, el('span', {}, sr.label), el('span', {}, sr.raw[i] == null ? 'unavailable' : `${sr.fmt(sr.raw[i])} · ${Math.round(sr.idx[i])}`)))]);
+      tip.hidden = false;
+      const panel = tip.parentElement.getBoundingClientRect(); const gb = g.getBoundingClientRect();
+      tip.style.left = `${Math.max(8, Math.min(gb.left - panel.left + gb.width / 2 - tip.offsetWidth / 2, panel.width - tip.offsetWidth - 8))}px`;
+      tip.style.top = `${box.getBoundingClientRect().top - panel.top - 8}px`;
+    };
+    g.addEventListener('pointerenter', show); g.addEventListener('click', show);
+    svg.append(g);
+  });
+  svg.addEventListener('pointerleave', () => { $('#usage-tooltip').hidden = true; });
+  box.append(svg);
+}
+
 // ---------- hero: bitmap headline + scanline scale ----------
 const GLYPHS = {
   N: ['10001', '11001', '10101', '10101', '10011', '10001', '10001'],
@@ -585,7 +729,10 @@ if (loaded) {
   section('cards', '#cards', () => renderCards(latest));
   section('simulator', '#sim-out', () => setupSimulator(latest));
   section('chart', '#chart', () => renderChart(latest));
+  section('chart-notes', '#chart-takeaway', () => renderChartNotes(latest));
   section('table', '#series-table', () => renderSeriesTable(latest));
+  section('usage', '#usage-tiles', () => renderUsage(latest));
+  section('simulator-query', '#simulator', () => { const q = queryBlock(latest.queries?.simulator, 'Formula as code'); if (q) $('#simulator').append(q); });
   section('claims', '#supports', () => renderClaims(latest));
   section('wallet', '#wallet', () => renderWallet(latest));
   section('sources', '#sources', () => renderSources(latest, status));
@@ -595,7 +742,7 @@ if (loaded) {
     document.querySelectorAll('.seg button').forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
     hideTip(); section('chart', '#chart', () => renderChart(latest));
   }));
-  let rt; new ResizeObserver(() => { clearTimeout(rt); rt = setTimeout(() => section('chart', '#chart', () => renderChart(latest)), 120); }).observe($('#chart'));
-  document.addEventListener('click', (e) => { if (!e.target.closest('.chart')) hideTip(); });
+  let rt; new ResizeObserver(() => { clearTimeout(rt); rt = setTimeout(() => { section('chart', '#chart', () => renderChart(latest)); section('usage-chart', '#usage-chart', () => renderUsageChart(latest)); }, 120); }).observe($('#chart'));
+  document.addEventListener('click', (e) => { if (!e.target.closest('.chart')) { hideTip(); $('#usage-tooltip').hidden = true; } });
   document.documentElement.dataset.ready = '1';
 }

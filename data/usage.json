@@ -1,0 +1,4787 @@
+{
+  "description": "Daily NEAR network usage as reported by NearBlocks (/v1/charts), complete UTC days since 2025-01-01. Field definitions are NearBlocks’ own.",
+  "source": "https://api.nearblocks.io/v1/charts",
+  "updated_at": "2026-11-14T16:19:40.378Z",
+  "fields": [
+    "txns",
+    "active_accounts",
+    "new_accounts",
+    "active_contracts"
+  ],
+  "rows": [
+    {
+      "date": "2025-01-01",
+      "txns": 7858227,
+      "active_accounts": 926102,
+      "new_accounts": 384516,
+      "active_contracts": 3266334
+    },
+    {
+      "date": "2025-01-02",
+      "txns": 7634852,
+      "active_accounts": 948727,
+      "new_accounts": 504278,
+      "active_contracts": 3007305
+    },
+    {
+      "date": "2025-01-03",
+      "txns": 6609596,
+      "active_accounts": 904239,
+      "new_accounts": 197916,
+      "active_contracts": 3177252
+    },
+    {
+      "date": "2025-01-04",
+      "txns": 6398910,
+      "active_accounts": 896647,
+      "new_accounts": 340644,
+      "active_contracts": 2838282
+    },
+    {
+      "date": "2025-01-05",
+      "txns": 6324006,
+      "active_accounts": 899709,
+      "new_accounts": 399023,
+      "active_contracts": 2725609
+    },
+    {
+      "date": "2025-01-06",
+      "txns": 6622157,
+      "active_accounts": 900500,
+      "new_accounts": 266805,
+      "active_contracts": 3171549
+    },
+    {
+      "date": "2025-01-07",
+      "txns": 6311764,
+      "active_accounts": 903202,
+      "new_accounts": 418212,
+      "active_contracts": 2728003
+    },
+    {
+      "date": "2025-01-08",
+      "txns": 6459697,
+      "active_accounts": 894398,
+      "new_accounts": 276219,
+      "active_contracts": 2916073
+    },
+    {
+      "date": "2025-01-09",
+      "txns": 6246802,
+      "active_accounts": 898839,
+      "new_accounts": 437374,
+      "active_contracts": 2639685
+    },
+    {
+      "date": "2025-01-10",
+      "txns": 6301014,
+      "active_accounts": 907588,
+      "new_accounts": 293854,
+      "active_contracts": 2778291
+    },
+    {
+      "date": "2025-01-11",
+      "txns": 6331920,
+      "active_accounts": 882091,
+      "new_accounts": 297360,
+      "active_contracts": 2851692
+    },
+    {
+      "date": "2025-01-12",
+      "txns": 6463502,
+      "active_accounts": 898531,
+      "new_accounts": 300244,
+      "active_contracts": 2911102
+    },
+    {
+      "date": "2025-01-13",
+      "txns": 6055283,
+      "active_accounts": 900378,
+      "new_accounts": 285226,
+      "active_contracts": 2569898
+    },
+    {
+      "date": "2025-01-14",
+      "txns": 6245690,
+      "active_accounts": 890323,
+      "new_accounts": 317438,
+      "active_contracts": 2688713
+    },
+    {
+      "date": "2025-01-15",
+      "txns": 6286677,
+      "active_accounts": 885122,
+      "new_accounts": 310032,
+      "active_contracts": 2809635
+    },
+    {
+      "date": "2025-01-16",
+      "txns": 6520428,
+      "active_accounts": 890182,
+      "new_accounts": 353295,
+      "active_contracts": 2876739
+    },
+    {
+      "date": "2025-01-17",
+      "txns": 6308992,
+      "active_accounts": 884108,
+      "new_accounts": 364404,
+      "active_contracts": 2739786
+    },
+    {
+      "date": "2025-01-18",
+      "txns": 6247788,
+      "active_accounts": 853291,
+      "new_accounts": 336154,
+      "active_contracts": 2785451
+    },
+    {
+      "date": "2025-01-19",
+      "txns": 7760651,
+      "active_accounts": 876500,
+      "new_accounts": 390831,
+      "active_contracts": 3184226
+    },
+    {
+      "date": "2025-01-20",
+      "txns": 8889596,
+      "active_accounts": 881410,
+      "new_accounts": 385025,
+      "active_contracts": 3275369
+    },
+    {
+      "date": "2025-01-21",
+      "txns": 9225695,
+      "active_accounts": 900209,
+      "new_accounts": 460670,
+      "active_contracts": 3149271
+    },
+    {
+      "date": "2025-01-22",
+      "txns": 9469279,
+      "active_accounts": 871791,
+      "new_accounts": 425105,
+      "active_contracts": 3424558
+    },
+    {
+      "date": "2025-01-23",
+      "txns": 9430009,
+      "active_accounts": 863825,
+      "new_accounts": 507661,
+      "active_contracts": 3310843
+    },
+    {
+      "date": "2025-01-24",
+      "txns": 9055018,
+      "active_accounts": 864267,
+      "new_accounts": 393696,
+      "active_contracts": 3244520
+    },
+    {
+      "date": "2025-01-25",
+      "txns": 7585980,
+      "active_accounts": 850574,
+      "new_accounts": 437536,
+      "active_contracts": 3212775
+    },
+    {
+      "date": "2025-01-26",
+      "txns": 7434447,
+      "active_accounts": 870328,
+      "new_accounts": 450068,
+      "active_contracts": 3225104
+    },
+    {
+      "date": "2025-01-27",
+      "txns": 7540416,
+      "active_accounts": 870495,
+      "new_accounts": 517614,
+      "active_contracts": 3142172
+    },
+    {
+      "date": "2025-01-28",
+      "txns": 7375065,
+      "active_accounts": 848717,
+      "new_accounts": 376209,
+      "active_contracts": 3142889
+    },
+    {
+      "date": "2025-01-29",
+      "txns": 7236179,
+      "active_accounts": 830606,
+      "new_accounts": 481154,
+      "active_contracts": 2924627
+    },
+    {
+      "date": "2025-01-30",
+      "txns": 7173756,
+      "active_accounts": 836218,
+      "new_accounts": 435906,
+      "active_contracts": 3031687
+    },
+    {
+      "date": "2025-01-31",
+      "txns": 6905870,
+      "active_accounts": 829335,
+      "new_accounts": 472885,
+      "active_contracts": 2957019
+    },
+    {
+      "date": "2025-02-01",
+      "txns": 5747806,
+      "active_accounts": 846344,
+      "new_accounts": 117899,
+      "active_contracts": 2103607
+    },
+    {
+      "date": "2025-02-02",
+      "txns": 4242379,
+      "active_accounts": 837061,
+      "new_accounts": 44679,
+      "active_contracts": 990242
+    },
+    {
+      "date": "2025-02-03",
+      "txns": 5506609,
+      "active_accounts": 841959,
+      "new_accounts": 216178,
+      "active_contracts": 1862847
+    },
+    {
+      "date": "2025-02-04",
+      "txns": 7151263,
+      "active_accounts": 848989,
+      "new_accounts": 587871,
+      "active_contracts": 2744898
+    },
+    {
+      "date": "2025-02-05",
+      "txns": 7308555,
+      "active_accounts": 831685,
+      "new_accounts": 349420,
+      "active_contracts": 3127222
+    },
+    {
+      "date": "2025-02-06",
+      "txns": 7321763,
+      "active_accounts": 845346,
+      "new_accounts": 417905,
+      "active_contracts": 3112650
+    },
+    {
+      "date": "2025-02-07",
+      "txns": 6996098,
+      "active_accounts": 838707,
+      "new_accounts": 528586,
+      "active_contracts": 2925172
+    },
+    {
+      "date": "2025-02-08",
+      "txns": 7335803,
+      "active_accounts": 829661,
+      "new_accounts": 367816,
+      "active_contracts": 3245648
+    },
+    {
+      "date": "2025-02-09",
+      "txns": 7287911,
+      "active_accounts": 812031,
+      "new_accounts": 520295,
+      "active_contracts": 3058046
+    },
+    {
+      "date": "2025-02-10",
+      "txns": 7391616,
+      "active_accounts": 817530,
+      "new_accounts": 358289,
+      "active_contracts": 3293985
+    },
+    {
+      "date": "2025-02-11",
+      "txns": 7414366,
+      "active_accounts": 839105,
+      "new_accounts": 510409,
+      "active_contracts": 3093942
+    },
+    {
+      "date": "2025-02-12",
+      "txns": 7155909,
+      "active_accounts": 827883,
+      "new_accounts": 538191,
+      "active_contracts": 2925249
+    },
+    {
+      "date": "2025-02-13",
+      "txns": 7471978,
+      "active_accounts": 827453,
+      "new_accounts": 246577,
+      "active_contracts": 3406175
+    },
+    {
+      "date": "2025-02-14",
+      "txns": 6345534,
+      "active_accounts": 826085,
+      "new_accounts": 456742,
+      "active_contracts": 2438062
+    },
+    {
+      "date": "2025-02-15",
+      "txns": 6839532,
+      "active_accounts": 820327,
+      "new_accounts": 664298,
+      "active_contracts": 2555526
+    },
+    {
+      "date": "2025-02-16",
+      "txns": 7202784,
+      "active_accounts": 816780,
+      "new_accounts": 254050,
+      "active_contracts": 3238150
+    },
+    {
+      "date": "2025-02-17",
+      "txns": 7422911,
+      "active_accounts": 827605,
+      "new_accounts": 181920,
+      "active_contracts": 3450137
+    },
+    {
+      "date": "2025-02-18",
+      "txns": 6113040,
+      "active_accounts": 837902,
+      "new_accounts": 195125,
+      "active_contracts": 2454371
+    },
+    {
+      "date": "2025-02-19",
+      "txns": 5878785,
+      "active_accounts": 625237,
+      "new_accounts": 205647,
+      "active_contracts": 2308483
+    },
+    {
+      "date": "2025-02-20",
+      "txns": 7309102,
+      "active_accounts": 529711,
+      "new_accounts": 383520,
+      "active_contracts": 2986355
+    },
+    {
+      "date": "2025-02-21",
+      "txns": 7328410,
+      "active_accounts": 527180,
+      "new_accounts": 366317,
+      "active_contracts": 3028288
+    },
+    {
+      "date": "2025-02-22",
+      "txns": 7475608,
+      "active_accounts": 496414,
+      "new_accounts": 402057,
+      "active_contracts": 3226718
+    },
+    {
+      "date": "2025-02-23",
+      "txns": 7225845,
+      "active_accounts": 519868,
+      "new_accounts": 365156,
+      "active_contracts": 3108471
+    },
+    {
+      "date": "2025-02-24",
+      "txns": 7090534,
+      "active_accounts": 526016,
+      "new_accounts": 346057,
+      "active_contracts": 2759055
+    },
+    {
+      "date": "2025-02-25",
+      "txns": 6827987,
+      "active_accounts": 508849,
+      "new_accounts": 343844,
+      "active_contracts": 2894437
+    },
+    {
+      "date": "2025-02-26",
+      "txns": 7411619,
+      "active_accounts": 521413,
+      "new_accounts": 365927,
+      "active_contracts": 3018585
+    },
+    {
+      "date": "2025-02-27",
+      "txns": 7037319,
+      "active_accounts": 530101,
+      "new_accounts": 347579,
+      "active_contracts": 2841802
+    },
+    {
+      "date": "2025-02-28",
+      "txns": 6512749,
+      "active_accounts": 527904,
+      "new_accounts": 306005,
+      "active_contracts": 2886074
+    },
+    {
+      "date": "2025-03-01",
+      "txns": 6356660,
+      "active_accounts": 520137,
+      "new_accounts": 391175,
+      "active_contracts": 2666030
+    },
+    {
+      "date": "2025-03-02",
+      "txns": 6318899,
+      "active_accounts": 512451,
+      "new_accounts": 314467,
+      "active_contracts": 2649940
+    },
+    {
+      "date": "2025-03-03",
+      "txns": 6143343,
+      "active_accounts": 509502,
+      "new_accounts": 311962,
+      "active_contracts": 2535865
+    },
+    {
+      "date": "2025-03-04",
+      "txns": 6266846,
+      "active_accounts": 525173,
+      "new_accounts": 217292,
+      "active_contracts": 2757079
+    },
+    {
+      "date": "2025-03-05",
+      "txns": 6525309,
+      "active_accounts": 528703,
+      "new_accounts": 225614,
+      "active_contracts": 2858911
+    },
+    {
+      "date": "2025-03-06",
+      "txns": 6762329,
+      "active_accounts": 529072,
+      "new_accounts": 346473,
+      "active_contracts": 2936234
+    },
+    {
+      "date": "2025-03-07",
+      "txns": 5799788,
+      "active_accounts": 518306,
+      "new_accounts": 253487,
+      "active_contracts": 2425244
+    },
+    {
+      "date": "2025-03-08",
+      "txns": 6345902,
+      "active_accounts": 516656,
+      "new_accounts": 337441,
+      "active_contracts": 2871819
+    },
+    {
+      "date": "2025-03-09",
+      "txns": 6406183,
+      "active_accounts": 511374,
+      "new_accounts": 304374,
+      "active_contracts": 3009158
+    },
+    {
+      "date": "2025-03-10",
+      "txns": 6331756,
+      "active_accounts": 515782,
+      "new_accounts": 341391,
+      "active_contracts": 2905565
+    },
+    {
+      "date": "2025-03-11",
+      "txns": 6980029,
+      "active_accounts": 522875,
+      "new_accounts": 368488,
+      "active_contracts": 3107249
+    },
+    {
+      "date": "2025-03-12",
+      "txns": 6422858,
+      "active_accounts": 489849,
+      "new_accounts": 341556,
+      "active_contracts": 3122826
+    },
+    {
+      "date": "2025-03-13",
+      "txns": 6669334,
+      "active_accounts": 497261,
+      "new_accounts": 359559,
+      "active_contracts": 2996674
+    },
+    {
+      "date": "2025-03-14",
+      "txns": 6682450,
+      "active_accounts": 488858,
+      "new_accounts": 279139,
+      "active_contracts": 3194491
+    },
+    {
+      "date": "2025-03-15",
+      "txns": 5036104,
+      "active_accounts": 481091,
+      "new_accounts": 73868,
+      "active_contracts": 1778360
+    },
+    {
+      "date": "2025-03-16",
+      "txns": 4790589,
+      "active_accounts": 502296,
+      "new_accounts": 52019,
+      "active_contracts": 1522710
+    },
+    {
+      "date": "2025-03-17",
+      "txns": 5578841,
+      "active_accounts": 508006,
+      "new_accounts": 253656,
+      "active_contracts": 2170514
+    },
+    {
+      "date": "2025-03-18",
+      "txns": 6224495,
+      "active_accounts": 508154,
+      "new_accounts": 235159,
+      "active_contracts": 2626646
+    },
+    {
+      "date": "2025-03-19",
+      "txns": 6337321,
+      "active_accounts": 500382,
+      "new_accounts": 247067,
+      "active_contracts": 2658499
+    },
+    {
+      "date": "2025-03-20",
+      "txns": 11724238,
+      "active_accounts": 496933,
+      "new_accounts": 517318,
+      "active_contracts": 2836627
+    },
+    {
+      "date": "2025-03-21",
+      "txns": 7292754,
+      "active_accounts": 493171,
+      "new_accounts": 334991,
+      "active_contracts": 3261402
+    },
+    {
+      "date": "2025-03-22",
+      "txns": 6953254,
+      "active_accounts": 482538,
+      "new_accounts": 442276,
+      "active_contracts": 3038175
+    },
+    {
+      "date": "2025-03-23",
+      "txns": 6826968,
+      "active_accounts": 485335,
+      "new_accounts": 363134,
+      "active_contracts": 3188460
+    },
+    {
+      "date": "2025-03-24",
+      "txns": 6045144,
+      "active_accounts": 480622,
+      "new_accounts": 501395,
+      "active_contracts": 2746470
+    },
+    {
+      "date": "2025-03-25",
+      "txns": 6923342,
+      "active_accounts": 498243,
+      "new_accounts": 273724,
+      "active_contracts": 3242582
+    },
+    {
+      "date": "2025-03-26",
+      "txns": 6727480,
+      "active_accounts": 530492,
+      "new_accounts": 425930,
+      "active_contracts": 2916622
+    },
+    {
+      "date": "2025-03-27",
+      "txns": 7071806,
+      "active_accounts": 561797,
+      "new_accounts": 259330,
+      "active_contracts": 3131839
+    },
+    {
+      "date": "2025-03-28",
+      "txns": 7424116,
+      "active_accounts": 557000,
+      "new_accounts": 317583,
+      "active_contracts": 3069753
+    },
+    {
+      "date": "2025-03-29",
+      "txns": 6893453,
+      "active_accounts": 518283,
+      "new_accounts": 351303,
+      "active_contracts": 2987831
+    },
+    {
+      "date": "2025-03-30",
+      "txns": 6257678,
+      "active_accounts": 538260,
+      "new_accounts": 439930,
+      "active_contracts": 2712506
+    },
+    {
+      "date": "2025-03-31",
+      "txns": 6339795,
+      "active_accounts": 547879,
+      "new_accounts": 212719,
+      "active_contracts": 3206824
+    },
+    {
+      "date": "2025-04-01",
+      "txns": 6370296,
+      "active_accounts": 545226,
+      "new_accounts": 311691,
+      "active_contracts": 2913204
+    },
+    {
+      "date": "2025-04-02",
+      "txns": 6174893,
+      "active_accounts": 531276,
+      "new_accounts": 303991,
+      "active_contracts": 2979369
+    },
+    {
+      "date": "2025-04-03",
+      "txns": 6203070,
+      "active_accounts": 488868,
+      "new_accounts": 302294,
+      "active_contracts": 2992945
+    },
+    {
+      "date": "2025-04-04",
+      "txns": 6529852,
+      "active_accounts": 516388,
+      "new_accounts": 322267,
+      "active_contracts": 3120350
+    },
+    {
+      "date": "2025-04-05",
+      "txns": 7078248,
+      "active_accounts": 512307,
+      "new_accounts": 413771,
+      "active_contracts": 3728570
+    },
+    {
+      "date": "2025-04-06",
+      "txns": 6540425,
+      "active_accounts": 473875,
+      "new_accounts": 386943,
+      "active_contracts": 3329353
+    },
+    {
+      "date": "2025-04-07",
+      "txns": 6663977,
+      "active_accounts": 460606,
+      "new_accounts": 316823,
+      "active_contracts": 2843040
+    },
+    {
+      "date": "2025-04-08",
+      "txns": 6922482,
+      "active_accounts": 470232,
+      "new_accounts": 332989,
+      "active_contracts": 2895818
+    },
+    {
+      "date": "2025-04-09",
+      "txns": 6937852,
+      "active_accounts": 459237,
+      "new_accounts": 302111,
+      "active_contracts": 2892101
+    },
+    {
+      "date": "2025-04-10",
+      "txns": 6737026,
+      "active_accounts": 453240,
+      "new_accounts": 291913,
+      "active_contracts": 2820938
+    },
+    {
+      "date": "2025-04-11",
+      "txns": 6714695,
+      "active_accounts": 448616,
+      "new_accounts": 286564,
+      "active_contracts": 2861446
+    },
+    {
+      "date": "2025-04-12",
+      "txns": 6764251,
+      "active_accounts": 439424,
+      "new_accounts": 231956,
+      "active_contracts": 2877980
+    },
+    {
+      "date": "2025-04-13",
+      "txns": 6800539,
+      "active_accounts": 453248,
+      "new_accounts": 234145,
+      "active_contracts": 2884663
+    },
+    {
+      "date": "2025-04-14",
+      "txns": 6948584,
+      "active_accounts": 470112,
+      "new_accounts": 216157,
+      "active_contracts": 2987458
+    },
+    {
+      "date": "2025-04-15",
+      "txns": 6920661,
+      "active_accounts": 490070,
+      "new_accounts": 225795,
+      "active_contracts": 2892089
+    },
+    {
+      "date": "2025-04-16",
+      "txns": 7619284,
+      "active_accounts": 472869,
+      "new_accounts": 362620,
+      "active_contracts": 3373254
+    },
+    {
+      "date": "2025-04-17",
+      "txns": 6664498,
+      "active_accounts": 482917,
+      "new_accounts": 394311,
+      "active_contracts": 3553173
+    },
+    {
+      "date": "2025-04-18",
+      "txns": 5857254,
+      "active_accounts": 468571,
+      "new_accounts": 381192,
+      "active_contracts": 2901986
+    },
+    {
+      "date": "2025-04-19",
+      "txns": 5668813,
+      "active_accounts": 462528,
+      "new_accounts": 322772,
+      "active_contracts": 2872009
+    },
+    {
+      "date": "2025-04-20",
+      "txns": 5845108,
+      "active_accounts": 464017,
+      "new_accounts": 302348,
+      "active_contracts": 2923790
+    },
+    {
+      "date": "2025-04-21",
+      "txns": 5749983,
+      "active_accounts": 474049,
+      "new_accounts": 291349,
+      "active_contracts": 2842099
+    },
+    {
+      "date": "2025-04-22",
+      "txns": 5676656,
+      "active_accounts": 471750,
+      "new_accounts": 290492,
+      "active_contracts": 2818713
+    },
+    {
+      "date": "2025-04-23",
+      "txns": 5640156,
+      "active_accounts": 471364,
+      "new_accounts": 388999,
+      "active_contracts": 2820312
+    },
+    {
+      "date": "2025-04-24",
+      "txns": 5573863,
+      "active_accounts": 466693,
+      "new_accounts": 288252,
+      "active_contracts": 2819808
+    },
+    {
+      "date": "2025-04-25",
+      "txns": 5102094,
+      "active_accounts": 464769,
+      "new_accounts": 240880,
+      "active_contracts": 2555275
+    },
+    {
+      "date": "2025-04-26",
+      "txns": 6027940,
+      "active_accounts": 457880,
+      "new_accounts": 322036,
+      "active_contracts": 3202988
+    },
+    {
+      "date": "2025-04-27",
+      "txns": 5401300,
+      "active_accounts": 458419,
+      "new_accounts": 278346,
+      "active_contracts": 2796776
+    },
+    {
+      "date": "2025-04-28",
+      "txns": 5601954,
+      "active_accounts": 460209,
+      "new_accounts": 285864,
+      "active_contracts": 2844825
+    },
+    {
+      "date": "2025-04-29",
+      "txns": 5012554,
+      "active_accounts": 457640,
+      "new_accounts": 237801,
+      "active_contracts": 2432833
+    },
+    {
+      "date": "2025-04-30",
+      "txns": 6101678,
+      "active_accounts": 443569,
+      "new_accounts": 338670,
+      "active_contracts": 3289613
+    },
+    {
+      "date": "2025-05-01",
+      "txns": 5389675,
+      "active_accounts": 429070,
+      "new_accounts": 281108,
+      "active_contracts": 2829830
+    },
+    {
+      "date": "2025-05-02",
+      "txns": 5330559,
+      "active_accounts": 420796,
+      "new_accounts": 277228,
+      "active_contracts": 2823352
+    },
+    {
+      "date": "2025-05-03",
+      "txns": 5429355,
+      "active_accounts": 418981,
+      "new_accounts": 276518,
+      "active_contracts": 2857328
+    },
+    {
+      "date": "2025-05-04",
+      "txns": 5460210,
+      "active_accounts": 432851,
+      "new_accounts": 271290,
+      "active_contracts": 2802859
+    },
+    {
+      "date": "2025-05-05",
+      "txns": 5191825,
+      "active_accounts": 429449,
+      "new_accounts": 319871,
+      "active_contracts": 2635894
+    },
+    {
+      "date": "2025-05-06",
+      "txns": 5852948,
+      "active_accounts": 430946,
+      "new_accounts": 317937,
+      "active_contracts": 3122407
+    },
+    {
+      "date": "2025-05-07",
+      "txns": 5579468,
+      "active_accounts": 420297,
+      "new_accounts": 282017,
+      "active_contracts": 2930516
+    },
+    {
+      "date": "2025-05-08",
+      "txns": 5575292,
+      "active_accounts": 420967,
+      "new_accounts": 279776,
+      "active_contracts": 2918835
+    },
+    {
+      "date": "2025-05-09",
+      "txns": 5486034,
+      "active_accounts": 420246,
+      "new_accounts": 269977,
+      "active_contracts": 2895621
+    },
+    {
+      "date": "2025-05-10",
+      "txns": 5369053,
+      "active_accounts": 415087,
+      "new_accounts": 267687,
+      "active_contracts": 2843220
+    },
+    {
+      "date": "2025-05-11",
+      "txns": 5306074,
+      "active_accounts": 405452,
+      "new_accounts": 267241,
+      "active_contracts": 2817720
+    },
+    {
+      "date": "2025-05-12",
+      "txns": 5453606,
+      "active_accounts": 491311,
+      "new_accounts": 252950,
+      "active_contracts": 2833097
+    },
+    {
+      "date": "2025-05-13",
+      "txns": 5283314,
+      "active_accounts": 417747,
+      "new_accounts": 250535,
+      "active_contracts": 2827037
+    },
+    {
+      "date": "2025-05-14",
+      "txns": 5148004,
+      "active_accounts": 426689,
+      "new_accounts": 238050,
+      "active_contracts": 2815117
+    },
+    {
+      "date": "2025-05-15",
+      "txns": 4720478,
+      "active_accounts": 419109,
+      "new_accounts": 252260,
+      "active_contracts": 2714042
+    },
+    {
+      "date": "2025-05-16",
+      "txns": 5216473,
+      "active_accounts": 418040,
+      "new_accounts": 268685,
+      "active_contracts": 2804520
+    },
+    {
+      "date": "2025-05-17",
+      "txns": 5310551,
+      "active_accounts": 412090,
+      "new_accounts": 265388,
+      "active_contracts": 2839140
+    },
+    {
+      "date": "2025-05-18",
+      "txns": 5181399,
+      "active_accounts": 408333,
+      "new_accounts": 271180,
+      "active_contracts": 2812401
+    },
+    {
+      "date": "2025-05-19",
+      "txns": 5546958,
+      "active_accounts": 469010,
+      "new_accounts": 280567,
+      "active_contracts": 2850647
+    },
+    {
+      "date": "2025-05-20",
+      "txns": 5641020,
+      "active_accounts": 498143,
+      "new_accounts": 281004,
+      "active_contracts": 2864880
+    },
+    {
+      "date": "2025-05-21",
+      "txns": 5343032,
+      "active_accounts": 460736,
+      "new_accounts": 282284,
+      "active_contracts": 2857418
+    },
+    {
+      "date": "2025-05-22",
+      "txns": 5321053,
+      "active_accounts": 460426,
+      "new_accounts": 275457,
+      "active_contracts": 2838004
+    },
+    {
+      "date": "2025-05-23",
+      "txns": 5357220,
+      "active_accounts": 458683,
+      "new_accounts": 273395,
+      "active_contracts": 2845577
+    },
+    {
+      "date": "2025-05-24",
+      "txns": 5126780,
+      "active_accounts": 406734,
+      "new_accounts": 267411,
+      "active_contracts": 2825237
+    },
+    {
+      "date": "2025-05-25",
+      "txns": 4478192,
+      "active_accounts": 321261,
+      "new_accounts": 267833,
+      "active_contracts": 2542259
+    },
+    {
+      "date": "2025-05-26",
+      "txns": 4713706,
+      "active_accounts": 357948,
+      "new_accounts": 272676,
+      "active_contracts": 2563534
+    },
+    {
+      "date": "2025-05-27",
+      "txns": 4922121,
+      "active_accounts": 380070,
+      "new_accounts": 235241,
+      "active_contracts": 2689827
+    },
+    {
+      "date": "2025-05-28",
+      "txns": 4985054,
+      "active_accounts": 390933,
+      "new_accounts": 258577,
+      "active_contracts": 2691699
+    },
+    {
+      "date": "2025-05-29",
+      "txns": 4878176,
+      "active_accounts": 386657,
+      "new_accounts": 174472,
+      "active_contracts": 2690581
+    },
+    {
+      "date": "2025-05-30",
+      "txns": 5185180,
+      "active_accounts": 377728,
+      "new_accounts": 331434,
+      "active_contracts": 2697270
+    },
+    {
+      "date": "2025-05-31",
+      "txns": 4890090,
+      "active_accounts": 374501,
+      "new_accounts": 236466,
+      "active_contracts": 2666308
+    },
+    {
+      "date": "2025-06-01",
+      "txns": 4698529,
+      "active_accounts": 375278,
+      "new_accounts": 195133,
+      "active_contracts": 2651833
+    },
+    {
+      "date": "2025-06-02",
+      "txns": 4831116,
+      "active_accounts": 383342,
+      "new_accounts": 192583,
+      "active_contracts": 2711676
+    },
+    {
+      "date": "2025-06-03",
+      "txns": 5037145,
+      "active_accounts": 381871,
+      "new_accounts": 205583,
+      "active_contracts": 2721768
+    },
+    {
+      "date": "2025-06-04",
+      "txns": 5110333,
+      "active_accounts": 381014,
+      "new_accounts": 204638,
+      "active_contracts": 2775341
+    },
+    {
+      "date": "2025-06-05",
+      "txns": 4984351,
+      "active_accounts": 376161,
+      "new_accounts": 213026,
+      "active_contracts": 2754164
+    },
+    {
+      "date": "2025-06-06",
+      "txns": 4895557,
+      "active_accounts": 367680,
+      "new_accounts": 214530,
+      "active_contracts": 2744844
+    },
+    {
+      "date": "2025-06-07",
+      "txns": 4871398,
+      "active_accounts": 364181,
+      "new_accounts": 224655,
+      "active_contracts": 2676120
+    },
+    {
+      "date": "2025-06-08",
+      "txns": 4823565,
+      "active_accounts": 362274,
+      "new_accounts": 232822,
+      "active_contracts": 2651837
+    },
+    {
+      "date": "2025-06-09",
+      "txns": 5086480,
+      "active_accounts": 365214,
+      "new_accounts": 303942,
+      "active_contracts": 2690228
+    },
+    {
+      "date": "2025-06-10",
+      "txns": 5045427,
+      "active_accounts": 364759,
+      "new_accounts": 292224,
+      "active_contracts": 2698558
+    },
+    {
+      "date": "2025-06-11",
+      "txns": 4884141,
+      "active_accounts": 358318,
+      "new_accounts": 261937,
+      "active_contracts": 2670704
+    },
+    {
+      "date": "2025-06-12",
+      "txns": 4845526,
+      "active_accounts": 359832,
+      "new_accounts": 250898,
+      "active_contracts": 2674358
+    },
+    {
+      "date": "2025-06-13",
+      "txns": 4777173,
+      "active_accounts": 362868,
+      "new_accounts": 232066,
+      "active_contracts": 2659652
+    },
+    {
+      "date": "2025-06-14",
+      "txns": 4688138,
+      "active_accounts": 370719,
+      "new_accounts": 244966,
+      "active_contracts": 2619026
+    },
+    {
+      "date": "2025-06-15",
+      "txns": 4904516,
+      "active_accounts": 354289,
+      "new_accounts": 362763,
+      "active_contracts": 2614234
+    },
+    {
+      "date": "2025-06-16",
+      "txns": 4929018,
+      "active_accounts": 359217,
+      "new_accounts": 343994,
+      "active_contracts": 2599435
+    },
+    {
+      "date": "2025-06-17",
+      "txns": 5001393,
+      "active_accounts": 357000,
+      "new_accounts": 344215,
+      "active_contracts": 2662068
+    },
+    {
+      "date": "2025-06-18",
+      "txns": 4746621,
+      "active_accounts": 355850,
+      "new_accounts": 264402,
+      "active_contracts": 2651511
+    },
+    {
+      "date": "2025-06-19",
+      "txns": 4784025,
+      "active_accounts": 351976,
+      "new_accounts": 265968,
+      "active_contracts": 2684514
+    },
+    {
+      "date": "2025-06-20",
+      "txns": 4768857,
+      "active_accounts": 340842,
+      "new_accounts": 265462,
+      "active_contracts": 2663807
+    },
+    {
+      "date": "2025-06-21",
+      "txns": 4736950,
+      "active_accounts": 336316,
+      "new_accounts": 243501,
+      "active_contracts": 2656197
+    },
+    {
+      "date": "2025-06-22",
+      "txns": 4691867,
+      "active_accounts": 333420,
+      "new_accounts": 241396,
+      "active_contracts": 2637392
+    },
+    {
+      "date": "2025-06-23",
+      "txns": 4965623,
+      "active_accounts": 339407,
+      "new_accounts": 269948,
+      "active_contracts": 2791854
+    },
+    {
+      "date": "2025-06-24",
+      "txns": 4988306,
+      "active_accounts": 338221,
+      "new_accounts": 268176,
+      "active_contracts": 2815068
+    },
+    {
+      "date": "2025-06-25",
+      "txns": 5013256,
+      "active_accounts": 338158,
+      "new_accounts": 266500,
+      "active_contracts": 2800619
+    },
+    {
+      "date": "2025-06-26",
+      "txns": 5099015,
+      "active_accounts": 337653,
+      "new_accounts": 282455,
+      "active_contracts": 2815058
+    },
+    {
+      "date": "2025-06-27",
+      "txns": 4944857,
+      "active_accounts": 330300,
+      "new_accounts": 279006,
+      "active_contracts": 2726572
+    },
+    {
+      "date": "2025-06-28",
+      "txns": 5001256,
+      "active_accounts": 331801,
+      "new_accounts": 270555,
+      "active_contracts": 2847542
+    },
+    {
+      "date": "2025-06-29",
+      "txns": 4856484,
+      "active_accounts": 327118,
+      "new_accounts": 256909,
+      "active_contracts": 2777871
+    },
+    {
+      "date": "2025-06-30",
+      "txns": 4804847,
+      "active_accounts": 331757,
+      "new_accounts": 249382,
+      "active_contracts": 2759439
+    },
+    {
+      "date": "2025-07-01",
+      "txns": 4750327,
+      "active_accounts": 332768,
+      "new_accounts": 239555,
+      "active_contracts": 2761883
+    },
+    {
+      "date": "2025-07-02",
+      "txns": 4787468,
+      "active_accounts": 336980,
+      "new_accounts": 232149,
+      "active_contracts": 2751317
+    },
+    {
+      "date": "2025-07-03",
+      "txns": 4806810,
+      "active_accounts": 332250,
+      "new_accounts": 234063,
+      "active_contracts": 2751648
+    },
+    {
+      "date": "2025-07-04",
+      "txns": 4821673,
+      "active_accounts": 326534,
+      "new_accounts": 241048,
+      "active_contracts": 2816881
+    },
+    {
+      "date": "2025-07-05",
+      "txns": 4784885,
+      "active_accounts": 320988,
+      "new_accounts": 236703,
+      "active_contracts": 2789266
+    },
+    {
+      "date": "2025-07-06",
+      "txns": 4688518,
+      "active_accounts": 320850,
+      "new_accounts": 218512,
+      "active_contracts": 2757653
+    },
+    {
+      "date": "2025-07-07",
+      "txns": 4577327,
+      "active_accounts": 327188,
+      "new_accounts": 214231,
+      "active_contracts": 2686770
+    },
+    {
+      "date": "2025-07-08",
+      "txns": 4559117,
+      "active_accounts": 314864,
+      "new_accounts": 217671,
+      "active_contracts": 2628025
+    },
+    {
+      "date": "2025-07-09",
+      "txns": 4576165,
+      "active_accounts": 332420,
+      "new_accounts": 216752,
+      "active_contracts": 2634335
+    },
+    {
+      "date": "2025-07-10",
+      "txns": 4713058,
+      "active_accounts": 333705,
+      "new_accounts": 211030,
+      "active_contracts": 2681294
+    },
+    {
+      "date": "2025-07-11",
+      "txns": 4778058,
+      "active_accounts": 332288,
+      "new_accounts": 219420,
+      "active_contracts": 2727101
+    },
+    {
+      "date": "2025-07-12",
+      "txns": 3925395,
+      "active_accounts": 331019,
+      "new_accounts": 154665,
+      "active_contracts": 2141313
+    },
+    {
+      "date": "2025-07-13",
+      "txns": 2272640,
+      "active_accounts": 334042,
+      "new_accounts": 17034,
+      "active_contracts": 701335
+    },
+    {
+      "date": "2025-07-14",
+      "txns": 3832640,
+      "active_accounts": 343207,
+      "new_accounts": 127019,
+      "active_contracts": 1830519
+    },
+    {
+      "date": "2025-07-15",
+      "txns": 4806572,
+      "active_accounts": 342543,
+      "new_accounts": 218829,
+      "active_contracts": 2737583
+    },
+    {
+      "date": "2025-07-16",
+      "txns": 4837616,
+      "active_accounts": 356571,
+      "new_accounts": 217026,
+      "active_contracts": 2773708
+    },
+    {
+      "date": "2025-07-17",
+      "txns": 4892308,
+      "active_accounts": 346083,
+      "new_accounts": 217917,
+      "active_contracts": 2730024
+    },
+    {
+      "date": "2025-07-18",
+      "txns": 4865080,
+      "active_accounts": 346033,
+      "new_accounts": 221244,
+      "active_contracts": 2747031
+    },
+    {
+      "date": "2025-07-19",
+      "txns": 4586524,
+      "active_accounts": 326848,
+      "new_accounts": 225148,
+      "active_contracts": 2711497
+    },
+    {
+      "date": "2025-07-20",
+      "txns": 4634768,
+      "active_accounts": 342912,
+      "new_accounts": 217470,
+      "active_contracts": 2669463
+    },
+    {
+      "date": "2025-07-21",
+      "txns": 4886481,
+      "active_accounts": 344125,
+      "new_accounts": 216152,
+      "active_contracts": 2679968
+    },
+    {
+      "date": "2025-07-22",
+      "txns": 4767942,
+      "active_accounts": 348000,
+      "new_accounts": 206875,
+      "active_contracts": 2653694
+    },
+    {
+      "date": "2025-07-23",
+      "txns": 5240127,
+      "active_accounts": 346444,
+      "new_accounts": 230122,
+      "active_contracts": 2670233
+    },
+    {
+      "date": "2025-07-24",
+      "txns": 5381716,
+      "active_accounts": 345606,
+      "new_accounts": 235206,
+      "active_contracts": 2693678
+    },
+    {
+      "date": "2025-07-25",
+      "txns": 5283100,
+      "active_accounts": 322797,
+      "new_accounts": 235398,
+      "active_contracts": 2663739
+    },
+    {
+      "date": "2025-07-26",
+      "txns": 4855734,
+      "active_accounts": 339124,
+      "new_accounts": 232145,
+      "active_contracts": 2644927
+    },
+    {
+      "date": "2025-07-27",
+      "txns": 4918823,
+      "active_accounts": 341823,
+      "new_accounts": 213717,
+      "active_contracts": 2662851
+    },
+    {
+      "date": "2025-07-28",
+      "txns": 5827094,
+      "active_accounts": 348450,
+      "new_accounts": 546303,
+      "active_contracts": 2676575
+    },
+    {
+      "date": "2025-07-29",
+      "txns": 5815172,
+      "active_accounts": 349733,
+      "new_accounts": 593877,
+      "active_contracts": 2713814
+    },
+    {
+      "date": "2025-07-30",
+      "txns": 5881218,
+      "active_accounts": 348115,
+      "new_accounts": 578697,
+      "active_contracts": 2698464
+    },
+    {
+      "date": "2025-07-31",
+      "txns": 5595814,
+      "active_accounts": 346511,
+      "new_accounts": 529006,
+      "active_contracts": 2656122
+    },
+    {
+      "date": "2025-08-01",
+      "txns": 5697762,
+      "active_accounts": 335863,
+      "new_accounts": 441057,
+      "active_contracts": 2587384
+    },
+    {
+      "date": "2025-08-02",
+      "txns": 5481203,
+      "active_accounts": 331718,
+      "new_accounts": 426231,
+      "active_contracts": 2610631
+    },
+    {
+      "date": "2025-08-03",
+      "txns": 5276984,
+      "active_accounts": 332812,
+      "new_accounts": 399730,
+      "active_contracts": 2663986
+    },
+    {
+      "date": "2025-08-04",
+      "txns": 5354974,
+      "active_accounts": 336555,
+      "new_accounts": 402801,
+      "active_contracts": 2678388
+    },
+    {
+      "date": "2025-08-05",
+      "txns": 4999811,
+      "active_accounts": 336613,
+      "new_accounts": 392653,
+      "active_contracts": 2633273
+    },
+    {
+      "date": "2025-08-06",
+      "txns": 5015345,
+      "active_accounts": 340225,
+      "new_accounts": 376590,
+      "active_contracts": 2652903
+    },
+    {
+      "date": "2025-08-07",
+      "txns": 5125929,
+      "active_accounts": 339947,
+      "new_accounts": 379947,
+      "active_contracts": 2698418
+    },
+    {
+      "date": "2025-08-08",
+      "txns": 4948636,
+      "active_accounts": 335408,
+      "new_accounts": 362807,
+      "active_contracts": 2647539
+    },
+    {
+      "date": "2025-08-09",
+      "txns": 4790288,
+      "active_accounts": 322587,
+      "new_accounts": 350104,
+      "active_contracts": 2636242
+    },
+    {
+      "date": "2025-08-10",
+      "txns": 4866005,
+      "active_accounts": 334719,
+      "new_accounts": 344380,
+      "active_contracts": 2608959
+    },
+    {
+      "date": "2025-08-11",
+      "txns": 4951535,
+      "active_accounts": 338800,
+      "new_accounts": 344592,
+      "active_contracts": 2713297
+    },
+    {
+      "date": "2025-08-12",
+      "txns": 5008307,
+      "active_accounts": 331954,
+      "new_accounts": 348353,
+      "active_contracts": 2699665
+    },
+    {
+      "date": "2025-08-13",
+      "txns": 4976883,
+      "active_accounts": 334078,
+      "new_accounts": 319287,
+      "active_contracts": 2785149
+    },
+    {
+      "date": "2025-08-14",
+      "txns": 5133268,
+      "active_accounts": 345915,
+      "new_accounts": 367968,
+      "active_contracts": 2784686
+    },
+    {
+      "date": "2025-08-15",
+      "txns": 5195571,
+      "active_accounts": 343984,
+      "new_accounts": 321067,
+      "active_contracts": 2807951
+    },
+    {
+      "date": "2025-08-16",
+      "txns": 4965339,
+      "active_accounts": 331618,
+      "new_accounts": 294463,
+      "active_contracts": 2779906
+    },
+    {
+      "date": "2025-08-17",
+      "txns": 4999807,
+      "active_accounts": 342561,
+      "new_accounts": 282436,
+      "active_contracts": 2785786
+    },
+    {
+      "date": "2025-08-18",
+      "txns": 5013328,
+      "active_accounts": 341139,
+      "new_accounts": 287964,
+      "active_contracts": 2770702
+    },
+    {
+      "date": "2025-08-19",
+      "txns": 4984756,
+      "active_accounts": 340767,
+      "new_accounts": 291366,
+      "active_contracts": 2775247
+    },
+    {
+      "date": "2025-08-20",
+      "txns": 4934303,
+      "active_accounts": 334579,
+      "new_accounts": 284717,
+      "active_contracts": 2744797
+    },
+    {
+      "date": "2025-08-21",
+      "txns": 4925621,
+      "active_accounts": 326732,
+      "new_accounts": 271449,
+      "active_contracts": 2855260
+    },
+    {
+      "date": "2025-08-22",
+      "txns": 4946062,
+      "active_accounts": 324678,
+      "new_accounts": 318890,
+      "active_contracts": 2802483
+    },
+    {
+      "date": "2025-08-23",
+      "txns": 5027549,
+      "active_accounts": 324053,
+      "new_accounts": 332879,
+      "active_contracts": 2814224
+    },
+    {
+      "date": "2025-08-24",
+      "txns": 4984764,
+      "active_accounts": 322260,
+      "new_accounts": 346959,
+      "active_contracts": 2784799
+    },
+    {
+      "date": "2025-08-25",
+      "txns": 4954601,
+      "active_accounts": 326060,
+      "new_accounts": 313842,
+      "active_contracts": 2753797
+    },
+    {
+      "date": "2025-08-26",
+      "txns": 5004186,
+      "active_accounts": 328537,
+      "new_accounts": 261419,
+      "active_contracts": 2857784
+    },
+    {
+      "date": "2025-08-27",
+      "txns": 4905631,
+      "active_accounts": 328561,
+      "new_accounts": 254220,
+      "active_contracts": 2802855
+    },
+    {
+      "date": "2025-08-28",
+      "txns": 4836376,
+      "active_accounts": 326532,
+      "new_accounts": 253788,
+      "active_contracts": 2832167
+    },
+    {
+      "date": "2025-08-29",
+      "txns": 4742351,
+      "active_accounts": 320988,
+      "new_accounts": 252923,
+      "active_contracts": 2775944
+    },
+    {
+      "date": "2025-08-30",
+      "txns": 4774224,
+      "active_accounts": 310255,
+      "new_accounts": 252136,
+      "active_contracts": 2765626
+    },
+    {
+      "date": "2025-08-31",
+      "txns": 4759174,
+      "active_accounts": 314056,
+      "new_accounts": 245461,
+      "active_contracts": 2746519
+    },
+    {
+      "date": "2025-09-01",
+      "txns": 4928973,
+      "active_accounts": 311868,
+      "new_accounts": 253351,
+      "active_contracts": 2795470
+    },
+    {
+      "date": "2025-09-02",
+      "txns": 4950123,
+      "active_accounts": 318121,
+      "new_accounts": 260432,
+      "active_contracts": 2799878
+    },
+    {
+      "date": "2025-09-03",
+      "txns": 4951963,
+      "active_accounts": 319260,
+      "new_accounts": 260919,
+      "active_contracts": 2774821
+    },
+    {
+      "date": "2025-09-04",
+      "txns": 4726604,
+      "active_accounts": 291056,
+      "new_accounts": 276341,
+      "active_contracts": 2757161
+    },
+    {
+      "date": "2025-09-05",
+      "txns": 4865153,
+      "active_accounts": 311068,
+      "new_accounts": 260013,
+      "active_contracts": 2706274
+    },
+    {
+      "date": "2025-09-06",
+      "txns": 4830883,
+      "active_accounts": 302108,
+      "new_accounts": 240883,
+      "active_contracts": 2723468
+    },
+    {
+      "date": "2025-09-07",
+      "txns": 4841481,
+      "active_accounts": 304489,
+      "new_accounts": 240989,
+      "active_contracts": 2758492
+    },
+    {
+      "date": "2025-09-08",
+      "txns": 4748752,
+      "active_accounts": 312006,
+      "new_accounts": 244584,
+      "active_contracts": 2700050
+    },
+    {
+      "date": "2025-09-09",
+      "txns": 4870224,
+      "active_accounts": 306005,
+      "new_accounts": 238153,
+      "active_contracts": 2795143
+    },
+    {
+      "date": "2025-09-10",
+      "txns": 4895042,
+      "active_accounts": 306075,
+      "new_accounts": 244236,
+      "active_contracts": 2749857
+    },
+    {
+      "date": "2025-09-11",
+      "txns": 4964681,
+      "active_accounts": 301726,
+      "new_accounts": 242607,
+      "active_contracts": 2752420
+    },
+    {
+      "date": "2025-09-12",
+      "txns": 4831054,
+      "active_accounts": 303334,
+      "new_accounts": 245056,
+      "active_contracts": 2694763
+    },
+    {
+      "date": "2025-09-13",
+      "txns": 4726073,
+      "active_accounts": 299216,
+      "new_accounts": 239938,
+      "active_contracts": 2689696
+    },
+    {
+      "date": "2025-09-14",
+      "txns": 4649034,
+      "active_accounts": 297625,
+      "new_accounts": 232628,
+      "active_contracts": 2719432
+    },
+    {
+      "date": "2025-09-15",
+      "txns": 4644068,
+      "active_accounts": 293261,
+      "new_accounts": 228549,
+      "active_contracts": 2734774
+    },
+    {
+      "date": "2025-09-16",
+      "txns": 4603334,
+      "active_accounts": 297817,
+      "new_accounts": 219063,
+      "active_contracts": 2671403
+    },
+    {
+      "date": "2025-09-17",
+      "txns": 4588911,
+      "active_accounts": 295987,
+      "new_accounts": 225991,
+      "active_contracts": 2744192
+    },
+    {
+      "date": "2025-09-18",
+      "txns": 4514113,
+      "active_accounts": 291200,
+      "new_accounts": 238886,
+      "active_contracts": 2679215
+    },
+    {
+      "date": "2025-09-19",
+      "txns": 4462434,
+      "active_accounts": 291407,
+      "new_accounts": 233432,
+      "active_contracts": 2654552
+    },
+    {
+      "date": "2025-09-20",
+      "txns": 4468326,
+      "active_accounts": 284191,
+      "new_accounts": 236321,
+      "active_contracts": 2601356
+    },
+    {
+      "date": "2025-09-21",
+      "txns": 4513832,
+      "active_accounts": 285420,
+      "new_accounts": 234901,
+      "active_contracts": 2691222
+    },
+    {
+      "date": "2025-09-22",
+      "txns": 4547800,
+      "active_accounts": 297450,
+      "new_accounts": 226919,
+      "active_contracts": 2723963
+    },
+    {
+      "date": "2025-09-23",
+      "txns": 4475363,
+      "active_accounts": 296093,
+      "new_accounts": 264936,
+      "active_contracts": 2645955
+    },
+    {
+      "date": "2025-09-24",
+      "txns": 4513944,
+      "active_accounts": 293327,
+      "new_accounts": 279846,
+      "active_contracts": 2664269
+    },
+    {
+      "date": "2025-09-25",
+      "txns": 4533732,
+      "active_accounts": 290785,
+      "new_accounts": 267265,
+      "active_contracts": 2653432
+    },
+    {
+      "date": "2025-09-26",
+      "txns": 4592721,
+      "active_accounts": 292210,
+      "new_accounts": 258151,
+      "active_contracts": 2746655
+    },
+    {
+      "date": "2025-09-27",
+      "txns": 4525562,
+      "active_accounts": 285253,
+      "new_accounts": 262664,
+      "active_contracts": 2692419
+    },
+    {
+      "date": "2025-09-28",
+      "txns": 4527076,
+      "active_accounts": 286548,
+      "new_accounts": 248363,
+      "active_contracts": 2642620
+    },
+    {
+      "date": "2025-09-29",
+      "txns": 4564228,
+      "active_accounts": 291148,
+      "new_accounts": 275518,
+      "active_contracts": 2703130
+    },
+    {
+      "date": "2025-09-30",
+      "txns": 4475446,
+      "active_accounts": 289877,
+      "new_accounts": 242839,
+      "active_contracts": 2634975
+    },
+    {
+      "date": "2025-10-01",
+      "txns": 4632736,
+      "active_accounts": 288151,
+      "new_accounts": 267015,
+      "active_contracts": 2689404
+    },
+    {
+      "date": "2025-10-02",
+      "txns": 4575116,
+      "active_accounts": 290966,
+      "new_accounts": 290192,
+      "active_contracts": 2649313
+    },
+    {
+      "date": "2025-10-03",
+      "txns": 4514419,
+      "active_accounts": 279048,
+      "new_accounts": 278516,
+      "active_contracts": 2558788
+    },
+    {
+      "date": "2025-10-04",
+      "txns": 4457849,
+      "active_accounts": 279183,
+      "new_accounts": 259198,
+      "active_contracts": 2594981
+    },
+    {
+      "date": "2025-10-05",
+      "txns": 4467062,
+      "active_accounts": 285332,
+      "new_accounts": 260539,
+      "active_contracts": 2600896
+    },
+    {
+      "date": "2025-10-06",
+      "txns": 4456327,
+      "active_accounts": 286177,
+      "new_accounts": 253248,
+      "active_contracts": 2581154
+    },
+    {
+      "date": "2025-10-07",
+      "txns": 4612911,
+      "active_accounts": 284782,
+      "new_accounts": 240040,
+      "active_contracts": 2705731
+    },
+    {
+      "date": "2025-10-08",
+      "txns": 4580424,
+      "active_accounts": 279945,
+      "new_accounts": 271686,
+      "active_contracts": 2660927
+    },
+    {
+      "date": "2025-10-09",
+      "txns": 4779971,
+      "active_accounts": 282311,
+      "new_accounts": 325008,
+      "active_contracts": 2635723
+    },
+    {
+      "date": "2025-10-10",
+      "txns": 4793375,
+      "active_accounts": 270141,
+      "new_accounts": 267095,
+      "active_contracts": 2665521
+    },
+    {
+      "date": "2025-10-11",
+      "txns": 4848246,
+      "active_accounts": 271597,
+      "new_accounts": 254217,
+      "active_contracts": 2628466
+    },
+    {
+      "date": "2025-10-12",
+      "txns": 4867365,
+      "active_accounts": 276041,
+      "new_accounts": 229045,
+      "active_contracts": 2768800
+    },
+    {
+      "date": "2025-10-13",
+      "txns": 4767320,
+      "active_accounts": 274103,
+      "new_accounts": 223011,
+      "active_contracts": 2674740
+    },
+    {
+      "date": "2025-10-14",
+      "txns": 4754962,
+      "active_accounts": 277670,
+      "new_accounts": 233836,
+      "active_contracts": 2718848
+    },
+    {
+      "date": "2025-10-15",
+      "txns": 4564782,
+      "active_accounts": 275570,
+      "new_accounts": 227297,
+      "active_contracts": 2731535
+    },
+    {
+      "date": "2025-10-16",
+      "txns": 4786354,
+      "active_accounts": 278201,
+      "new_accounts": 315037,
+      "active_contracts": 2847372
+    },
+    {
+      "date": "2025-10-17",
+      "txns": 4388829,
+      "active_accounts": 273287,
+      "new_accounts": 216371,
+      "active_contracts": 2615637
+    },
+    {
+      "date": "2025-10-18",
+      "txns": 4304916,
+      "active_accounts": 265871,
+      "new_accounts": 214418,
+      "active_contracts": 2627037
+    },
+    {
+      "date": "2025-10-19",
+      "txns": 4379507,
+      "active_accounts": 274624,
+      "new_accounts": 215011,
+      "active_contracts": 2570288
+    },
+    {
+      "date": "2025-10-20",
+      "txns": 4821640,
+      "active_accounts": 272951,
+      "new_accounts": 344144,
+      "active_contracts": 2663472
+    },
+    {
+      "date": "2025-10-21",
+      "txns": 4592452,
+      "active_accounts": 270008,
+      "new_accounts": 314798,
+      "active_contracts": 2645187
+    },
+    {
+      "date": "2025-10-22",
+      "txns": 4441563,
+      "active_accounts": 269303,
+      "new_accounts": 256313,
+      "active_contracts": 2651884
+    },
+    {
+      "date": "2025-10-23",
+      "txns": 4379425,
+      "active_accounts": 266769,
+      "new_accounts": 239501,
+      "active_contracts": 2650961
+    },
+    {
+      "date": "2025-10-24",
+      "txns": 4378326,
+      "active_accounts": 260345,
+      "new_accounts": 215588,
+      "active_contracts": 2619669
+    },
+    {
+      "date": "2025-10-25",
+      "txns": 4307497,
+      "active_accounts": 257743,
+      "new_accounts": 200889,
+      "active_contracts": 2638100
+    },
+    {
+      "date": "2025-10-26",
+      "txns": 4310749,
+      "active_accounts": 265895,
+      "new_accounts": 201324,
+      "active_contracts": 2560597
+    },
+    {
+      "date": "2025-10-27",
+      "txns": 4460228,
+      "active_accounts": 274422,
+      "new_accounts": 208310,
+      "active_contracts": 2523165
+    },
+    {
+      "date": "2025-10-28",
+      "txns": 4472170,
+      "active_accounts": 266364,
+      "new_accounts": 200906,
+      "active_contracts": 2579722
+    },
+    {
+      "date": "2025-10-29",
+      "txns": 4460424,
+      "active_accounts": 269242,
+      "new_accounts": 210948,
+      "active_contracts": 2589525
+    },
+    {
+      "date": "2025-10-30",
+      "txns": 4499926,
+      "active_accounts": 265974,
+      "new_accounts": 205654,
+      "active_contracts": 2647555
+    },
+    {
+      "date": "2025-10-31",
+      "txns": 4325534,
+      "active_accounts": 253889,
+      "new_accounts": 192360,
+      "active_contracts": 2585483
+    },
+    {
+      "date": "2025-11-01",
+      "txns": 4294270,
+      "active_accounts": 250232,
+      "new_accounts": 180319,
+      "active_contracts": 2619027
+    },
+    {
+      "date": "2025-11-02",
+      "txns": 4327572,
+      "active_accounts": 249882,
+      "new_accounts": 181136,
+      "active_contracts": 2631762
+    },
+    {
+      "date": "2025-11-03",
+      "txns": 4323513,
+      "active_accounts": 255577,
+      "new_accounts": 186195,
+      "active_contracts": 2605742
+    },
+    {
+      "date": "2025-11-04",
+      "txns": 4324097,
+      "active_accounts": 250396,
+      "new_accounts": 186737,
+      "active_contracts": 2549447
+    },
+    {
+      "date": "2025-11-05",
+      "txns": 4247145,
+      "active_accounts": 250359,
+      "new_accounts": 184294,
+      "active_contracts": 2583158
+    },
+    {
+      "date": "2025-11-06",
+      "txns": 4068138,
+      "active_accounts": 251003,
+      "new_accounts": 187314,
+      "active_contracts": 2472235
+    },
+    {
+      "date": "2025-11-07",
+      "txns": 4213365,
+      "active_accounts": 247287,
+      "new_accounts": 203005,
+      "active_contracts": 2468089
+    },
+    {
+      "date": "2025-11-08",
+      "txns": 4262119,
+      "active_accounts": 247576,
+      "new_accounts": 197519,
+      "active_contracts": 2495119
+    },
+    {
+      "date": "2025-11-09",
+      "txns": 4156257,
+      "active_accounts": 226994,
+      "new_accounts": 196863,
+      "active_contracts": 2468708
+    },
+    {
+      "date": "2025-11-10",
+      "txns": 4355752,
+      "active_accounts": 264240,
+      "new_accounts": 196925,
+      "active_contracts": 2484840
+    },
+    {
+      "date": "2025-11-11",
+      "txns": 4228785,
+      "active_accounts": 260821,
+      "new_accounts": 199817,
+      "active_contracts": 2459063
+    },
+    {
+      "date": "2025-11-12",
+      "txns": 4337790,
+      "active_accounts": 257073,
+      "new_accounts": 222897,
+      "active_contracts": 2509577
+    },
+    {
+      "date": "2025-11-13",
+      "txns": 4351120,
+      "active_accounts": 255819,
+      "new_accounts": 221959,
+      "active_contracts": 2491160
+    },
+    {
+      "date": "2025-11-14",
+      "txns": 4363339,
+      "active_accounts": 246721,
+      "new_accounts": 219239,
+      "active_contracts": 2497159
+    },
+    {
+      "date": "2025-11-15",
+      "txns": 4328149,
+      "active_accounts": 245464,
+      "new_accounts": 219339,
+      "active_contracts": 2503974
+    },
+    {
+      "date": "2025-11-16",
+      "txns": 4284834,
+      "active_accounts": 246092,
+      "new_accounts": 206812,
+      "active_contracts": 2489972
+    },
+    {
+      "date": "2025-11-17",
+      "txns": 4366874,
+      "active_accounts": 250997,
+      "new_accounts": 205012,
+      "active_contracts": 2501132
+    },
+    {
+      "date": "2025-11-18",
+      "txns": 4266045,
+      "active_accounts": 230724,
+      "new_accounts": 203741,
+      "active_contracts": 2627924
+    },
+    {
+      "date": "2025-11-19",
+      "txns": 4274079,
+      "active_accounts": 248104,
+      "new_accounts": 213113,
+      "active_contracts": 2518546
+    },
+    {
+      "date": "2025-11-20",
+      "txns": 4457064,
+      "active_accounts": 245664,
+      "new_accounts": 300911,
+      "active_contracts": 2493436
+    },
+    {
+      "date": "2025-11-21",
+      "txns": 4286527,
+      "active_accounts": 234358,
+      "new_accounts": 263278,
+      "active_contracts": 2469965
+    },
+    {
+      "date": "2025-11-22",
+      "txns": 4333041,
+      "active_accounts": 233103,
+      "new_accounts": 223317,
+      "active_contracts": 2467255
+    },
+    {
+      "date": "2025-11-23",
+      "txns": 4315430,
+      "active_accounts": 234393,
+      "new_accounts": 220488,
+      "active_contracts": 2455891
+    },
+    {
+      "date": "2025-11-24",
+      "txns": 4222699,
+      "active_accounts": 240156,
+      "new_accounts": 220552,
+      "active_contracts": 2485891
+    },
+    {
+      "date": "2025-11-25",
+      "txns": 4331713,
+      "active_accounts": 242275,
+      "new_accounts": 197909,
+      "active_contracts": 2486014
+    },
+    {
+      "date": "2025-11-26",
+      "txns": 3828036,
+      "active_accounts": 191444,
+      "new_accounts": 190020,
+      "active_contracts": 2426062
+    },
+    {
+      "date": "2025-11-27",
+      "txns": 4332084,
+      "active_accounts": 237363,
+      "new_accounts": 268145,
+      "active_contracts": 2469887
+    },
+    {
+      "date": "2025-11-28",
+      "txns": 4413456,
+      "active_accounts": 230475,
+      "new_accounts": 322240,
+      "active_contracts": 2595463
+    },
+    {
+      "date": "2025-11-29",
+      "txns": 4031761,
+      "active_accounts": 227227,
+      "new_accounts": 216863,
+      "active_contracts": 2435106
+    },
+    {
+      "date": "2025-11-30",
+      "txns": 4107373,
+      "active_accounts": 231143,
+      "new_accounts": 204451,
+      "active_contracts": 2444404
+    },
+    {
+      "date": "2025-12-01",
+      "txns": 4228761,
+      "active_accounts": 234018,
+      "new_accounts": 196260,
+      "active_contracts": 2451232
+    },
+    {
+      "date": "2025-12-02",
+      "txns": 4081654,
+      "active_accounts": 229497,
+      "new_accounts": 193352,
+      "active_contracts": 2418110
+    },
+    {
+      "date": "2025-12-03",
+      "txns": 4105359,
+      "active_accounts": 229124,
+      "new_accounts": 194442,
+      "active_contracts": 2482973
+    },
+    {
+      "date": "2025-12-04",
+      "txns": 4216807,
+      "active_accounts": 235437,
+      "new_accounts": 184853,
+      "active_contracts": 2537165
+    },
+    {
+      "date": "2025-12-05",
+      "txns": 3983361,
+      "active_accounts": 224477,
+      "new_accounts": 178445,
+      "active_contracts": 2469610
+    },
+    {
+      "date": "2025-12-06",
+      "txns": 3861406,
+      "active_accounts": 219165,
+      "new_accounts": 173362,
+      "active_contracts": 2461253
+    },
+    {
+      "date": "2025-12-07",
+      "txns": 3879668,
+      "active_accounts": 227365,
+      "new_accounts": 169650,
+      "active_contracts": 2467948
+    },
+    {
+      "date": "2025-12-08",
+      "txns": 3919127,
+      "active_accounts": 227236,
+      "new_accounts": 167420,
+      "active_contracts": 2478475
+    },
+    {
+      "date": "2025-12-09",
+      "txns": 3969897,
+      "active_accounts": 226922,
+      "new_accounts": 163791,
+      "active_contracts": 2456010
+    },
+    {
+      "date": "2025-12-10",
+      "txns": 3936999,
+      "active_accounts": 221290,
+      "new_accounts": 162701,
+      "active_contracts": 2481295
+    },
+    {
+      "date": "2025-12-11",
+      "txns": 3881276,
+      "active_accounts": 217393,
+      "new_accounts": 155018,
+      "active_contracts": 2476785
+    },
+    {
+      "date": "2025-12-12",
+      "txns": 3748277,
+      "active_accounts": 210947,
+      "new_accounts": 159942,
+      "active_contracts": 2394153
+    },
+    {
+      "date": "2025-12-13",
+      "txns": 3626525,
+      "active_accounts": 208393,
+      "new_accounts": 157252,
+      "active_contracts": 2320672
+    },
+    {
+      "date": "2025-12-14",
+      "txns": 3780233,
+      "active_accounts": 208069,
+      "new_accounts": 158054,
+      "active_contracts": 2471005
+    },
+    {
+      "date": "2025-12-15",
+      "txns": 3843544,
+      "active_accounts": 218775,
+      "new_accounts": 153751,
+      "active_contracts": 2451572
+    },
+    {
+      "date": "2025-12-16",
+      "txns": 3870281,
+      "active_accounts": 220887,
+      "new_accounts": 159545,
+      "active_contracts": 2433356
+    },
+    {
+      "date": "2025-12-17",
+      "txns": 3839700,
+      "active_accounts": 265963,
+      "new_accounts": 153533,
+      "active_contracts": 2412048
+    },
+    {
+      "date": "2025-12-18",
+      "txns": 4026913,
+      "active_accounts": 366653,
+      "new_accounts": 147537,
+      "active_contracts": 2456615
+    },
+    {
+      "date": "2025-12-19",
+      "txns": 3876577,
+      "active_accounts": 229111,
+      "new_accounts": 146628,
+      "active_contracts": 2491703
+    },
+    {
+      "date": "2025-12-20",
+      "txns": 3836808,
+      "active_accounts": 310404,
+      "new_accounts": 146085,
+      "active_contracts": 2436996
+    },
+    {
+      "date": "2025-12-21",
+      "txns": 3725545,
+      "active_accounts": 208213,
+      "new_accounts": 152800,
+      "active_contracts": 2425078
+    },
+    {
+      "date": "2025-12-22",
+      "txns": 3824384,
+      "active_accounts": 265530,
+      "new_accounts": 146596,
+      "active_contracts": 2438166
+    },
+    {
+      "date": "2025-12-23",
+      "txns": 3755622,
+      "active_accounts": 204741,
+      "new_accounts": 154759,
+      "active_contracts": 2450267
+    },
+    {
+      "date": "2025-12-24",
+      "txns": 3760062,
+      "active_accounts": 206156,
+      "new_accounts": 146552,
+      "active_contracts": 2463129
+    },
+    {
+      "date": "2025-12-25",
+      "txns": 3802237,
+      "active_accounts": 203808,
+      "new_accounts": 142704,
+      "active_contracts": 2476913
+    },
+    {
+      "date": "2025-12-26",
+      "txns": 3649009,
+      "active_accounts": 203100,
+      "new_accounts": 138329,
+      "active_contracts": 2339093
+    },
+    {
+      "date": "2025-12-27",
+      "txns": 3645108,
+      "active_accounts": 196306,
+      "new_accounts": 145504,
+      "active_contracts": 2373442
+    },
+    {
+      "date": "2025-12-28",
+      "txns": 3604294,
+      "active_accounts": 203562,
+      "new_accounts": 146245,
+      "active_contracts": 2306877
+    },
+    {
+      "date": "2025-12-29",
+      "txns": 3613999,
+      "active_accounts": 196537,
+      "new_accounts": 143375,
+      "active_contracts": 2315384
+    },
+    {
+      "date": "2025-12-30",
+      "txns": 3608436,
+      "active_accounts": 199536,
+      "new_accounts": 143119,
+      "active_contracts": 2326269
+    },
+    {
+      "date": "2025-12-31",
+      "txns": 3621035,
+      "active_accounts": 194584,
+      "new_accounts": 153895,
+      "active_contracts": 2315443
+    },
+    {
+      "date": "2026-01-01",
+      "txns": 3506624,
+      "active_accounts": 186611,
+      "new_accounts": 144400,
+      "active_contracts": 2303197
+    },
+    {
+      "date": "2026-01-02",
+      "txns": 3593062,
+      "active_accounts": 192007,
+      "new_accounts": 147063,
+      "active_contracts": 2308690
+    },
+    {
+      "date": "2026-01-03",
+      "txns": 3520716,
+      "active_accounts": 190454,
+      "new_accounts": 141828,
+      "active_contracts": 2282110
+    },
+    {
+      "date": "2026-01-04",
+      "txns": 3541417,
+      "active_accounts": 196293,
+      "new_accounts": 148726,
+      "active_contracts": 2294640
+    },
+    {
+      "date": "2026-01-05",
+      "txns": 3647154,
+      "active_accounts": 203459,
+      "new_accounts": 156394,
+      "active_contracts": 2302315
+    },
+    {
+      "date": "2026-01-06",
+      "txns": 3683216,
+      "active_accounts": 197610,
+      "new_accounts": 151170,
+      "active_contracts": 2324312
+    },
+    {
+      "date": "2026-01-07",
+      "txns": 3623519,
+      "active_accounts": 194287,
+      "new_accounts": 152434,
+      "active_contracts": 2359312
+    },
+    {
+      "date": "2026-01-08",
+      "txns": 3718695,
+      "active_accounts": 191228,
+      "new_accounts": 154576,
+      "active_contracts": 2382670
+    },
+    {
+      "date": "2026-01-09",
+      "txns": 3594342,
+      "active_accounts": 182000,
+      "new_accounts": 151150,
+      "active_contracts": 2365103
+    },
+    {
+      "date": "2026-01-10",
+      "txns": 3548648,
+      "active_accounts": 177006,
+      "new_accounts": 161472,
+      "active_contracts": 2351459
+    },
+    {
+      "date": "2026-01-11",
+      "txns": 3412165,
+      "active_accounts": 170319,
+      "new_accounts": 150133,
+      "active_contracts": 2270492
+    },
+    {
+      "date": "2026-01-12",
+      "txns": 3523288,
+      "active_accounts": 177938,
+      "new_accounts": 157696,
+      "active_contracts": 2261582
+    },
+    {
+      "date": "2026-01-13",
+      "txns": 2826774,
+      "active_accounts": 179170,
+      "new_accounts": 117511,
+      "active_contracts": 1662635
+    },
+    {
+      "date": "2026-01-14",
+      "txns": 4277725,
+      "active_accounts": 173925,
+      "new_accounts": 192916,
+      "active_contracts": 2855101
+    },
+    {
+      "date": "2026-01-15",
+      "txns": 3440557,
+      "active_accounts": 168488,
+      "new_accounts": 148372,
+      "active_contracts": 2234525
+    },
+    {
+      "date": "2026-01-16",
+      "txns": 3413354,
+      "active_accounts": 163927,
+      "new_accounts": 130464,
+      "active_contracts": 2235396
+    },
+    {
+      "date": "2026-01-17",
+      "txns": 3392056,
+      "active_accounts": 166524,
+      "new_accounts": 126162,
+      "active_contracts": 2228924
+    },
+    {
+      "date": "2026-01-18",
+      "txns": 3417900,
+      "active_accounts": 170355,
+      "new_accounts": 125322,
+      "active_contracts": 2241417
+    },
+    {
+      "date": "2026-01-19",
+      "txns": 3511364,
+      "active_accounts": 178071,
+      "new_accounts": 132106,
+      "active_contracts": 2258976
+    },
+    {
+      "date": "2026-01-20",
+      "txns": 3577884,
+      "active_accounts": 174717,
+      "new_accounts": 134334,
+      "active_contracts": 2240942
+    },
+    {
+      "date": "2026-01-21",
+      "txns": 3494194,
+      "active_accounts": 170934,
+      "new_accounts": 129221,
+      "active_contracts": 2255785
+    },
+    {
+      "date": "2026-01-22",
+      "txns": 3392561,
+      "active_accounts": 170580,
+      "new_accounts": 129809,
+      "active_contracts": 2233662
+    },
+    {
+      "date": "2026-01-23",
+      "txns": 3372711,
+      "active_accounts": 170480,
+      "new_accounts": 130593,
+      "active_contracts": 2222559
+    },
+    {
+      "date": "2026-01-24",
+      "txns": 3426823,
+      "active_accounts": 167198,
+      "new_accounts": 140993,
+      "active_contracts": 2234413
+    },
+    {
+      "date": "2026-01-25",
+      "txns": 3448570,
+      "active_accounts": 165205,
+      "new_accounts": 139942,
+      "active_contracts": 2242828
+    },
+    {
+      "date": "2026-01-26",
+      "txns": 3485043,
+      "active_accounts": 169950,
+      "new_accounts": 144758,
+      "active_contracts": 2249190
+    },
+    {
+      "date": "2026-01-27",
+      "txns": 3467652,
+      "active_accounts": 174298,
+      "new_accounts": 133965,
+      "active_contracts": 2251752
+    },
+    {
+      "date": "2026-01-28",
+      "txns": 3480999,
+      "active_accounts": 171937,
+      "new_accounts": 141979,
+      "active_contracts": 2288075
+    },
+    {
+      "date": "2026-01-29",
+      "txns": 3430439,
+      "active_accounts": 174583,
+      "new_accounts": 133986,
+      "active_contracts": 2237258
+    },
+    {
+      "date": "2026-01-30",
+      "txns": 3454330,
+      "active_accounts": 167021,
+      "new_accounts": 133588,
+      "active_contracts": 2238776
+    },
+    {
+      "date": "2026-01-31",
+      "txns": 3457212,
+      "active_accounts": 171914,
+      "new_accounts": 127185,
+      "active_contracts": 2227156
+    },
+    {
+      "date": "2026-02-01",
+      "txns": 3410196,
+      "active_accounts": 167981,
+      "new_accounts": 141182,
+      "active_contracts": 2236667
+    },
+    {
+      "date": "2026-02-02",
+      "txns": 3391098,
+      "active_accounts": 172277,
+      "new_accounts": 108306,
+      "active_contracts": 2249300
+    },
+    {
+      "date": "2026-02-03",
+      "txns": 3685228,
+      "active_accounts": 363348,
+      "new_accounts": 136617,
+      "active_contracts": 2247260
+    },
+    {
+      "date": "2026-02-04",
+      "txns": 3595251,
+      "active_accounts": 301580,
+      "new_accounts": 133333,
+      "active_contracts": 2245369
+    },
+    {
+      "date": "2026-02-05",
+      "txns": 3637869,
+      "active_accounts": 266188,
+      "new_accounts": 140541,
+      "active_contracts": 2239941
+    },
+    {
+      "date": "2026-02-06",
+      "txns": 3562713,
+      "active_accounts": 258339,
+      "new_accounts": 130910,
+      "active_contracts": 2238345
+    },
+    {
+      "date": "2026-02-07",
+      "txns": 3447863,
+      "active_accounts": 252619,
+      "new_accounts": 156464,
+      "active_contracts": 2211859
+    },
+    {
+      "date": "2026-02-08",
+      "txns": 3441513,
+      "active_accounts": 251386,
+      "new_accounts": 152704,
+      "active_contracts": 2211762
+    },
+    {
+      "date": "2026-02-09",
+      "txns": 3435600,
+      "active_accounts": 262363,
+      "new_accounts": 152326,
+      "active_contracts": 2215296
+    },
+    {
+      "date": "2026-02-10",
+      "txns": 3534923,
+      "active_accounts": 379672,
+      "new_accounts": 151037,
+      "active_contracts": 2224123
+    },
+    {
+      "date": "2026-02-11",
+      "txns": 3550475,
+      "active_accounts": 380569,
+      "new_accounts": 145747,
+      "active_contracts": 2219645
+    },
+    {
+      "date": "2026-02-12",
+      "txns": 3520045,
+      "active_accounts": 377569,
+      "new_accounts": 139803,
+      "active_contracts": 2194615
+    },
+    {
+      "date": "2026-02-13",
+      "txns": 3596766,
+      "active_accounts": 376533,
+      "new_accounts": 150221,
+      "active_contracts": 2223961
+    },
+    {
+      "date": "2026-02-14",
+      "txns": 3489869,
+      "active_accounts": 333146,
+      "new_accounts": 139734,
+      "active_contracts": 2222967
+    },
+    {
+      "date": "2026-02-15",
+      "txns": 3790938,
+      "active_accounts": 592250,
+      "new_accounts": 152990,
+      "active_contracts": 2211304
+    },
+    {
+      "date": "2026-02-16",
+      "txns": 3568949,
+      "active_accounts": 426088,
+      "new_accounts": 143167,
+      "active_contracts": 2208087
+    },
+    {
+      "date": "2026-02-17",
+      "txns": 3673260,
+      "active_accounts": 541983,
+      "new_accounts": 146073,
+      "active_contracts": 2215298
+    },
+    {
+      "date": "2026-02-18",
+      "txns": 3227703,
+      "active_accounts": 504588,
+      "new_accounts": 120570,
+      "active_contracts": 1860531
+    },
+    {
+      "date": "2026-02-19",
+      "txns": 3270228,
+      "active_accounts": 146971,
+      "new_accounts": 150132,
+      "active_contracts": 2195511
+    },
+    {
+      "date": "2026-02-20",
+      "txns": 3251929,
+      "active_accounts": 143359,
+      "new_accounts": 133128,
+      "active_contracts": 2201960
+    },
+    {
+      "date": "2026-02-21",
+      "txns": 3202198,
+      "active_accounts": 143063,
+      "new_accounts": 125482,
+      "active_contracts": 2196406
+    },
+    {
+      "date": "2026-02-22",
+      "txns": 3249572,
+      "active_accounts": 144950,
+      "new_accounts": 142724,
+      "active_contracts": 2221029
+    },
+    {
+      "date": "2026-02-23",
+      "txns": 3335654,
+      "active_accounts": 155478,
+      "new_accounts": 141606,
+      "active_contracts": 2222995
+    },
+    {
+      "date": "2026-02-24",
+      "txns": 3219737,
+      "active_accounts": 158821,
+      "new_accounts": 141407,
+      "active_contracts": 2104082
+    },
+    {
+      "date": "2026-02-25",
+      "txns": 3793647,
+      "active_accounts": 161206,
+      "new_accounts": 154708,
+      "active_contracts": 2206371
+    },
+    {
+      "date": "2026-02-26",
+      "txns": 3840625,
+      "active_accounts": 156943,
+      "new_accounts": 143622,
+      "active_contracts": 2207007
+    },
+    {
+      "date": "2026-02-27",
+      "txns": 3424852,
+      "active_accounts": 157018,
+      "new_accounts": 148090,
+      "active_contracts": 2194170
+    },
+    {
+      "date": "2026-02-28",
+      "txns": 3532396,
+      "active_accounts": 150870,
+      "new_accounts": 134781,
+      "active_contracts": 2181156
+    },
+    {
+      "date": "2026-03-01",
+      "txns": 3595113,
+      "active_accounts": 138509,
+      "new_accounts": 140321,
+      "active_contracts": 2184195
+    },
+    {
+      "date": "2026-03-02",
+      "txns": 3664541,
+      "active_accounts": 142175,
+      "new_accounts": 141062,
+      "active_contracts": 2181739
+    },
+    {
+      "date": "2026-03-03",
+      "txns": 3336584,
+      "active_accounts": 149175,
+      "new_accounts": 138285,
+      "active_contracts": 2177074
+    },
+    {
+      "date": "2026-03-04",
+      "txns": 3325268,
+      "active_accounts": 151854,
+      "new_accounts": 132372,
+      "active_contracts": 2183882
+    },
+    {
+      "date": "2026-03-05",
+      "txns": 3325419,
+      "active_accounts": 151028,
+      "new_accounts": 150924,
+      "active_contracts": 2177332
+    },
+    {
+      "date": "2026-03-06",
+      "txns": 3306784,
+      "active_accounts": 148857,
+      "new_accounts": 143232,
+      "active_contracts": 2174300
+    },
+    {
+      "date": "2026-03-07",
+      "txns": 3247636,
+      "active_accounts": 146239,
+      "new_accounts": 130637,
+      "active_contracts": 2191794
+    },
+    {
+      "date": "2026-03-08",
+      "txns": 3315460,
+      "active_accounts": 144938,
+      "new_accounts": 141462,
+      "active_contracts": 2223669
+    },
+    {
+      "date": "2026-03-09",
+      "txns": 3351758,
+      "active_accounts": 148494,
+      "new_accounts": 144864,
+      "active_contracts": 2205418
+    },
+    {
+      "date": "2026-03-10",
+      "txns": 3332900,
+      "active_accounts": 150666,
+      "new_accounts": 147728,
+      "active_contracts": 2212110
+    },
+    {
+      "date": "2026-03-11",
+      "txns": 3287695,
+      "active_accounts": 148943,
+      "new_accounts": 143297,
+      "active_contracts": 2205699
+    },
+    {
+      "date": "2026-03-12",
+      "txns": 3335521,
+      "active_accounts": 156082,
+      "new_accounts": 135996,
+      "active_contracts": 2198615
+    },
+    {
+      "date": "2026-03-13",
+      "txns": 3269575,
+      "active_accounts": 146734,
+      "new_accounts": 126274,
+      "active_contracts": 2175704
+    },
+    {
+      "date": "2026-03-14",
+      "txns": 3169552,
+      "active_accounts": 144157,
+      "new_accounts": 125901,
+      "active_contracts": 2162068
+    },
+    {
+      "date": "2026-03-15",
+      "txns": 3178560,
+      "active_accounts": 141444,
+      "new_accounts": 134538,
+      "active_contracts": 2157970
+    },
+    {
+      "date": "2026-03-16",
+      "txns": 3290512,
+      "active_accounts": 145991,
+      "new_accounts": 141803,
+      "active_contracts": 2215365
+    },
+    {
+      "date": "2026-03-17",
+      "txns": 3219245,
+      "active_accounts": 145799,
+      "new_accounts": 136314,
+      "active_contracts": 2172293
+    },
+    {
+      "date": "2026-03-18",
+      "txns": 3237808,
+      "active_accounts": 142216,
+      "new_accounts": 137603,
+      "active_contracts": 2189899
+    },
+    {
+      "date": "2026-03-19",
+      "txns": 3208457,
+      "active_accounts": 143729,
+      "new_accounts": 131073,
+      "active_contracts": 2191105
+    },
+    {
+      "date": "2026-03-20",
+      "txns": 3145237,
+      "active_accounts": 137325,
+      "new_accounts": 115971,
+      "active_contracts": 2182971
+    },
+    {
+      "date": "2026-03-21",
+      "txns": 3114793,
+      "active_accounts": 135621,
+      "new_accounts": 121014,
+      "active_contracts": 2190598
+    },
+    {
+      "date": "2026-03-22",
+      "txns": 3106917,
+      "active_accounts": 137209,
+      "new_accounts": 110969,
+      "active_contracts": 2176111
+    },
+    {
+      "date": "2026-03-23",
+      "txns": 3444711,
+      "active_accounts": 139910,
+      "new_accounts": 134117,
+      "active_contracts": 2200646
+    },
+    {
+      "date": "2026-03-24",
+      "txns": 3891497,
+      "active_accounts": 140101,
+      "new_accounts": 135405,
+      "active_contracts": 2213243
+    },
+    {
+      "date": "2026-03-25",
+      "txns": 4232584,
+      "active_accounts": 140965,
+      "new_accounts": 137580,
+      "active_contracts": 2201888
+    },
+    {
+      "date": "2026-03-26",
+      "txns": 3915239,
+      "active_accounts": 138346,
+      "new_accounts": 131649,
+      "active_contracts": 2177812
+    },
+    {
+      "date": "2026-03-27",
+      "txns": 3618171,
+      "active_accounts": 136891,
+      "new_accounts": 140025,
+      "active_contracts": 2174254
+    },
+    {
+      "date": "2026-03-28",
+      "txns": 4563367,
+      "active_accounts": 133798,
+      "new_accounts": 129122,
+      "active_contracts": 2162356
+    },
+    {
+      "date": "2026-03-29",
+      "txns": 4191688,
+      "active_accounts": 133415,
+      "new_accounts": 134324,
+      "active_contracts": 2190206
+    },
+    {
+      "date": "2026-03-30",
+      "txns": 3464917,
+      "active_accounts": 138598,
+      "new_accounts": 143790,
+      "active_contracts": 2184028
+    },
+    {
+      "date": "2026-03-31",
+      "txns": 4169826,
+      "active_accounts": 139225,
+      "new_accounts": 137091,
+      "active_contracts": 2194168
+    },
+    {
+      "date": "2026-04-01",
+      "txns": 3758663,
+      "active_accounts": 139048,
+      "new_accounts": 99785,
+      "active_contracts": 1381922
+    },
+    {
+      "date": "2026-04-02",
+      "txns": 1063375,
+      "active_accounts": 137183,
+      "new_accounts": 20655,
+      "active_contracts": 184649
+    },
+    {
+      "date": "2026-04-03",
+      "txns": 907861,
+      "active_accounts": 131893,
+      "new_accounts": 19926,
+      "active_contracts": 194421
+    },
+    {
+      "date": "2026-04-04",
+      "txns": 908553,
+      "active_accounts": 130579,
+      "new_accounts": 20379,
+      "active_contracts": 191740
+    },
+    {
+      "date": "2026-04-05",
+      "txns": 896322,
+      "active_accounts": 129245,
+      "new_accounts": 21066,
+      "active_contracts": 189652
+    },
+    {
+      "date": "2026-04-06",
+      "txns": 959480,
+      "active_accounts": 134018,
+      "new_accounts": 20920,
+      "active_contracts": 199565
+    },
+    {
+      "date": "2026-04-07",
+      "txns": 957226,
+      "active_accounts": 132219,
+      "new_accounts": 21533,
+      "active_contracts": 186713
+    },
+    {
+      "date": "2026-04-08",
+      "txns": 971381,
+      "active_accounts": 133993,
+      "new_accounts": 22624,
+      "active_contracts": 186136
+    },
+    {
+      "date": "2026-04-09",
+      "txns": 972850,
+      "active_accounts": 133071,
+      "new_accounts": 20957,
+      "active_contracts": 182467
+    },
+    {
+      "date": "2026-04-10",
+      "txns": 992732,
+      "active_accounts": 132673,
+      "new_accounts": 20671,
+      "active_contracts": 184509
+    },
+    {
+      "date": "2026-04-11",
+      "txns": 960660,
+      "active_accounts": 131792,
+      "new_accounts": 21502,
+      "active_contracts": 183513
+    },
+    {
+      "date": "2026-04-12",
+      "txns": 992071,
+      "active_accounts": 131282,
+      "new_accounts": 18709,
+      "active_contracts": 157157
+    },
+    {
+      "date": "2026-04-13",
+      "txns": 895923,
+      "active_accounts": 139249,
+      "new_accounts": 19981,
+      "active_contracts": 138065
+    },
+    {
+      "date": "2026-04-14",
+      "txns": 785094,
+      "active_accounts": 127401,
+      "new_accounts": 19307,
+      "active_contracts": 104582
+    },
+    {
+      "date": "2026-04-15",
+      "txns": 763144,
+      "active_accounts": 133306,
+      "new_accounts": 19082,
+      "active_contracts": 95043
+    },
+    {
+      "date": "2026-04-16",
+      "txns": 1058803,
+      "active_accounts": 133652,
+      "new_accounts": 16929,
+      "active_contracts": 99956
+    },
+    {
+      "date": "2026-04-17",
+      "txns": 729376,
+      "active_accounts": 130982,
+      "new_accounts": 17102,
+      "active_contracts": 96900
+    },
+    {
+      "date": "2026-04-18",
+      "txns": 763796,
+      "active_accounts": 129021,
+      "new_accounts": 18419,
+      "active_contracts": 99685
+    },
+    {
+      "date": "2026-04-19",
+      "txns": 802962,
+      "active_accounts": 127462,
+      "new_accounts": 19444,
+      "active_contracts": 100997
+    },
+    {
+      "date": "2026-04-20",
+      "txns": 808458,
+      "active_accounts": 129958,
+      "new_accounts": 21429,
+      "active_contracts": 106399
+    },
+    {
+      "date": "2026-04-21",
+      "txns": 805053,
+      "active_accounts": 129703,
+      "new_accounts": 21668,
+      "active_contracts": 102438
+    },
+    {
+      "date": "2026-04-22",
+      "txns": 778988,
+      "active_accounts": 129984,
+      "new_accounts": 22326,
+      "active_contracts": 98349
+    },
+    {
+      "date": "2026-04-23",
+      "txns": 751971,
+      "active_accounts": 126197,
+      "new_accounts": 21657,
+      "active_contracts": 96044
+    },
+    {
+      "date": "2026-04-24",
+      "txns": 686968,
+      "active_accounts": 121955,
+      "new_accounts": 17999,
+      "active_contracts": 94160
+    },
+    {
+      "date": "2026-04-25",
+      "txns": 622133,
+      "active_accounts": 122432,
+      "new_accounts": 14382,
+      "active_contracts": 86694
+    },
+    {
+      "date": "2026-04-26",
+      "txns": 722389,
+      "active_accounts": 118616,
+      "new_accounts": 13273,
+      "active_contracts": 90949
+    },
+    {
+      "date": "2026-04-27",
+      "txns": 713204,
+      "active_accounts": 124353,
+      "new_accounts": 16174,
+      "active_contracts": 93534
+    },
+    {
+      "date": "2026-04-28",
+      "txns": 709459,
+      "active_accounts": 120906,
+      "new_accounts": 18095,
+      "active_contracts": 98718
+    },
+    {
+      "date": "2026-04-29",
+      "txns": 932580,
+      "active_accounts": 123229,
+      "new_accounts": 17185,
+      "active_contracts": 92373
+    },
+    {
+      "date": "2026-04-30",
+      "txns": 726837,
+      "active_accounts": 119499,
+      "new_accounts": 16528,
+      "active_contracts": 90268
+    },
+    {
+      "date": "2026-05-01",
+      "txns": 704350,
+      "active_accounts": 119055,
+      "new_accounts": 18239,
+      "active_contracts": 92543
+    },
+    {
+      "date": "2026-05-02",
+      "txns": 695144,
+      "active_accounts": 128424,
+      "new_accounts": 22308,
+      "active_contracts": 94929
+    },
+    {
+      "date": "2026-05-03",
+      "txns": 726605,
+      "active_accounts": 126433,
+      "new_accounts": 21908,
+      "active_contracts": 97580
+    },
+    {
+      "date": "2026-05-04",
+      "txns": 768403,
+      "active_accounts": 129115,
+      "new_accounts": 23686,
+      "active_contracts": 98167
+    },
+    {
+      "date": "2026-05-05",
+      "txns": 761084,
+      "active_accounts": 133244,
+      "new_accounts": 26398,
+      "active_contracts": 101682
+    },
+    {
+      "date": "2026-05-06",
+      "txns": 847917,
+      "active_accounts": 128094,
+      "new_accounts": 22670,
+      "active_contracts": 118779
+    },
+    {
+      "date": "2026-05-07",
+      "txns": 783747,
+      "active_accounts": 124915,
+      "new_accounts": 17132,
+      "active_contracts": 99877
+    },
+    {
+      "date": "2026-05-08",
+      "txns": 761282,
+      "active_accounts": 124037,
+      "new_accounts": 17650,
+      "active_contracts": 96403
+    },
+    {
+      "date": "2026-05-09",
+      "txns": 740471,
+      "active_accounts": 120268,
+      "new_accounts": 16876,
+      "active_contracts": 96565
+    },
+    {
+      "date": "2026-05-10",
+      "txns": 757261,
+      "active_accounts": 119985,
+      "new_accounts": 16812,
+      "active_contracts": 103135
+    },
+    {
+      "date": "2026-05-11",
+      "txns": 757788,
+      "active_accounts": 124825,
+      "new_accounts": 18692,
+      "active_contracts": 97546
+    },
+    {
+      "date": "2026-05-12",
+      "txns": 788621,
+      "active_accounts": 123869,
+      "new_accounts": 17284,
+      "active_contracts": 94676
+    },
+    {
+      "date": "2026-05-13",
+      "txns": 790516,
+      "active_accounts": 122413,
+      "new_accounts": 18329,
+      "active_contracts": 101668
+    },
+    {
+      "date": "2026-05-14",
+      "txns": 786025,
+      "active_accounts": 120501,
+      "new_accounts": 17675,
+      "active_contracts": 103301
+    },
+    {
+      "date": "2026-05-15",
+      "txns": 751448,
+      "active_accounts": 107035,
+      "new_accounts": 16743,
+      "active_contracts": 99413
+    },
+    {
+      "date": "2026-05-16",
+      "txns": 722169,
+      "active_accounts": 111501,
+      "new_accounts": 15705,
+      "active_contracts": 92079
+    },
+    {
+      "date": "2026-05-17",
+      "txns": 726935,
+      "active_accounts": 115963,
+      "new_accounts": 15698,
+      "active_contracts": 97406
+    },
+    {
+      "date": "2026-05-18",
+      "txns": 787300,
+      "active_accounts": 118091,
+      "new_accounts": 17980,
+      "active_contracts": 91065
+    },
+    {
+      "date": "2026-05-19",
+      "txns": 779071,
+      "active_accounts": 118559,
+      "new_accounts": 16699,
+      "active_contracts": 88506
+    },
+    {
+      "date": "2026-05-20",
+      "txns": 817159,
+      "active_accounts": 119992,
+      "new_accounts": 16954,
+      "active_contracts": 97370
+    },
+    {
+      "date": "2026-05-21",
+      "txns": 836842,
+      "active_accounts": 116316,
+      "new_accounts": 17135,
+      "active_contracts": 90127
+    },
+    {
+      "date": "2026-05-22",
+      "txns": 1109094,
+      "active_accounts": 125196,
+      "new_accounts": 19309,
+      "active_contracts": 91802
+    },
+    {
+      "date": "2026-05-23",
+      "txns": 879647,
+      "active_accounts": 122630,
+      "new_accounts": 18152,
+      "active_contracts": 89863
+    },
+    {
+      "date": "2026-05-24",
+      "txns": 898928,
+      "active_accounts": 122760,
+      "new_accounts": 18368,
+      "active_contracts": 89631
+    },
+    {
+      "date": "2026-05-25",
+      "txns": 898740,
+      "active_accounts": 126133,
+      "new_accounts": 18753,
+      "active_contracts": 88564
+    },
+    {
+      "date": "2026-05-26",
+      "txns": 957320,
+      "active_accounts": 124386,
+      "new_accounts": 18222,
+      "active_contracts": 84734
+    },
+    {
+      "date": "2026-05-27",
+      "txns": 831632,
+      "active_accounts": 118211,
+      "new_accounts": 15963,
+      "active_contracts": 84140
+    },
+    {
+      "date": "2026-05-28",
+      "txns": 825571,
+      "active_accounts": 115174,
+      "new_accounts": 18548,
+      "active_contracts": 83958
+    },
+    {
+      "date": "2026-05-29",
+      "txns": 864412,
+      "active_accounts": 115762,
+      "new_accounts": 18104,
+      "active_contracts": 99681
+    },
+    {
+      "date": "2026-05-30",
+      "txns": 776204,
+      "active_accounts": 112655,
+      "new_accounts": 15807,
+      "active_contracts": 99192
+    },
+    {
+      "date": "2026-05-31",
+      "txns": 761360,
+      "active_accounts": 113585,
+      "new_accounts": 14916,
+      "active_contracts": 95193
+    },
+    {
+      "date": "2026-06-01",
+      "txns": 882995,
+      "active_accounts": 117957,
+      "new_accounts": 16138,
+      "active_contracts": 96553
+    },
+    {
+      "date": "2026-06-02",
+      "txns": 971904,
+      "active_accounts": 118358,
+      "new_accounts": 18378,
+      "active_contracts": 101403
+    },
+    {
+      "date": "2026-06-03",
+      "txns": 987134,
+      "active_accounts": 121069,
+      "new_accounts": 17478,
+      "active_contracts": 90440
+    },
+    {
+      "date": "2026-06-04",
+      "txns": 1020616,
+      "active_accounts": 118953,
+      "new_accounts": 16930,
+      "active_contracts": 101086
+    },
+    {
+      "date": "2026-06-05",
+      "txns": 1055518,
+      "active_accounts": 115801,
+      "new_accounts": 16224,
+      "active_contracts": 97045
+    },
+    {
+      "date": "2026-06-06",
+      "txns": 830379,
+      "active_accounts": 111304,
+      "new_accounts": 14689,
+      "active_contracts": 93014
+    },
+    {
+      "date": "2026-06-07",
+      "txns": 845410,
+      "active_accounts": 111870,
+      "new_accounts": 14862,
+      "active_contracts": 92148
+    },
+    {
+      "date": "2026-06-08",
+      "txns": 876622,
+      "active_accounts": 123836,
+      "new_accounts": 16746,
+      "active_contracts": 97411
+    },
+    {
+      "date": "2026-06-09",
+      "txns": 804550,
+      "active_accounts": 112294,
+      "new_accounts": 16442,
+      "active_contracts": 84585
+    },
+    {
+      "date": "2026-06-10",
+      "txns": 804245,
+      "active_accounts": 114609,
+      "new_accounts": 13617,
+      "active_contracts": 96925
+    },
+    {
+      "date": "2026-06-11",
+      "txns": 804656,
+      "active_accounts": 112200,
+      "new_accounts": 15814,
+      "active_contracts": 100998
+    },
+    {
+      "date": "2026-06-12",
+      "txns": 789334,
+      "active_accounts": 111915,
+      "new_accounts": 16287,
+      "active_contracts": 99467
+    },
+    {
+      "date": "2026-06-13",
+      "txns": 734123,
+      "active_accounts": 110134,
+      "new_accounts": 16383,
+      "active_contracts": 93557
+    },
+    {
+      "date": "2026-06-14",
+      "txns": 756764,
+      "active_accounts": 110032,
+      "new_accounts": 17396,
+      "active_contracts": 96759
+    },
+    {
+      "date": "2026-06-15",
+      "txns": 851039,
+      "active_accounts": 117898,
+      "new_accounts": 18921,
+      "active_contracts": 97520
+    },
+    {
+      "date": "2026-06-16",
+      "txns": 804245,
+      "active_accounts": 114118,
+      "new_accounts": 18810,
+      "active_contracts": 95844
+    },
+    {
+      "date": "2026-06-17",
+      "txns": 823188,
+      "active_accounts": 115824,
+      "new_accounts": 18322,
+      "active_contracts": 97649
+    },
+    {
+      "date": "2026-06-18",
+      "txns": 801660,
+      "active_accounts": 111472,
+      "new_accounts": 17483,
+      "active_contracts": 98279
+    },
+    {
+      "date": "2026-06-19",
+      "txns": 812658,
+      "active_accounts": 110263,
+      "new_accounts": 16612,
+      "active_contracts": 96764
+    },
+    {
+      "date": "2026-06-20",
+      "txns": 719919,
+      "active_accounts": 106396,
+      "new_accounts": 15659,
+      "active_contracts": 92992
+    },
+    {
+      "date": "2026-06-21",
+      "txns": 722402,
+      "active_accounts": 109135,
+      "new_accounts": 16294,
+      "active_contracts": 93926
+    },
+    {
+      "date": "2026-06-22",
+      "txns": 757253,
+      "active_accounts": 112032,
+      "new_accounts": 17585,
+      "active_contracts": 98367
+    },
+    {
+      "date": "2026-06-23",
+      "txns": 757769,
+      "active_accounts": 112986,
+      "new_accounts": 18392,
+      "active_contracts": 98403
+    },
+    {
+      "date": "2026-06-24",
+      "txns": 768173,
+      "active_accounts": 110260,
+      "new_accounts": 17853,
+      "active_contracts": 94636
+    },
+    {
+      "date": "2026-06-25",
+      "txns": 743096,
+      "active_accounts": 109728,
+      "new_accounts": 17988,
+      "active_contracts": 92800
+    },
+    {
+      "date": "2026-06-26",
+      "txns": 736132,
+      "active_accounts": 106389,
+      "new_accounts": 16243,
+      "active_contracts": 91251
+    },
+    {
+      "date": "2026-06-27",
+      "txns": 697852,
+      "active_accounts": 106056,
+      "new_accounts": 16043,
+      "active_contracts": 90564
+    },
+    {
+      "date": "2026-06-28",
+      "txns": 711388,
+      "active_accounts": 105934,
+      "new_accounts": 16157,
+      "active_contracts": 92004
+    },
+    {
+      "date": "2026-06-29",
+      "txns": 796983,
+      "active_accounts": 108811,
+      "new_accounts": 17148,
+      "active_contracts": 93673
+    },
+    {
+      "date": "2026-06-30",
+      "txns": 747039,
+      "active_accounts": 107730,
+      "new_accounts": 17286,
+      "active_contracts": 93958
+    },
+    {
+      "date": "2026-07-01",
+      "txns": 720865,
+      "active_accounts": 104101,
+      "new_accounts": 16005,
+      "active_contracts": 90837
+    },
+    {
+      "date": "2026-07-02",
+      "txns": 747871,
+      "active_accounts": 105844,
+      "new_accounts": 14989,
+      "active_contracts": 139550
+    },
+    {
+      "date": "2026-07-03",
+      "txns": 739047,
+      "active_accounts": 104465,
+      "new_accounts": 17423,
+      "active_contracts": 89882
+    },
+    {
+      "date": "2026-07-04",
+      "txns": 753757,
+      "active_accounts": 103825,
+      "new_accounts": 21466,
+      "active_contracts": 86656
+    },
+    {
+      "date": "2026-07-05",
+      "txns": 737968,
+      "active_accounts": 106184,
+      "new_accounts": 18197,
+      "active_contracts": 91726
+    },
+    {
+      "date": "2026-07-06",
+      "txns": 796655,
+      "active_accounts": 106771,
+      "new_accounts": 19860,
+      "active_contracts": 96567
+    },
+    {
+      "date": "2026-07-07",
+      "txns": 819335,
+      "active_accounts": 105153,
+      "new_accounts": 22958,
+      "active_contracts": 91141
+    },
+    {
+      "date": "2026-07-08",
+      "txns": 873695,
+      "active_accounts": 105152,
+      "new_accounts": 23420,
+      "active_contracts": 96609
+    },
+    {
+      "date": "2026-07-09",
+      "txns": 823411,
+      "active_accounts": 102571,
+      "new_accounts": 19227,
+      "active_contracts": 112861
+    },
+    {
+      "date": "2026-07-10",
+      "txns": 770836,
+      "active_accounts": 102400,
+      "new_accounts": 14203,
+      "active_contracts": 85211
+    },
+    {
+      "date": "2026-07-11",
+      "txns": 715477,
+      "active_accounts": 90183,
+      "new_accounts": 10788,
+      "active_contracts": 94743
+    },
+    {
+      "date": "2026-07-12",
+      "txns": 694076,
+      "active_accounts": 89871,
+      "new_accounts": 10540,
+      "active_contracts": 91924
+    },
+    {
+      "date": "2026-07-13",
+      "txns": 794924,
+      "active_accounts": 91883,
+      "new_accounts": 10319,
+      "active_contracts": 91512
+    },
+    {
+      "date": "2026-07-14",
+      "txns": 757867,
+      "active_accounts": 92405,
+      "new_accounts": 9945,
+      "active_contracts": 90996
+    },
+    {
+      "date": "2026-07-15",
+      "txns": 725079,
+      "active_accounts": 90939,
+      "new_accounts": 9897,
+      "active_contracts": 86753
+    },
+    {
+      "date": "2026-07-16",
+      "txns": 724947,
+      "active_accounts": 89017,
+      "new_accounts": 10642,
+      "active_contracts": 86754
+    },
+    {
+      "date": "2026-07-17",
+      "txns": 711903,
+      "active_accounts": 88616,
+      "new_accounts": 10528,
+      "active_contracts": 82403
+    },
+    {
+      "date": "2026-07-18",
+      "txns": 672538,
+      "active_accounts": 87019,
+      "new_accounts": 8365,
+      "active_contracts": 82755
+    },
+    {
+      "date": "2026-07-19",
+      "txns": 664256,
+      "active_accounts": 85909,
+      "new_accounts": 8802,
+      "active_contracts": 82273
+    },
+    {
+      "date": "2026-07-20",
+      "txns": 754988,
+      "active_accounts": 88674,
+      "new_accounts": 10700,
+      "active_contracts": 107810
+    },
+    {
+      "date": "2026-07-21",
+      "txns": 737854,
+      "active_accounts": 89928,
+      "new_accounts": 10650,
+      "active_contracts": 90578
+    },
+    {
+      "date": "2026-07-22",
+      "txns": 718549,
+      "active_accounts": 89683,
+      "new_accounts": 12322,
+      "active_contracts": 90368
+    },
+    {
+      "date": "2026-07-23",
+      "txns": 732946,
+      "active_accounts": 88801,
+      "new_accounts": 11596,
+      "active_contracts": 84945
+    },
+    {
+      "date": "2026-07-24",
+      "txns": 712611,
+      "active_accounts": 85291,
+      "new_accounts": 14397,
+      "active_contracts": 74626
+    },
+    {
+      "date": "2026-07-25",
+      "txns": 718997,
+      "active_accounts": 86103,
+      "new_accounts": 15345,
+      "active_contracts": 85028
+    },
+    {
+      "date": "2026-07-26",
+      "txns": 706844,
+      "active_accounts": 85718,
+      "new_accounts": 14217,
+      "active_contracts": 86404
+    },
+    {
+      "date": "2026-07-27",
+      "txns": 698017,
+      "active_accounts": 87128,
+      "new_accounts": 14453,
+      "active_contracts": 73774
+    },
+    {
+      "date": "2026-07-28",
+      "txns": 703205,
+      "active_accounts": 86405,
+      "new_accounts": 13989,
+      "active_contracts": 86891
+    },
+    {
+      "date": "2026-07-29",
+      "txns": 705004,
+      "active_accounts": 86375,
+      "new_accounts": 14377,
+      "active_contracts": 77967
+    },
+    {
+      "date": "2026-07-30",
+      "txns": 733277,
+      "active_accounts": 85469,
+      "new_accounts": 14978,
+      "active_contracts": 89584
+    },
+    {
+      "date": "2026-07-31",
+      "txns": 708126,
+      "active_accounts": 82072,
+      "new_accounts": 14029,
+      "active_contracts": 85921
+    },
+    {
+      "date": "2026-08-01",
+      "txns": 681793,
+      "active_accounts": 82192,
+      "new_accounts": 12877,
+      "active_contracts": 84839
+    },
+    {
+      "date": "2026-08-02",
+      "txns": 671128,
+      "active_accounts": 81729,
+      "new_accounts": 13066,
+      "active_contracts": 87147
+    },
+    {
+      "date": "2026-08-03",
+      "txns": 690732,
+      "active_accounts": 85195,
+      "new_accounts": 13582,
+      "active_contracts": 88617
+    },
+    {
+      "date": "2026-08-04",
+      "txns": 696617,
+      "active_accounts": 85551,
+      "new_accounts": 13880,
+      "active_contracts": 90810
+    },
+    {
+      "date": "2026-08-05",
+      "txns": 671609,
+      "active_accounts": 84061,
+      "new_accounts": 14136,
+      "active_contracts": 89565
+    },
+    {
+      "date": "2026-08-06",
+      "txns": 675341,
+      "active_accounts": 84184,
+      "new_accounts": 13251,
+      "active_contracts": 106093
+    },
+    {
+      "date": "2026-08-07",
+      "txns": 656089,
+      "active_accounts": 82269,
+      "new_accounts": 12992,
+      "active_contracts": 73460
+    },
+    {
+      "date": "2026-08-08",
+      "txns": 656235,
+      "active_accounts": 78514,
+      "new_accounts": 14633,
+      "active_contracts": 84511
+    },
+    {
+      "date": "2026-08-09",
+      "txns": 637854,
+      "active_accounts": 80418,
+      "new_accounts": 12740,
+      "active_contracts": 82200
+    },
+    {
+      "date": "2026-08-10",
+      "txns": 672018,
+      "active_accounts": 82610,
+      "new_accounts": 12708,
+      "active_contracts": 82868
+    },
+    {
+      "date": "2026-08-11",
+      "txns": 660154,
+      "active_accounts": 82799,
+      "new_accounts": 12511,
+      "active_contracts": 83941
+    },
+    {
+      "date": "2026-08-12",
+      "txns": 685406,
+      "active_accounts": 82166,
+      "new_accounts": 11986,
+      "active_contracts": 83328
+    },
+    {
+      "date": "2026-08-13",
+      "txns": 664804,
+      "active_accounts": 82572,
+      "new_accounts": 11282,
+      "active_contracts": 71046
+    },
+    {
+      "date": "2026-08-14",
+      "txns": 639732,
+      "active_accounts": 79800,
+      "new_accounts": 11236,
+      "active_contracts": 83479
+    },
+    {
+      "date": "2026-08-15",
+      "txns": 584733,
+      "active_accounts": 79812,
+      "new_accounts": 10918,
+      "active_contracts": 70854
+    },
+    {
+      "date": "2026-08-16",
+      "txns": 615151,
+      "active_accounts": 80163,
+      "new_accounts": 11785,
+      "active_contracts": 72184
+    },
+    {
+      "date": "2026-08-17",
+      "txns": 669250,
+      "active_accounts": 80576,
+      "new_accounts": 11881,
+      "active_contracts": 71580
+    },
+    {
+      "date": "2026-08-18",
+      "txns": 673834,
+      "active_accounts": 80055,
+      "new_accounts": 12501,
+      "active_contracts": 77252
+    },
+    {
+      "date": "2026-08-19",
+      "txns": 733400,
+      "active_accounts": 80931,
+      "new_accounts": 13077,
+      "active_contracts": 81144
+    },
+    {
+      "date": "2026-08-20",
+      "txns": 758797,
+      "active_accounts": 82216,
+      "new_accounts": 13829,
+      "active_contracts": 90551
+    },
+    {
+      "date": "2026-08-21",
+      "txns": 786077,
+      "active_accounts": 81667,
+      "new_accounts": 14315,
+      "active_contracts": 52068
+    },
+    {
+      "date": "2026-08-22",
+      "txns": 804701,
+      "active_accounts": 79636,
+      "new_accounts": 12974,
+      "active_contracts": 50497
+    },
+    {
+      "date": "2026-08-23",
+      "txns": 726225,
+      "active_accounts": 79394,
+      "new_accounts": 12413,
+      "active_contracts": 49490
+    },
+    {
+      "date": "2026-08-24",
+      "txns": 805717,
+      "active_accounts": 81373,
+      "new_accounts": 13352,
+      "active_contracts": 51643
+    },
+    {
+      "date": "2026-08-25",
+      "txns": 719568,
+      "active_accounts": 79464,
+      "new_accounts": 12793,
+      "active_contracts": 53159
+    },
+    {
+      "date": "2026-08-26",
+      "txns": 655345,
+      "active_accounts": 81506,
+      "new_accounts": 12080,
+      "active_contracts": 50584
+    },
+    {
+      "date": "2026-08-27",
+      "txns": 681264,
+      "active_accounts": 81525,
+      "new_accounts": 12037,
+      "active_contracts": 50502
+    },
+    {
+      "date": "2026-08-28",
+      "txns": 654889,
+      "active_accounts": 78375,
+      "new_accounts": 10425,
+      "active_contracts": 49819
+    },
+    {
+      "date": "2026-08-29",
+      "txns": 594141,
+      "active_accounts": 76934,
+      "new_accounts": 9661,
+      "active_contracts": 49715
+    },
+    {
+      "date": "2026-08-30",
+      "txns": 623892,
+      "active_accounts": 76955,
+      "new_accounts": 9946,
+      "active_contracts": 50531
+    },
+    {
+      "date": "2026-08-31",
+      "txns": 684883,
+      "active_accounts": 77790,
+      "new_accounts": 11236,
+      "active_contracts": 51814
+    },
+    {
+      "date": "2026-09-01",
+      "txns": 670529,
+      "active_accounts": 77130,
+      "new_accounts": 10628,
+      "active_contracts": 53147
+    },
+    {
+      "date": "2026-09-02",
+      "txns": 659622,
+      "active_accounts": 77127,
+      "new_accounts": 11252,
+      "active_contracts": 52542
+    },
+    {
+      "date": "2026-09-03",
+      "txns": 703698,
+      "active_accounts": 77607,
+      "new_accounts": 11213,
+      "active_contracts": 73441
+    },
+    {
+      "date": "2026-09-04",
+      "txns": 735463,
+      "active_accounts": 76042,
+      "new_accounts": 10886,
+      "active_contracts": 53031
+    },
+    {
+      "date": "2026-09-05",
+      "txns": 674162,
+      "active_accounts": 74288,
+      "new_accounts": 11910,
+      "active_contracts": 50784
+    },
+    {
+      "date": "2026-09-06",
+      "txns": 763172,
+      "active_accounts": 74652,
+      "new_accounts": 11690,
+      "active_contracts": 52918
+    },
+    {
+      "date": "2026-09-07",
+      "txns": 746044,
+      "active_accounts": 75711,
+      "new_accounts": 10873,
+      "active_contracts": 52200
+    },
+    {
+      "date": "2026-09-08",
+      "txns": 704254,
+      "active_accounts": 71768,
+      "new_accounts": 11637,
+      "active_contracts": 53305
+    },
+    {
+      "date": "2026-09-09",
+      "txns": 772841,
+      "active_accounts": 71964,
+      "new_accounts": 11339,
+      "active_contracts": 52490
+    },
+    {
+      "date": "2026-09-10",
+      "txns": 728736,
+      "active_accounts": 71159,
+      "new_accounts": 10482,
+      "active_contracts": 51937
+    },
+    {
+      "date": "2026-09-11",
+      "txns": 846582,
+      "active_accounts": 70014,
+      "new_accounts": 12598,
+      "active_contracts": 51254
+    },
+    {
+      "date": "2026-09-12",
+      "txns": 651970,
+      "active_accounts": 67170,
+      "new_accounts": 11203,
+      "active_contracts": 51403
+    },
+    {
+      "date": "2026-09-13",
+      "txns": 626447,
+      "active_accounts": 61501,
+      "new_accounts": 11659,
+      "active_contracts": 51426
+    },
+    {
+      "date": "2026-09-14",
+      "txns": 706600,
+      "active_accounts": 49972,
+      "new_accounts": 9579,
+      "active_contracts": 49983
+    },
+    {
+      "date": "2026-09-15",
+      "txns": 706597,
+      "active_accounts": 45247,
+      "new_accounts": 8116,
+      "active_contracts": 49433
+    },
+    {
+      "date": "2026-09-16",
+      "txns": 777089,
+      "active_accounts": 42517,
+      "new_accounts": 7772,
+      "active_contracts": 47423
+    },
+    {
+      "date": "2026-09-17",
+      "txns": 840314,
+      "active_accounts": 44749,
+      "new_accounts": 9142,
+      "active_contracts": 48050
+    },
+    {
+      "date": "2026-09-18",
+      "txns": 973388,
+      "active_accounts": 62965,
+      "new_accounts": 14050,
+      "active_contracts": 49799
+    },
+    {
+      "date": "2026-09-19",
+      "txns": 839380,
+      "active_accounts": 52391,
+      "new_accounts": 14636,
+      "active_contracts": 45730
+    },
+    {
+      "date": "2026-09-20",
+      "txns": 846013,
+      "active_accounts": 57466,
+      "new_accounts": 12868,
+      "active_contracts": 44829
+    },
+    {
+      "date": "2026-09-21",
+      "txns": 871723,
+      "active_accounts": 60298,
+      "new_accounts": 12642,
+      "active_contracts": 46997
+    },
+    {
+      "date": "2026-09-22",
+      "txns": 971959,
+      "active_accounts": 57797,
+      "new_accounts": 13413,
+      "active_contracts": 71758
+    },
+    {
+      "date": "2026-09-23",
+      "txns": 869892,
+      "active_accounts": 56105,
+      "new_accounts": 13620,
+      "active_contracts": 47032
+    },
+    {
+      "date": "2026-09-24",
+      "txns": 741291,
+      "active_accounts": 54027,
+      "new_accounts": 11472,
+      "active_contracts": 45369
+    },
+    {
+      "date": "2026-09-25",
+      "txns": 715469,
+      "active_accounts": 57300,
+      "new_accounts": 12945,
+      "active_contracts": 44539
+    },
+    {
+      "date": "2026-09-26",
+      "txns": 603143,
+      "active_accounts": 54118,
+      "new_accounts": 11843,
+      "active_contracts": 43008
+    },
+    {
+      "date": "2026-09-27",
+      "txns": 1217209,
+      "active_accounts": 63589,
+      "new_accounts": 22366,
+      "active_contracts": 47699
+    },
+    {
+      "date": "2026-09-28",
+      "txns": 1129793,
+      "active_accounts": 61771,
+      "new_accounts": 20830,
+      "active_contracts": 60701
+    },
+    {
+      "date": "2026-09-29",
+      "txns": 987627,
+      "active_accounts": 62990,
+      "new_accounts": 15557,
+      "active_contracts": 66837
+    },
+    {
+      "date": "2026-09-30",
+      "txns": 923526,
+      "active_accounts": 58749,
+      "new_accounts": 13575,
+      "active_contracts": 67069
+    },
+    {
+      "date": "2026-10-01",
+      "txns": 1151492,
+      "active_accounts": 62105,
+      "new_accounts": 15070,
+      "active_contracts": 69974
+    },
+    {
+      "date": "2026-10-02",
+      "txns": 868026,
+      "active_accounts": 118077,
+      "new_accounts": 9601,
+      "active_contracts": 61441
+    },
+    {
+      "date": "2026-10-03",
+      "txns": 690438,
+      "active_accounts": 176719,
+      "new_accounts": 8148,
+      "active_contracts": 60382
+    },
+    {
+      "date": "2026-10-04",
+      "txns": 839450,
+      "active_accounts": 177196,
+      "new_accounts": 9186,
+      "active_contracts": 62486
+    },
+    {
+      "date": "2026-10-05",
+      "txns": 865681,
+      "active_accounts": 95992,
+      "new_accounts": 8914,
+      "active_contracts": 90674
+    },
+    {
+      "date": "2026-10-06",
+      "txns": 909765,
+      "active_accounts": 124809,
+      "new_accounts": 8773,
+      "active_contracts": 60770
+    },
+    {
+      "date": "2026-10-07",
+      "txns": 971068,
+      "active_accounts": 175774,
+      "new_accounts": 8461,
+      "active_contracts": 58930
+    },
+    {
+      "date": "2026-10-08",
+      "txns": 1014850,
+      "active_accounts": 82447,
+      "new_accounts": 11123,
+      "active_contracts": 58143
+    },
+    {
+      "date": "2026-10-09",
+      "txns": 680332,
+      "active_accounts": 53950,
+      "new_accounts": 7367,
+      "active_contracts": 56152
+    },
+    {
+      "date": "2026-10-10",
+      "txns": 850344,
+      "active_accounts": 56881,
+      "new_accounts": 7637,
+      "active_contracts": 53707
+    },
+    {
+      "date": "2026-10-11",
+      "txns": 1109584,
+      "active_accounts": 54865,
+      "new_accounts": 7635,
+      "active_contracts": 54655
+    },
+    {
+      "date": "2026-10-12",
+      "txns": 712621,
+      "active_accounts": 59164,
+      "new_accounts": 10039,
+      "active_contracts": 56607
+    },
+    {
+      "date": "2026-10-13",
+      "txns": 731054,
+      "active_accounts": 55685,
+      "new_accounts": 8196,
+      "active_contracts": 54639
+    },
+    {
+      "date": "2026-10-14",
+      "txns": 767812,
+      "active_accounts": 58615,
+      "new_accounts": 10350,
+      "active_contracts": 54603
+    },
+    {
+      "date": "2026-10-15",
+      "txns": 911980,
+      "active_accounts": 55503,
+      "new_accounts": 8440,
+      "active_contracts": 55014
+    },
+    {
+      "date": "2026-10-16",
+      "txns": 658427,
+      "active_accounts": 54936,
+      "new_accounts": 8974,
+      "active_contracts": 54782
+    },
+    {
+      "date": "2026-10-17",
+      "txns": 557903,
+      "active_accounts": 54322,
+      "new_accounts": 9034,
+      "active_contracts": 52368
+    },
+    {
+      "date": "2026-10-18",
+      "txns": 569735,
+      "active_accounts": 51810,
+      "new_accounts": 7742,
+      "active_contracts": 53535
+    },
+    {
+      "date": "2026-10-19",
+      "txns": 607019,
+      "active_accounts": 53107,
+      "new_accounts": 8331,
+      "active_contracts": 63885
+    },
+    {
+      "date": "2026-10-20",
+      "txns": 617990,
+      "active_accounts": 52116,
+      "new_accounts": 11474,
+      "active_contracts": 64105
+    },
+    {
+      "date": "2026-10-21",
+      "txns": 658784,
+      "active_accounts": 53919,
+      "new_accounts": 8320,
+      "active_contracts": 61200
+    },
+    {
+      "date": "2026-10-22",
+      "txns": 547267,
+      "active_accounts": 51423,
+      "new_accounts": 11236,
+      "active_contracts": 41683
+    },
+    {
+      "date": "2026-10-23",
+      "txns": 609236,
+      "active_accounts": 51214,
+      "new_accounts": 8490,
+      "active_contracts": 62849
+    },
+    {
+      "date": "2026-10-24",
+      "txns": 635438,
+      "active_accounts": 50178,
+      "new_accounts": 7337,
+      "active_contracts": 61922
+    },
+    {
+      "date": "2026-10-25",
+      "txns": 550250,
+      "active_accounts": 49245,
+      "new_accounts": 9180,
+      "active_contracts": 50473
+    },
+    {
+      "date": "2026-10-26",
+      "txns": 573801,
+      "active_accounts": 49601,
+      "new_accounts": 5794,
+      "active_contracts": 50042
+    },
+    {
+      "date": "2026-10-27",
+      "txns": 604320,
+      "active_accounts": 61855,
+      "new_accounts": 9440,
+      "active_contracts": 62289
+    },
+    {
+      "date": "2026-10-28",
+      "txns": 520096,
+      "active_accounts": 49273,
+      "new_accounts": 9236,
+      "active_contracts": 50535
+    },
+    {
+      "date": "2026-10-29",
+      "txns": 649103,
+      "active_accounts": 49292,
+      "new_accounts": 6112,
+      "active_contracts": 51017
+    },
+    {
+      "date": "2026-10-30",
+      "txns": 691420,
+      "active_accounts": 47349,
+      "new_accounts": 17871,
+      "active_contracts": 62196
+    },
+    {
+      "date": "2026-10-31",
+      "txns": 502649,
+      "active_accounts": 46019,
+      "new_accounts": 17100,
+      "active_contracts": 48418
+    },
+    {
+      "date": "2026-11-01",
+      "txns": 509345,
+      "active_accounts": 46478,
+      "new_accounts": 14317,
+      "active_contracts": 60683
+    },
+    {
+      "date": "2026-11-02",
+      "txns": 522358,
+      "active_accounts": 48060,
+      "new_accounts": 12718,
+      "active_contracts": 49151
+    },
+    {
+      "date": "2026-11-03",
+      "txns": 597189,
+      "active_accounts": 72343,
+      "new_accounts": 8510,
+      "active_contracts": 59087
+    },
+    {
+      "date": "2026-11-04",
+      "txns": 706690,
+      "active_accounts": 79164,
+      "new_accounts": 12874,
+      "active_contracts": 64771
+    },
+    {
+      "date": "2026-11-05",
+      "txns": 848794,
+      "active_accounts": 78560,
+      "new_accounts": 9988,
+      "active_contracts": 77822
+    },
+    {
+      "date": "2026-11-06",
+      "txns": 717484,
+      "active_accounts": 78574,
+      "new_accounts": 6242,
+      "active_contracts": 75369
+    },
+    {
+      "date": "2026-11-07",
+      "txns": 682432,
+      "active_accounts": 77076,
+      "new_accounts": 5226,
+      "active_contracts": 73823
+    },
+    {
+      "date": "2026-11-08",
+      "txns": 609504,
+      "active_accounts": 79184,
+      "new_accounts": 5018,
+      "active_contracts": 78892
+    },
+    {
+      "date": "2026-11-09",
+      "txns": 895302,
+      "active_accounts": 77752,
+      "new_accounts": 11970,
+      "active_contracts": 145602
+    },
+    {
+      "date": "2026-11-10",
+      "txns": 970505,
+      "active_accounts": 177510,
+      "new_accounts": 8343,
+      "active_contracts": 130339
+    },
+    {
+      "date": "2026-11-11",
+      "txns": 891297,
+      "active_accounts": 77831,
+      "new_accounts": 7087,
+      "active_contracts": 114185
+    },
+    {
+      "date": "2026-11-12",
+      "txns": 891523,
+      "active_accounts": 85370,
+      "new_accounts": 11242,
+      "active_contracts": 112193
+    },
+    {
+      "date": "2026-11-13",
+      "txns": 1036324,
+      "active_accounts": 85595,
+      "new_accounts": 6304,
+      "active_contracts": 109934
+    }
+  ]
+}

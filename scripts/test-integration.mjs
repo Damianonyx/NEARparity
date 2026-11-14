@@ -9,7 +9,7 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { test } from 'node:test';
 import { fileURLToPath } from 'node:url';
-import { CHAIN, WALLET, existingIn, heightAt, missing, supplyAt } from './fixtures/mock-network.mjs';
+import { CHAIN, USAGE, WALLET, existingIn, heightAt, missing, supplyAt } from './fixtures/mock-network.mjs';
 
 const ROOT = fileURLToPath(new URL('..', import.meta.url));
 const NOW = '2026-11-14T12:00:00.000Z';
@@ -74,6 +74,19 @@ test('run 1: fresh build from an empty data directory', async () => {
   assert.equal(L.official_dashboard.wallet_row.near_amount, 777.5);
   // Simulator defaults derived from the window.
   assert.ok(Math.abs(L.simulator.default_result.value - (near(expIssuance) / 30) * 2 / (5 / 10_000)) < 1e-3);
+  // Network usage (NearBlocks charts) vs the previous 30 days, and the detected structural break.
+  assert.equal(m.usage_txns.value, USAGE.txnsAfter); assert.equal(m.usage_txns.change_pct, 0);
+  assert.equal(m.usage_active_accounts.value, USAGE.accounts);
+  assert.equal(m.usage_new_accounts.value, 30 * USAGE.newAccounts);
+  assert.equal(m.usage_active_contracts.reported_by, 'NearBlocks');
+  assert.equal(m.intents_volume.change_pct, 0);
+  assert.deepEqual([L.meta.usage_largest_txn_drop.to, L.meta.usage_largest_txn_drop.txns_after], [USAGE.stepDay, USAGE.txnsAfter]);
+  assert.ok(Math.abs(L.meta.usage_largest_txn_drop.change - (USAGE.txnsAfter / USAGE.txnsBefore - 1)) < 1e-12);
+  const wk = L.series_weekly.find((r) => r.period_start.startsWith('2026-04-26'));
+  assert.equal(wk.txns_avg, USAGE.txnsAfter); assert.equal(wk.intents_volume_usd, 7 * 1e8);
+  // Every section ships the query behind it, with the actual blocks used.
+  for (const k of ['issuance', 'supply', 'intents', 'coverage', 'weekly', 'usage', 'simulator']) assert.ok(L.queries[k]?.length, `queries.${k}`);
+  assert.match(L.queries.supply[0].code, new RegExp(String(L.metrics.supply_start.block_height)));
   assert.equal((await readdir(join(dir, 'data/snapshots'))).length, 1);
   const S = await read('status.json');
   assert.equal(S.consecutive_partial_runs, 0);

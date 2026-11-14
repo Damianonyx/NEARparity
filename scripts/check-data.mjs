@@ -18,7 +18,8 @@ need(L.meta && 'wallet_created_at' in L.meta && 'holders_revenue_labelled_from' 
 const REQUIRED = ['issuance', 'daily_issuance', 'issuance_annualised_rate', 'supply_start', 'supply_end', 'supply_change', 'derived_burns',
   'intents_volume', 'intents_gross_fees', 'intents_net_revenue', 'intents_holders_revenue', 'net_revenue_capture_rate', 'buyback_allocation',
   'avg_daily_volume', 'price_avg', 'price_current', 'buyback_proxy_near', 'wallet_net_accumulation', 'wallet_net_excl_internal',
-  'verified_purchases', 'coverage_verified', 'coverage_proxy', 'coverage_wallet'];
+  'verified_purchases', 'coverage_verified', 'coverage_proxy', 'coverage_wallet',
+  'usage_active_accounts', 'usage_txns', 'usage_new_accounts', 'usage_active_contracts'];
 for (const k of REQUIRED) need(L.metrics?.[k], `metrics.${k} is required`);
 for (const [k, m] of Object.entries(L.metrics || {})) {
   if (k === 'epoch_checks') continue;
@@ -37,6 +38,7 @@ need(Array.isArray(L.series_weekly), 'series_weekly must be an array');
 for (const r of L.series_weekly || []) need(iso(r.period_start) && iso(r.period_end) && typeof r.issuance_near === 'number', `series row ${r.period_start} malformed`);
 need(L.simulator?.formula && L.simulator?.default_result, 'simulator block is required');
 need(Array.isArray(L.sources) && L.sources.length >= 5, 'sources list is required');
+for (const k of ['issuance', 'supply', 'intents', 'coverage', 'weekly', 'usage', 'simulator']) need(Array.isArray(L.queries?.[k]), `queries.${k} is required (the query behind each figure)`);
 
 if (errors.length) { console.log(`${errors.length} contract violation(s):\n- ${errors.join('\n- ')}`); process.exitCode = 1; }
 else console.log(`data contract ok: ${Object.keys(L.metrics).length} metrics, ${L.series_weekly.length} weekly rows, generated ${L.generated_at}`);
