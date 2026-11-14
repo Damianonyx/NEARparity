@@ -75,8 +75,15 @@ export function parityRequiredDailyVolume({ dailyIssuanceNear, priceUsd, capture
   if (denominator === 0) {
     return { finite: false, value: null, reason: 'No finite volume achieves parity under these assumptions.' };
   }
-  return { finite: true, value: (dailyIssuanceNear * priceUsd) / denominator, reason: null };
+  const value = (dailyIssuanceNear * priceUsd) / denominator;
+  // Tiny positive rates can overflow to Infinity or to values no display can represent meaningfully.
+  if (!Number.isFinite(denominator) || !Number.isFinite(value) || value > PARITY_VOLUME_LIMIT_USD) {
+    return { finite: false, value: null, out_of_range: true, reason: 'Out of range: under these inputs the required volume exceeds $1 quadrillion per day, so no realistic volume achieves parity.' };
+  }
+  return { finite: true, value, reason: null };
 }
+/** Largest required daily volume shown as a number (USD); above it the scenario is reported as out of range. */
+export const PARITY_VOLUME_LIMIT_USD = 1e15;
 
 /** UTC midnight (as a Date) of the day containing `date`. */
 export function utcMidnight(date) {

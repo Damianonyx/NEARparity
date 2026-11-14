@@ -87,7 +87,8 @@ const chain = await group('chain', async () => {
   });
   const walletErrors = [];
   if (wallet?.account_id) {
-    const samePools = (bal) => JSON.stringify(bal?.pools ?? []) === JSON.stringify(pools);
+    // Reuse a cached balance only if it exists and was read with the same staking pools.
+    const samePools = (bal) => !!bal && typeof bal.total_yocto === 'string' && JSON.stringify(bal.pools ?? []) === JSON.stringify(pools);
     const need = instants.filter((i) => !samePools(bcache.boundaries[i].wallets?.[wallet.account_id]));
     await mapLimit(need, 2, async (iso) => {
       try { bcache.boundaries[iso].wallets[wallet.account_id] = await walletBalances(rpc, wallet.account_id, bcache.boundaries[iso].block_hash, { pools }); } catch (e) { walletErrors.push(`${iso}: ${e.message}`); }
@@ -219,6 +220,21 @@ if (chain) {
   const inWin = chain.records.filter((r) => { const t = Date.parse(r.start_time); return t >= ws && t < we; });
   const bStart = chain.boundaries[window.start]; const bEnd = chain.boundaries[window.end];
   const rec = reconcileBurns({ mints: inWin.map((r) => r.mint_yocto), supplyStart: bStart.total_supply, supplyEnd: bEnd.total_supply });
+  // Publication gate: structural problems (a missing or duplicate epoch, supply rising inside an epoch) in or next to
+  // the window, or negative derived burns, mean the window's chain figures cannot be trusted. They are then not
+  // published: the chain group counts as failed, so the previous good values are kept (stale) and the run is partial.
+  // A mint below the cap is a disclosed warning, not a blocker.
+  const BLOCKING = /missing or extra epoch|duplicate boundary|supply rose inside the epoch/;
+  const blockingChecks = chain.checks.filter((c) => { const t = Date.parse(c.epoch_start_time); return t >= ws - 2 * DAY_MS && t <= we + DAY_MS && c.issues.some((i) => BLOCKING.test(i)); });
+  const integrity = [
+    ...blockingChecks.map((c) => `epoch ${c.epoch_start_height} (${c.epoch_start_time}): ${c.issues.join('; ')}`),
+    ...(rec.derivedBurns < 0n ? [`derived burns are negative (${yoctoToNear(rec.derivedBurns).toFixed(2)} NEAR): issuance is incomplete`] : []),
+    ...(inWin.length === 0 ? ['no epoch boundary in the window'] : []),
+  ];
+  if (integrity.length) {
+    groupErrors.chain = `integrity check failed: ${integrity.slice(0, 3).join(' | ')}`;
+    log(`! chain integrity check failed: ${integrity.join(' | ')}`);
+  }
   const issuanceNear = yoctoToNear(rec.issuance);
   const lastRate = chain.records.at(-1).max_inflation_rate ?? ['?', '?'];
   const flagged = chain.checks.filter((c) => c.issues.length);
@@ -248,9 +264,10 @@ if (chain) {
     flagged: flagged.slice(-20), window_mint_to_cap_ratio: ratios.length ? { min: Math.min(...ratios), max: Math.max(...ratios) } : null,
     method: 'Within each epoch supply must not rise (only burns); boundaries must be one epoch apart; each mint should be ≤ and close to supply × max_inflation_rate × epoch duration ÷ 31,556,952 s (ratio < 0.95 or > 1.001 is flagged).',
   });
-} else {
+}
+if (!chain || groupErrors.chain) { // no chain data, or it failed the integrity gate: publish nothing new from it
   for (const k of ['issuance', 'daily_issuance', 'issuance_annualised_rate', 'supply_start', 'supply_end', 'supply_change', 'derived_burns']) {
-    set(k, ['chain'], unavailable('NEAR', SRC_CHAIN, 'See chain method.', `Chain data failed this run: ${groupErrors.chain}`));
+    set(k, ['chain'], unavailable(M[k]?.unit ?? 'NEAR', SRC_CHAIN, 'See chain method.', `Chain data failed this run: ${groupErrors.chain}`));
   }
 }
 
@@ -316,7 +333,8 @@ set('buyback_proxy_near', ['llama_holders', 'price'], px?.value != null
 // Buyback wallet: net accumulation, excluding moves between NEAR's own revenue wallets.
 const walletLabel = wallet?.official_source ? wallet.label : 'unconfirmed wallet';
 const related = new Set(wallet?.related_revenue_wallets?.accounts || []);
-const internal = (start, end) => internalTransfers({ txns: transferHistory?.txns, ftTxns: transferHistory?.ft_txns, complete: transferHistory?.complete }, wallet?.account_id, related, start, end);
+const internalRaw = (start, end) => internalTransfers({ txns: transferHistory?.txns, ftTxns: transferHistory?.ft_txns, complete: transferHistory?.complete }, wallet?.account_id, related, start, end);
+const internal = (start, end) => { const r = internalRaw(start, end); return r?.invalid ? null : r; };
 const WALLET_SRC = `${SRC_CHAIN}: view_account, wrap.near ft_balance_of, intents.near mt_balance_of (nep141:wrap.near)${pools.length ? `, staking pools ${pools.join(', ')}` : ''}`;
 if (chain && wallet?.account_id) {
   const a = chain.boundaries[window.start].wallets?.[wallet.account_id]; const b = chain.boundaries[window.end].wallets?.[wallet.account_id];
@@ -344,7 +362,8 @@ if (!M.wallet_net_accumulation) set('wallet_net_accumulation', ['chain'], unavai
       status: 'measured', derived: true, wallet: wallet.account_id, wallet_label: walletLabel,
     }));
   } else {
-    set('wallet_internal_transfers', ['chain', 'nearblocks'], unavailable('NEAR', 'NearBlocks transfers', 'Internal transfers.', 'Transfer history or wallet balances unavailable.'));
+    const bad = internalRaw(window.start, window.end)?.invalid;
+    set('wallet_internal_transfers', ['chain', 'nearblocks'], unavailable('NEAR', 'NearBlocks transfers', 'Internal transfers.', bad ? `${bad.length} transfer record(s) in the window have malformed amounts (${bad.slice(0, 2).join(', ')}); not counted as zero.` : 'Transfer history or wallet balances unavailable.'));
     set('wallet_net_excl_internal', ['chain', 'nearblocks'], unavailable('NEAR', 'Archival RPC balances + NearBlocks transfers', 'Net accumulation minus internal transfers.', 'Wallet balances or transfer history unavailable.'));
   }
 }
@@ -431,13 +450,16 @@ if (chain) {
     const mints = chain.records.filter((r) => { const t = Date.parse(r.start_time); return t >= s && t < e; }).map((r) => r.mint_yocto);
     const a = chain.boundaries[bk.start]; const b = chain.boundaries[bk.end];
     const rec = reconcileBurns({ mints, supplyStart: a.total_supply, supplyEnd: b.total_supply });
+    const blocked = chain.checks.some((c) => { const t = Date.parse(c.epoch_start_time); return t >= s - DAY_MS && t <= e + DAY_MS && c.issues.some((i) => /missing or extra epoch|duplicate boundary|supply rose inside the epoch/.test(i)); }) || rec.derivedBurns < 0n;
     const wa = a.wallets?.[wallet?.account_id]; const wb = b.wallets?.[wallet?.account_id];
     const p = proxyNear(bk.start, bk.end);
     const walletNet = wa && wb ? yoctoToNear(toYocto(wb.total_yocto) - toYocto(wa.total_yocto)) : null;
     const internalNet = internal(bk.start, bk.end)?.net ?? null;
     return {
       period_start: bk.start, period_end: bk.end, days: bk.days, partial: bk.partial,
-      issuance_near: yoctoToNear(rec.issuance), supply_change_near: yoctoToNear(rec.supplyChange), derived_burns_near: yoctoToNear(rec.derivedBurns),
+      ...(blocked
+        ? { issuance_near: null, supply_change_near: null, derived_burns_near: null, chain_integrity_issue: rec.derivedBurns < 0n ? 'negative derived burns (incomplete issuance)' : 'epoch continuity check failed' }
+        : { issuance_near: yoctoToNear(rec.issuance), supply_change_near: yoctoToNear(rec.supplyChange), derived_burns_near: yoctoToNear(rec.derivedBurns) }),
       buyback_proxy_near: p?.value ?? null, buyback_proxy_status: p?.value != null ? 'proxy' : 'unavailable',
       wallet_net_near: walletNet, wallet_internal_near: internalNet,
       wallet_net_excl_internal_near: walletNet != null && internalNet != null ? walletNet - internalNet : null,
@@ -470,7 +492,9 @@ for (const [key, rec] of Object.entries(M)) {
   if (!prev || !prev.status || prev.status === 'unavailable' || !['measured', 'estimate', 'proxy'].includes(prev.status)) continue;
   const failedDep = (groupOf[key] || []).find((g) => failedGroups.has(g));
   if (failedDep || rec.status === 'unavailable') {
-    M[key] = { ...prev, stale: true, stale_since: prev.stale_since ?? prevLatest.generated_at, stale_reason: failedDep ? `${failedDep} failed this run: ${groupErrors[failedDep]}` : `Unavailable this run: ${rec.reason}` };
+    // Only metrics fed by a core source make the refresh incomplete; optional sources (BigQuery, the dashboard) do not.
+    const optional = !(groupOf[key] || []).some((g) => !OPTIONAL_GROUPS.has(g));
+    M[key] = { ...prev, stale: true, stale_since: prev.stale_since ?? prevLatest.generated_at, stale_reason: failedDep ? `${failedDep} failed this run: ${groupErrors[failedDep]}` : `Unavailable this run: ${rec.reason}`, ...(optional ? { stale_optional: true } : {}) };
     stale[key] = M[key].stale_since;
   }
 }
@@ -479,7 +503,9 @@ if (series && prevLatest?.series_weekly) {
   const prevBy = new Map(prevLatest.series_weekly.map((r) => [r.period_start, r]));
   for (const r of series) {
     const p = prevBy.get(r.period_start);
-    if (!p) continue;
+    // Reuse a previous value only for exactly the same period (same start, end and length), never a shorter one.
+    if (!p || p.period_end !== r.period_end || p.days !== r.days) continue;
+    if (r.issuance_near == null && p.issuance_near != null && !p.chain_integrity_issue) { r.issuance_near = p.issuance_near; r.supply_change_near = p.supply_change_near; r.derived_burns_near = p.derived_burns_near; r.chain_stale = true; }
     if (r.buyback_proxy_near == null && p.buyback_proxy_near != null) { r.buyback_proxy_near = p.buyback_proxy_near; r.buyback_proxy_status = 'proxy'; r.buyback_proxy_stale = true; }
     if (r.wallet_net_excl_internal_near == null && p.wallet_net_excl_internal_near != null) { r.wallet_net_excl_internal_near = p.wallet_net_excl_internal_near; r.wallet_internal_near = p.wallet_internal_near; r.wallet_stale = true; }
     for (const f of ['intents_volume_usd', 'active_accounts_avg', 'txns_avg', 'active_contracts_avg']) if (r[f] == null && p[f] != null) { r[f] = p[f]; r[`${f}_stale`] = true; }
@@ -588,7 +614,11 @@ const queries = {
 };
 
 // ---------- health ----------
-const partial = failedGroups.size > 0;
+// Health reflects data completeness, not only thrown errors: a core metric kept from a previous run (e.g. an API
+// answered 200 but omitted the latest day) or a stale weekly series makes the refresh partial.
+const incomplete = Object.keys(stale).filter((k) => k === 'series_weekly' || (M[k] && !M[k].stale_optional));
+const partial = failedGroups.size > 0 || incomplete.length > 0;
+if (incomplete.length) notes.incomplete_metrics = incomplete;
 const consecutivePartial = partial ? (prevStatus.consecutive_partial_runs ?? 0) + 1 : 0;
 const rpcUsage = Object.fromEntries(Object.entries(rpc.usage).map(([u, x]) => [u, x]));
 const fallbackServed = Object.entries(rpc.usage).filter(([u]) => u !== ARCHIVAL_URLS[0]).reduce((a, [, x]) => a + x.served, 0);
@@ -634,7 +664,7 @@ if (!anyOk && prevLatest) {
   // One snapshot per UTC day (the first successful build of the day); earlier snapshots are never removed.
   const today = generatedAt.slice(0, 10);
   const existing = (await store.list('data/snapshots/')).filter((f) => f.startsWith(today));
-  if (!existing.length) {
+  if (!partial && !existing.length) {
     const stamp = generatedAt.replace(/[:]/g, '-').replace(/\.\d+Z$/, 'Z');
     await store.writeJson(`data/snapshots/${stamp}.json`, latest);
     log(`  snapshot data/snapshots/${stamp}.json`);

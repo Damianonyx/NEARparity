@@ -46,8 +46,9 @@ function walletAt(h) {
   if (t < WALLET.created) return null;
   let native = BigInt(h - ats(WALLET.created)) * WALLET.rate;
   if (t >= WALLET.internalAt) native += WALLET.internal;
-  if (t >= WALLET.stakeAt) native -= WALLET.stake;
-  return { native, wnear: t >= WALLET.wnearAt ? WALLET.wnear : 0n, staked: t >= WALLET.stakeAt ? WALLET.stake : 0n };
+  const stakes = !process.env.MOCK_NO_STAKE && t >= WALLET.stakeAt;
+  if (stakes) native -= WALLET.stake;
+  return { native, wnear: t >= WALLET.wnearAt ? WALLET.wnear : 0n, staked: stakes ? WALLET.stake : 0n };
 }
 
 const json = (obj, status = 200) => new Response(JSON.stringify(obj), { status, headers: { 'content-type': 'application/json' } });
@@ -104,7 +105,7 @@ function walletTxns() {
   add(WALLET.created + 10, 'multisignature.near', WALLET.id, [{ action: 'CREATE_ACCOUNT' }, { action: 'TRANSFER', deposit: 5e24 }]);
   for (let s = WALLET.created + DAY; s < nowS() - 3600; s += DAY) add(s, 'intents.near', WALLET.id, [{ action: 'TRANSFER', deposit: 864e24 }]);
   add(WALLET.internalAt, WALLET.related, WALLET.id, [{ action: 'TRANSFER', deposit: Number(WALLET.internal) }]);
-  add(WALLET.stakeAt, WALLET.id, WALLET.pool, [{ action: 'FUNCTION_CALL', method: 'deposit_and_stake', deposit: Number(WALLET.stake) }]);
+  if (!process.env.MOCK_NO_STAKE) add(WALLET.stakeAt, WALLET.id, WALLET.pool, [{ action: 'FUNCTION_CALL', method: 'deposit_and_stake', deposit: Number(WALLET.stake) }]);
   return rows.sort((a, b) => (BigInt(b.block_timestamp) > BigInt(a.block_timestamp) ? 1 : -1));
 }
 // NearBlocks daily charts: constant usage with one structural step on 2026-04-02 (txns 3M → 1M, contracts 2M → 100k).
@@ -126,7 +127,7 @@ function nearblocks(url) {
   const cursor = Number(u.searchParams.get('cursor') || 0);
   const per = Number(u.searchParams.get('per_page') || 25);
   if (u.pathname.endsWith('/ft-txns')) {
-    return json({ txns: [{ event_index: 'e1', transaction_hash: 'tf', block_timestamp: nbTime(WALLET.wnearAt), affected_account_id: WALLET.id, involved_account_id: WALLET.related, delta_amount: WALLET.wnear.toString(), cause: 'TRANSFER', ft: { contract: 'wrap.near', symbol: 'wNEAR', decimals: 24 } }] });
+    return json({ txns: [{ event_index: 'e1', transaction_hash: 'tf', block_timestamp: nbTime(WALLET.wnearAt), affected_account_id: WALLET.id, involved_account_id: WALLET.related, delta_amount: process.env.MOCK_BAD_FT ? '2e27' : WALLET.wnear.toString(), cause: 'TRANSFER', ft: { contract: 'wrap.near', symbol: 'wNEAR', decimals: 24 } }] });
   }
   receiptPagesServed++;
   if (Number(process.env.MOCK_NEARBLOCKS_FAIL_PAGE) === receiptPagesServed) return json({ message: 'boom' }, 500);

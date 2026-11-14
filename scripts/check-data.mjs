@@ -35,7 +35,23 @@ if (mm.issuance?.value_yocto && mm.supply_change?.value_yocto && mm.derived_burn
   need(BigInt(mm.issuance.value_yocto) - BigInt(mm.supply_change.value_yocto) === BigInt(mm.derived_burns.value_yocto), 'burn reconciliation must hold exactly: issuance − supply change = burns');
 }
 need(Array.isArray(L.series_weekly), 'series_weekly must be an array');
-for (const r of L.series_weekly || []) need(iso(r.period_start) && iso(r.period_end) && typeof r.issuance_near === 'number', `series row ${r.period_start} malformed`);
+for (const r of L.series_weekly || []) {
+  need(iso(r.period_start) && iso(r.period_end) && (typeof r.issuance_near === 'number' || (r.issuance_near === null && typeof r.chain_integrity_issue === 'string')), `series row ${r.period_start} malformed`);
+  need(Date.parse(r.period_end) - Date.parse(r.period_start) === r.days * 86_400_000, `series row ${r.period_start}: days does not match its period`);
+  if (typeof r.derived_burns_near === 'number') need(r.derived_burns_near >= 0, `series row ${r.period_start}: negative derived burns`);
+}
+// Publication gates: no negative burns as a fresh measurement; every metric's period is a real, ordered interval;
+// fresh (non-stale) window metrics must cover exactly the published window.
+if (mm.derived_burns?.value != null) need(mm.derived_burns.value >= 0, 'derived_burns must not be negative');
+for (const [k, m] of Object.entries(L.metrics || {})) {
+  if (k === 'epoch_checks' || m.status === 'unavailable') continue;
+  if (m.period_start != null || m.period_end != null) need(iso(m.period_start) && iso(m.period_end) && Date.parse(m.period_start) <= Date.parse(m.period_end), `metrics.${k}: invalid period`);
+  const windowed = m.period_start && m.period_end && Date.parse(m.period_end) - Date.parse(m.period_start) === 30 * 86_400_000;
+  if (windowed && !m.stale && !m.snapshot) need(m.period_start === L.window.start && m.period_end === L.window.end, `metrics.${k}: fresh 30-day value is not for the published window`);
+}
+need(typeof L.partial_refresh === 'boolean', 'partial_refresh must be a boolean');
+const coreStale = Object.entries(L.metrics || {}).filter(([, m]) => m.stale && !m.stale_optional).map(([k]) => k);
+if (coreStale.length) need(L.partial_refresh === true, `stale core metrics (${coreStale.slice(0, 3).join(', ')}) but partial_refresh is false`);
 need(L.simulator?.formula && L.simulator?.default_result, 'simulator block is required');
 need(Array.isArray(L.sources) && L.sources.length >= 5, 'sources list is required');
 for (const k of ['issuance', 'supply', 'intents', 'coverage', 'weekly', 'usage', 'simulator']) need(Array.isArray(L.queries?.[k]), `queries.${k} is required (the query behind each figure)`);
