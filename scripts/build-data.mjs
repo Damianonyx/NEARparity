@@ -9,12 +9,12 @@ import {
   utcWindow, weeklyBuckets, yoctoToNear,
 } from './lib/calc.mjs';
 import { createStatus, createStore, getJson } from './lib/io.mjs';
-import { USAGE_FIELDS, USAGE_URL, changeCorrelation, changePct, llamaWindowSum, parseUsage, priorWindow, windowStat } from './lib/usage.mjs';
+import { USAGE_FIELDS, USAGE_URL, changeCorrelation, changePct, leadLag, leadVerdict, llamaWindowSum, parseUsage, priorWindow, windowStat } from './lib/usage.mjs';
 import { ARCHIVAL_URLS, blockBefore, createRpc, epochChecks, mapLimit, sampleInflationRates, walkEpochs, walletBalances } from './lib/near.mjs';
 import { DASHBOARD_URL, LLAMA, fetchDashboard, fetchLlamaSeries, fetchPrice, fetchTransfers } from './lib/sources.mjs';
 import { discoverStakingPools, firstPositiveDay, internalTransfers, walletCreatedAt } from './lib/wallet.mjs';
 import { traceMetrics, dailyTraceMetrics } from './lib/trace.mjs';
-import { DAILY_TRACE_SQL, FRESHNESS_SQL, daysToQuery, gcpAccessToken, mergeDaily, runQuery, sumDays } from './lib/bigquery.mjs';
+import { DAILY_TRACE_SQL, DAILY_USAGE_SQL, FRESHNESS_SQL, daysToQuery, gcpAccessToken, mergeDaily, runQuery, sumDays } from './lib/bigquery.mjs';
 import { readFile } from 'node:fs/promises';
 
 export const SCHEMA_VERSION = 2;
@@ -112,8 +112,10 @@ const bq = {
   project: process.env.NEAR_PARITY_GCP_PROJECT || bqConf?.project, serviceAccount: process.env.NEAR_PARITY_GCP_SA || bqConf?.service_account,
   provider: process.env.NEAR_PARITY_GCP_PROVIDER || bqConf?.workload_identity_provider,
   maxGbPerDay: bqConf?.max_gb_per_day ?? 2, maxDays: bqConf?.max_days_per_run ?? 35,
+  usageFrom: bqConf?.usage_from ?? BACKFILL_FROM.slice(0, 10), usageMaxDays: bqConf?.usage_max_days_per_run ?? 400, usageMaxGbPerDay: bqConf?.usage_max_gb_per_day ?? 0.5,
 };
 let bqDaily = await store.readJson('data/bigquery-daily.json', null);
+let bqUsage = await store.readJson('data/bigquery-usage.json', null);
 const bqRun = await group('bigquery', async () => {
   if (!wallet?.account_id || !bq.project) return { skipped: 'not configured' };
   const token = await gcpAccessToken(bq);
@@ -127,7 +129,29 @@ const bqRun = await group('bigquery', async () => {
   const lastDay = state.last_day && state.last_day >= new Date(Date.parse(window.start) - DAY_MS).toISOString().slice(0, 10) ? state.last_day : null;
   const range = daysToQuery({ lastDay, from: winStartDay, latestUnix, maxDays: bq.maxDays });
   const latestIso = new Date(latestUnix * 1000).toISOString();
-  if (!range) return { queried: null, latest_block_utc: latestIso, bytes: fresh.bytes };
+  const out = { queried: range, latest_block_utc: latestIso, bytes: fresh.bytes };
+  // Network usage (transactions, active accounts, contract usage): every complete day since usage_from, once.
+  const uRange = daysToQuery({ lastDay: bqUsage?.last_day ?? null, from: bq.usageFrom, latestUnix, maxDays: bq.usageMaxDays });
+  if (uRange) {
+    const uDays = (Date.parse(uRange.end) - Date.parse(uRange.start)) / DAY_MS;
+    const u = await runQuery({ token, project: bq.project, sql: DAILY_USAGE_SQL, params: uRange, maxBytes: uDays * bq.usageMaxGbPerDay * 1e9 });
+    const days = { ...(bqUsage?.days || {}) };
+    const by = new Map(u.rows.map((r) => [r.day, r]));
+    for (let t = Date.parse(uRange.start); t < Date.parse(uRange.end); t += DAY_MS) {
+      const d = new Date(t).toISOString().slice(0, 10); const r = by.get(d);
+      if (!r) throw new Error(`BigQuery usage: no rows for ${d}`); // every day has transactions; a gap means bad data
+      days[d] = { txns: Number(r.txns), active_accounts: Number(r.active_accounts), active_contracts: Number(r.active_contracts), function_calls: Number(r.function_calls) };
+    }
+    bqUsage = {
+      description: 'Daily network usage from the BigQuery public NEAR dataset (scripts/lib/bigquery.mjs, DAILY_USAGE_SQL): transactions, distinct signers, distinct contracts receiving FUNCTION_CALL actions, and function calls, per UTC day.',
+      dataset: 'bigquery-public-data.crypto_near_mainnet_us', updated_at: new Date().toISOString(), latest_block_utc: latestIso,
+      last_day: new Date(Date.parse(uRange.end) - DAY_MS).toISOString().slice(0, 10), days,
+    };
+    await store.writeJson('data/bigquery-usage.json', bqUsage);
+    log(`  BigQuery usage: ${uRange.start} → ${uRange.end} (${uDays} days), ${(u.bytes / 1e9).toFixed(2)} GB processed`);
+    out.usage_queried = uRange; out.bytes += u.bytes;
+  }
+  if (!range) return out;
   const nDays = (Date.parse(range.end) - Date.parse(range.start)) / DAY_MS;
   const res = await runQuery({
     token, project: bq.project, sql: DAILY_TRACE_SQL, maxBytes: nDays * bq.maxGbPerDay * 1e9,
@@ -140,7 +164,7 @@ const bqRun = await group('bigquery', async () => {
   };
   await store.writeJson('data/bigquery-daily.json', bqDaily);
   log(`  BigQuery: ${range.start} → ${range.end} (${nDays} days), ${(res.bytes / 1e9).toFixed(2)} GB processed`);
-  return { queried: range, latest_block_utc: latestIso, bytes: fresh.bytes + res.bytes, job_id: res.job_id };
+  return { ...out, bytes: out.bytes + res.bytes, job_id: res.job_id };
 });
 if (bqRun?.skipped) log(`  BigQuery trace skipped: ${bqRun.skipped}`);
 if (bqRun && !bqRun.skipped) setStatus('bigquery', { ok: true, url: 'https://bigquery.googleapis.com' });
@@ -157,6 +181,10 @@ const usage = await group('usage', async () => {
   return { rows };
 });
 const usageRows = usage?.rows ?? (await store.readJson('data/usage.json', null))?.rows ?? null;
+const bqUsageRows = bqUsage?.days ? Object.entries(bqUsage.days).map(([date, d]) => ({ date, ...d })).sort((a, b) => a.date.localeCompare(b.date)) : null;
+// Weekly/derived usage prefers BigQuery when it covers the whole range; NearBlocks otherwise (and for 2025).
+const bqCovers = (start, end, field = 'txns') => !!bqUsageRows && windowStat(bqUsageRows, field, start, end).value != null;
+const usageFor = (start, end) => (bqCovers(start, end) ? bqUsageRows : usageRows);
 
 // ---------- data-derived dates (never hard-coded in the UI) ----------
 const meta = {
@@ -164,9 +192,10 @@ const meta = {
   wallet_created_at: walletCreatedAt(transferHistory?.txns, wallet?.account_id) ?? prevLatest?.meta?.wallet_created_at ?? null,
   holders_revenue_labelled_from: firstPositiveDay(llama.holders?.series) ?? prevLatest?.meta?.holders_revenue_labelled_from ?? null,
   staking_pools: pools,
-  // Largest single-day fall in NearBlocks transactions since backfill_from (a structural break worth showing).
+  usage_source: bqCovers(BACKFILL_FROM, window.end) ? 'BigQuery' : 'NearBlocks',
+  // Largest single-day fall in daily transactions since backfill_from (a structural break worth showing).
   usage_largest_txn_drop: (() => {
-    const r = (usageRows || []).filter((x) => x.date >= BACKFILL_FROM.slice(0, 10));
+    const r = ((bqCovers(BACKFILL_FROM, window.end) ? bqUsageRows : usageRows) || []).filter((x) => x.date >= BACKFILL_FROM.slice(0, 10) && x.date < window.end.slice(0, 10));
     let best = null;
     for (let i = 1; i < r.length; i++) {
       const a = r[i - 1]; const b = r[i];
@@ -337,7 +366,25 @@ ratioMetric('coverage_wallet', ['chain', 'nearblocks'], 'wallet_net_excl_interna
 const prior = priorWindow(window.start, window.end);
 const PW = { prior_period_start: prior.start, prior_period_end: prior.end };
 const USAGE_SRC = `NearBlocks daily charts: ${USAGE_URL}`;
+const BQ_USAGE_SRC = 'BigQuery public NEAR dataset (bigquery-public-data.crypto_near_mainnet_us), filtered on block_date: data/bigquery-usage.json';
+const BQ_DEF = {
+  active_accounts: 'distinct transaction signers per UTC day (transactions.signer_account_id)',
+  txns: 'transactions per UTC day (rows of transactions)',
+  active_contracts: 'distinct accounts receiving FUNCTION_CALL actions per UTC day (receipt_actions.receipt_receiver_account_id)',
+  function_calls: 'FUNCTION_CALL receipt actions per UTC day (receipt_actions)',
+};
 const usageMetric = (key, field, agg, unit, label) => {
+  if (BQ_DEF[field] && bqCovers(prior.start, window.end, field)) {
+    const now = windowStat(bqUsageRows, field, window.start, window.end, agg);
+    const before = windowStat(bqUsageRows, field, prior.start, prior.end, agg);
+    const nb = usageRows ? windowStat(usageRows, field, window.start, window.end, agg).value : null;
+    return set(key, [], metric({
+      value: now.value, unit, ...W, source: BQ_USAGE_SRC, source_type: 'onchain', reported_by: 'BigQuery',
+      method: `${label} Mean of ${now.days} daily values: ${BQ_DEF[field]}. Compared with the previous ${now.days} days. NearBlocks' own figure for the same days is kept as a cross-check (nearblocks_value).`,
+      status: 'measured', prior_value: before.value, ...PW, change_pct: changePct(now.value, before.value), nearblocks_value: nb,
+    }));
+  }
+  if (field === 'function_calls') return set(key, [], unavailable(unit, BQ_USAGE_SRC, label, 'BigQuery usage data does not cover this window and the previous one.'));
   if (!usageRows) return set(key, ['usage'], unavailable(unit, USAGE_SRC, label, `NearBlocks charts unavailable: ${groupErrors.usage}`, { reported_by: 'NearBlocks' }));
   const now = windowStat(usageRows, field, window.start, window.end, agg);
   const before = windowStat(usageRows, field, prior.start, prior.end, agg);
@@ -352,6 +399,7 @@ usageMetric('usage_active_accounts', 'active_accounts', 'mean', 'accounts/day', 
 usageMetric('usage_txns', 'txns', 'mean', 'transactions/day', 'Daily transactions.');
 usageMetric('usage_new_accounts', 'new_accounts', 'sum', 'accounts', 'New accounts created.');
 usageMetric('usage_active_contracts', 'active_contracts', 'mean', 'contracts/day', 'Daily active contracts.');
+usageMetric('usage_function_calls', 'function_calls', 'mean', 'calls/day', 'Daily contract calls.');
 if (M.intents_volume?.status === 'measured' && llama.volume) {
   const pv = llamaWindowSum(llama.volume.series, prior.start, prior.end);
   Object.assign(M.intents_volume, { prior_value: pv, ...PW, change_pct: changePct(M.intents_volume.value, pv) });
@@ -396,9 +444,17 @@ if (chain) {
       wallet_balance_end_near: wb ? yoctoToNear(wb.total_yocto) : null,
       verified_purchases_near: (() => { const v = sumDays(bqDaily, bk.start, bk.end); return v ? yoctoToNear(v.bought) : null; })(),
       intents_volume_usd: llama.volume ? llamaWindowSum(llama.volume.series, bk.start, bk.end) : null,
-      active_accounts_avg: usageRows ? windowStat(usageRows, 'active_accounts', bk.start, bk.end).value : null,
-      txns_avg: usageRows ? windowStat(usageRows, 'txns', bk.start, bk.end).value : null,
-      active_contracts_avg: usageRows ? windowStat(usageRows, 'active_contracts', bk.start, bk.end).value : null,
+      ...(() => {
+        const rows = usageFor(bk.start, bk.end);
+        const w = (f) => (rows ? windowStat(rows, f, bk.start, bk.end).value : null);
+        return { active_accounts_avg: w('active_accounts'), txns_avg: w('txns'), active_contracts_avg: w('active_contracts'), usage_source: rows === bqUsageRows ? 'BigQuery' : rows ? 'NearBlocks' : null };
+      })(),
+      price_avg_usd: (() => {
+        if (!price?.byDay) return null;
+        let sum = 0; let n = 0;
+        for (let t = s; t < e; t += DAY_MS) { const p = price.byDay.get(new Date(t).toISOString().slice(0, 10)); if (p == null) return null; sum += p; n++; }
+        return n ? sum / n : null;
+      })(),
     };
   });
 }
@@ -472,7 +528,18 @@ if (series) {
   meta.usage_correlation = {
     intents_volume_vs_active_accounts: ca, intents_volume_vs_txns: ct,
     method: 'Pearson correlation of week-over-week % changes, full 7-day weeks since backfill_from. Descriptive only: no lag, no causality.',
+    usage_source: full.every((r) => r.usage_source === 'BigQuery') ? 'BigQuery' : 'NearBlocks',
   };
+  // The track hypothesis: is Intents volume a better leading indicator of network usage than NEAR price?
+  const px = full.map((r) => r.price_avg_usd);
+  const li = { usage_source: meta.usage_correlation.usage_source, weeks: full.length, first_week: full[0]?.period_start ?? null, last_week: full.at(-1)?.period_start ?? null };
+  for (const [key, field, label] of [['active_accounts', 'active_accounts_avg', 'daily active accounts'], ['txns', 'txns_avg', 'daily transactions']]) {
+    const u = full.map((r) => r[field]);
+    const volume = leadLag(vol, u); const priceL = leadLag(px, u);
+    li[key] = { volume, price: priceL, verdict: leadVerdict(volume, priceL, label) };
+  }
+  li.method = 'Week-over-week % changes of Intents volume (DefiLlama) and of the weekly mean NEAR price, at week t, against the change in weekly usage at week t + lag (lag 0–4). Pearson r and Spearman ρ (rank-based, robust to one-off jumps such as 2 Apr 2026). The noise band is ±1.96/√n (about 95%): a lead counts only if both r and ρ are positive and above it. Descriptive, not causal; about 40 weekly points.';
+  meta.leading_indicator = li;
 }
 
 // ---------- the query behind every figure (reproducible requests, with the actual blocks used) ----------
@@ -512,8 +579,10 @@ const queries = {
   ],
   weekly: [{ label: 'The same calculations per 7-day bucket from 2026-02-01 (boundary blocks in data/boundaries.json)', code: 'issuance_week = Σ mint for boundaries in the week\nproxy_week = Σ_day holders_usd ÷ price\nwallet_week = Δ wallet holdings − internal transfers' }],
   usage: [
-    { label: 'NearBlocks daily network charts (keyless)', code: `curl -s '${USAGE_URL}'` },
+    ...(bqUsage?.days ? [{ label: 'BigQuery public NEAR dataset, per UTC day (run by the refresh workflow for each new day; filtered on block_date, the partition column)', code: DAILY_USAGE_SQL }] : []),
+    { label: 'NearBlocks daily network charts (keyless; cross-check, and the 2025 baseline)', code: `curl -s '${USAGE_URL}'` },
     { label: 'Weekly values, the index, and the correlation', code: 'active_accounts_week = mean(daily active_accounts)\ntxns_week = mean(daily txns)\nintents_volume_week = Σ DefiLlama daily volume ÷ days\nindex = value ÷ value(first week from 2026-02-01) × 100\nr = pearson(week-over-week % change of volume, of active accounts), full weeks' },
+    { label: 'Leading-indicator test (the track hypothesis)', code: 'for lag in 0..4:\n  r(lag)   = pearson(Δ% volume[t], Δ% usage[t + lag])\n  rho(lag) = spearman(same pairs)\n  same for Δ% weekly mean NEAR price\nlead = lag ≥ 1 with r > 1.96/√n and rho > 1.96/√n' },
   ],
   simulator: [{ label: 'Conditional scenario', code: 'required_daily_volume_usd = daily_issuance_near × price_usd ÷ ((capture_bps ÷ 10,000) × (allocation_pct ÷ 100))' }],
 };

@@ -4,5 +4,8 @@
   "service_account": "nearparity-refresh@near-parity.iam.gserviceaccount.com",
   "workload_identity_provider": "projects/649234555729/locations/global/workloadIdentityPools/github/providers/nearparity",
   "max_gb_per_day": 2,
-  "max_days_per_run": 35
+  "max_days_per_run": 35,
+  "usage_from": "2026-02-01",
+  "usage_max_days_per_run": 400,
+  "usage_max_gb_per_day": 0.5
 }

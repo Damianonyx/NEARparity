@@ -61,3 +61,45 @@ export function changeCorrelation(a, b) {
   for (const [x, y] of pairs) { sxy += (x - mx) * (y - my); sxx += (x - mx) ** 2; syy += (y - my) ** 2; }
   return { r: sxx && syy ? sxy / Math.sqrt(sxx * syy) : null, n };
 }
+
+const pctChanges = (v) => v.slice(1).map((x, i) => (x == null || v[i] == null || v[i] === 0 ? null : (x - v[i]) / v[i]));
+const pearson = (pairs) => {
+  const n = pairs.length; if (n < 3) return null;
+  const mx = pairs.reduce((s, [x]) => s + x, 0) / n; const my = pairs.reduce((s, [, y]) => s + y, 0) / n;
+  let sxy = 0; let sxx = 0; let syy = 0;
+  for (const [x, y] of pairs) { sxy += (x - mx) * (y - my); sxx += (x - mx) ** 2; syy += (y - my) ** 2; }
+  return sxx && syy ? sxy / Math.sqrt(sxx * syy) : null;
+};
+const ranks = (a) => { // average ranks (ties share the mean rank)
+  const idx = a.map((v, i) => [v, i]).sort((p, q) => p[0] - q[0]); const r = new Array(a.length);
+  for (let i = 0; i < idx.length;) { let j = i; while (j + 1 < idx.length && idx[j + 1][0] === idx[i][0]) j++; for (let k = i; k <= j; k++) r[idx[k][1]] = (i + j) / 2 + 1; i = j + 1; }
+  return r;
+};
+
+/** Does x lead y? Correlation of week-over-week % changes of x at week t with y at week t + lag, for lag 0..maxLag.
+ *  Pearson r and Spearman rho (rank-based, robust to one-off jumps), n pairs, and an approximate 95% noise band
+ *  ±1.96/√n: |r| inside the band is indistinguishable from no relationship. Descriptive, not causal. */
+export function leadLag(x, y, maxLag = 4) {
+  const px = pctChanges(x); const py = pctChanges(y);
+  const out = [];
+  for (let lag = 0; lag <= maxLag; lag++) {
+    const pairs = [];
+    for (let t = 0; t + lag < py.length; t++) if (px[t] != null && py[t + lag] != null) pairs.push([px[t], py[t + lag]]);
+    const n = pairs.length;
+    const rx = ranks(pairs.map((p) => p[0])); const ry = ranks(pairs.map((p) => p[1]));
+    out.push({ lag, n, r: pearson(pairs), rho: n >= 3 ? pearson(rx.map((v, i) => [v, ry[i]])) : null, band: n ? 1.96 / Math.sqrt(n) : null });
+  }
+  return out;
+}
+
+/** Plain verdict from lead-lag tables, using only lags ≥ 1 and requiring both r and rho above the noise band. */
+export function leadVerdict(volume, price, usageLabel) {
+  const best = (rows) => rows.filter((x) => x.lag >= 1 && x.r != null && x.rho != null && x.r > x.band && x.rho > x.band)
+    .sort((a, b) => b.r - a.r)[0] ?? null;
+  const v = best(volume); const p = best(price);
+  const fmt = (x) => `r = ${x.r.toFixed(2)}, ρ = ${x.rho.toFixed(2)} at ${x.lag} week${x.lag > 1 ? 's' : ''}, n = ${x.n}`;
+  if (!v && !p) return { supports_hypothesis: false, text: `Neither Intents volume nor NEAR price leads ${usageLabel}: no lag of 1–4 weeks is above the noise band on both measures.` };
+  if (v && !p) return { supports_hypothesis: true, text: `Intents volume leads ${usageLabel} (${fmt(v)}); NEAR price does not.` };
+  if (p && !v) return { supports_hypothesis: false, text: `NEAR price leads ${usageLabel} (${fmt(p)}); Intents volume does not.` };
+  return { supports_hypothesis: v.r > p.r, text: `Both lead ${usageLabel}: Intents volume (${fmt(v)}) and NEAR price (${fmt(p)}).` };
+}

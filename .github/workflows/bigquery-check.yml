@@ -1,0 +1,20 @@
+name: BigQuery check
+
+# Freshness, columns and free dry-run cost estimates for the project's BigQuery SQL. Changes no data.
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  id-token: write # Google sign-in (Workload Identity Federation; no stored keys)
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: '22'
+      - run: node scripts/check-bigquery.mjs

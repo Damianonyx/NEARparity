@@ -30,8 +30,10 @@ The contract below is enforced in CI by `node scripts/check-data.mjs`.
 | `metrics` | object | Keyed metric records (below). |
 | `stale` | object | Metric key → since when its value has been carried over. |
 | `simulator` | object | Formula, label, `defaults` (daily issuance, price, capture bps, allocation %, observed volume) and `default_result`. |
-| `series_weekly` | array | One row per 7-day bucket since 2026-02-01: `issuance_near`, `supply_change_near`, `derived_burns_near`, `buyback_proxy_near`, `wallet_net_near`, `wallet_internal_near`, `wallet_net_excl_internal_near`, `wallet_balance_end_near`, `verified_purchases_near` (NEAR bought in swaps by the accounts that fund the wallet, for weeks where every day is in the daily BigQuery trace; otherwise null), `intents_volume_usd`, `active_accounts_avg`, `txns_avg`, `active_contracts_avg`, `partial`, `days`. |
+| `series_weekly` | array | One row per 7-day bucket since 2026-02-01: `issuance_near`, `supply_change_near`, `derived_burns_near`, `buyback_proxy_near`, `wallet_net_near`, `wallet_internal_near`, `wallet_net_excl_internal_near`, `wallet_balance_end_near`, `verified_purchases_near` (NEAR bought in swaps by the accounts that fund the wallet, for weeks where every day is in the daily BigQuery trace; otherwise null), `intents_volume_usd`, `active_accounts_avg`, `txns_avg`, `active_contracts_avg`, `usage_source` (`BigQuery` or `NearBlocks`), `price_avg_usd` (mean daily NEAR price, null if a day is missing), `partial`, `days`. |
 | `wallet_transfers` | object | Summary of the wallet's transfers in the window (counts, counterparties, outbound list). |
+| `meta.usage_source` | string | `BigQuery` when the BigQuery usage data covers the whole weekly range, else `NearBlocks`. |
+| `meta.leading_indicator` | object | The track hypothesis test: for `active_accounts` and `txns`, `volume` and `price` lists of `{ lag, n, r, rho, band }` (week-over-week % changes; lag 0–4 weeks; band = 1.96/√n) and a `verdict` `{ supports_hypothesis, text }`. |
 | `onchain_trace` | object or null | Summary of the BigQuery trace (`config/bigquery-trace.json`): window, run date, totals, funding sources, SQL and results paths. |
 | `official_dashboard` | object | revenue.near.org wallet breakdown vs on-chain holdings now, and the difference. |
 | `queries` | object | The query behind each section (`issuance`, `supply`, `intents`, `coverage`, `trace`, `weekly`, `usage`, `simulator`; `trace` holds the BigQuery SQL): a list of `{ label, code }` with runnable requests using the actual blocks of this build. |
@@ -87,7 +89,7 @@ Every metric has the same shape:
 | `trace_withdrawn_to_wallet`, `trace_untraced_near` | NEAR | measured | Same trace: NEAR delivered to the wallet by `native_withdraw` intents, and the part not matched to a swap. |
 | `coverage_proxy` | ratio | proxy | buyback_proxy_near ÷ issuance |
 | `coverage_wallet` | ratio | proxy | wallet_net_excl_internal ÷ issuance |
-| `usage_active_accounts`, `usage_txns`, `usage_active_contracts` | per day | measured (NearBlocks) | 30-day mean of NearBlocks' daily field; each carries `prior_value`, `prior_period_start/end` and `change_pct` against the previous 30 days |
+| `usage_active_accounts`, `usage_txns`, `usage_active_contracts`, `usage_function_calls` | per day | measured (`reported_by`: BigQuery, or NearBlocks as fallback) | 30-day mean of the daily BigQuery values (distinct transaction signers; transactions; distinct contracts receiving FUNCTION_CALL actions; FUNCTION_CALL actions), with NearBlocks' figure in `nearblocks_value` as a cross-check. Each carries `prior_value`, `prior_period_start/end` and `change_pct` against the previous 30 days. `usage_function_calls` exists only with BigQuery. |
 | `usage_new_accounts` | accounts | measured (NearBlocks) | 30-day sum, with the same prior-window comparison |
 
 `intents_volume` also carries `prior_value` and `change_pct` for the same comparison.

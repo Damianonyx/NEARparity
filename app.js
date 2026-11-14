@@ -496,7 +496,11 @@ function renderUsage(L) {
     tile('Active accounts / day', m.usage_active_accounts, (v) => nf0.format(v)),
     tile('Transactions / day', m.usage_txns, (v) => nf0.format(v)),
     tile('Active contracts / day', m.usage_active_contracts, (v) => nf0.format(v)),
+    ...(m.usage_function_calls?.value != null ? [tile('Contract calls / day', m.usage_function_calls, (v) => nf0.format(v))] : []),
   );
+  const src = L.meta?.usage_source || 'NearBlocks';
+  $('#usage-intro').textContent = `Is the activity behind the buyback growing? On-chain usage from ${src === 'BigQuery' ? 'the NEAR BigQuery public dataset (SQL filtered on block_date; NearBlocks kept as a cross-check)' : 'NearBlocks'}, next to NEAR Intents swap volume from DefiLlama. Last 30 days compared with the 30 before.`;
+  renderLeadTest(L);
   const ch = (k) => m[k]?.change_pct;
   $('#usage-takeaway').textContent = [ch('intents_volume'), ch('usage_active_accounts'), ch('usage_txns')].every((x) => x != null)
     ? `Over the last 30 days against the 30 before, Intents volume moved ${signedPct(ch('intents_volume'))}, daily active accounts ${signedPct(ch('usage_active_accounts'))} and daily transactions ${signedPct(ch('usage_txns'))}.`
@@ -519,6 +523,27 @@ function renderUsage(L) {
   const q = queryBlock(L.queries?.usage); if (q) uq.append(q);
 }
 
+/** The track hypothesis, tested: does Intents volume lead network usage better than NEAR price? */
+function renderLeadTest(L) {
+  const box = $('#usage-lead'); box.textContent = '';
+  const li = L.meta?.leading_indicator; const a = li?.active_accounts;
+  if (!a) return;
+  const f2 = (v) => (v == null ? '–' : v.toFixed(2));
+  const cell = (x) => el('td', { class: `n${x.r != null && x.rho != null && x.r > x.band && x.rho > x.band ? ' sig' : ''}` }, `${f2(x.r)} / ${f2(x.rho)}`);
+  const table = el('table', {},
+    el('thead', {}, el('tr', {}, ['Lead (weeks)', 'Volume → active accounts', 'Price → active accounts', 'Volume → transactions', 'Price → transactions', 'Noise band'].map((t, i) => el('th', { class: i ? 'n' : null }, t)))),
+    el('tbody', {}, a.volume.map((v, i) => el('tr', {}, el('td', {}, i === 0 ? '0 (same week)' : String(v.lag)),
+      cell(v), cell(a.price[i]), cell(li.txns.volume[i]), cell(li.txns.price[i]), el('td', { class: 'n' }, `±${f2(v.band)}`)))));
+  box.append(
+    el('h3', {}, 'Does Intents volume lead usage better than price?'),
+    el('p', { class: 'takeaway' }, !a.verdict.supports_hypothesis && !li.txns.verdict.supports_hypothesis && /^Neither/.test(a.verdict.text) && /^Neither/.test(li.txns.verdict.text)
+      ? 'Neither Intents volume nor NEAR price leads daily active accounts or daily transactions: no lag of 1–4 weeks is above the noise band on both measures.'
+      : `${a.verdict.text} ${li.txns.verdict.text}`),
+    el('p', { class: 'small' }, `Correlation of week-over-week changes (Pearson r / Spearman ρ) between this week's Intents volume or NEAR price and usage 0–4 weeks later, ${li.weeks} full weeks from ${fmtDay(li.first_week)}, usage from ${li.usage_source}. A lead counts only if both are positive and above the noise band (about 95%). Descriptive, not causal.`),
+    el('details', { class: 'table-view' }, el('summary', {}, 'Show the lead-lag table'), el('div', { class: 'table-scroll' }, table)),
+  );
+}
+
 function usageSeries(L) {
   const rows = L.series_weekly || [];
   const vol = rows.map((r) => (r.intents_volume_usd != null ? r.intents_volume_usd / r.days : null));
@@ -526,8 +551,8 @@ function usageSeries(L) {
   const tx = rows.map((r) => r.txns_avg ?? null);
   return { rows, series: [
     { label: 'Intents volume', src: 'DefiLlama', idx: indexTo100(vol), raw: vol, fmt: (v) => `${fmtUsd(v)}/day`, style: 'stroke: var(--accent); stroke-width: 2.5', dash: '' },
-    { label: 'Active accounts', src: 'NearBlocks', idx: indexTo100(acc), raw: acc, fmt: (v) => `${nf0.format(v)}/day`, style: 'stroke: var(--ink-2); stroke-width: 2', dash: '7 4' },
-    { label: 'Transactions', src: 'NearBlocks', idx: indexTo100(tx), raw: tx, fmt: (v) => `${nf0.format(v)}/day`, style: 'stroke: var(--muted); stroke-width: 2', dash: '2 3' },
+    { label: 'Active accounts', src: L.meta?.usage_source || 'NearBlocks', idx: indexTo100(acc), raw: acc, fmt: (v) => `${nf0.format(v)}/day`, style: 'stroke: var(--ink-2); stroke-width: 2', dash: '7 4' },
+    { label: 'Transactions', src: L.meta?.usage_source || 'NearBlocks', idx: indexTo100(tx), raw: tx, fmt: (v) => `${nf0.format(v)}/day`, style: 'stroke: var(--muted); stroke-width: 2', dash: '2 3' },
   ] };
 }
 
