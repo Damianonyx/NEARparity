@@ -43,6 +43,103 @@
       ],
       "bytes_processed": "35.59 GB",
       "duration": "4.4 s"
+    },
+    "03-funding-sources-30d": {
+      "sql": "queries/bigquery/03-funding-sources-30d.sql",
+      "result": [
+        {
+          "event": "mt_transfer",
+          "from_acct": "51e8f94d77b5e90dc9852ca6113771e11e8382ce69473a75e313e41665de7cbe",
+          "n": "500",
+          "near": "191433.899958379925390208424119"
+        },
+        {
+          "event": "mt_transfer",
+          "from_acct": "blockzen-1-main.near",
+          "n": "7556",
+          "near": "47417.328443837042739145492911"
+        },
+        {
+          "event": "mt_transfer",
+          "from_acct": "crux-solver.near",
+          "n": "1267",
+          "near": "18581.503119773010056224217688"
+        },
+        {
+          "event": "mt_transfer",
+          "from_acct": "s1.anyliq-solver.near",
+          "n": "51",
+          "near": "6302.082719354205937538497034"
+        },
+        {
+          "event": "mt_transfer",
+          "from_acct": "bb1fc1510b7e472729de67795f8bbd1164d806ca0dd89a0ef8fc6b01fae01b0e",
+          "n": "1",
+          "near": "2239.892107844596930739612624"
+        },
+        {
+          "event": "mt_transfer",
+          "from_acct": "cea65fa2a7d0be1b079c50eb08a04d1a9042a481d42240db92ec73bcc45b3365",
+          "n": "1",
+          "near": "1885.154089058234467376651388"
+        },
+        {
+          "event": "mt_transfer",
+          "from_acct": "99ecb105f3db7fdad5a8c65707ba3ab30c8ec6d0c5161e4ea5278d123067c851",
+          "n": "1",
+          "near": "1523.532596226977101073385314"
+        },
+        {
+          "event": "mt_transfer",
+          "from_acct": "e9b39748113ff49371d4a38112bde791ccf7d955e27e6aeba8accae135fdeedf",
+          "n": "1",
+          "near": "1301.0952927384787649274"
+        },
+        {
+          "event": "mt_transfer",
+          "from_acct": "079b2431e27c12a1e9e9c0f8e1ff450999dcbed6515f2f6970cc64c1403cd559",
+          "n": "1",
+          "near": "1151.010906809880884047341386"
+        },
+        {
+          "event": "mt_transfer",
+          "from_acct": "345ca3afb8745731fa9daff6f01334d2dd8b320d364a4bcd61f37594dbc5f1d6",
+          "n": "1",
+          "near": "1023.0281253114516594"
+        },
+        {
+          "event": "mt_transfer",
+          "from_acct": "84a75c1025f9527066518080ba5c956bb4be9823d37b795bba5301bf84efd074",
+          "n": "1",
+          "near": "801.901454308342935018125455"
+        },
+        {
+          "event": "mt_transfer",
+          "from_acct": "ded8707bb662670ecb0294692c504d0b920869570d292b6fcb3a651857f91b51",
+          "n": "1",
+          "near": "800.17431110106807382065"
+        },
+        {
+          "event": "mt_transfer",
+          "from_acct": "607ffb8f3d79e7ea4cf676b2031cc2d6a5ea875d2dbb09cb06929c2d73d1a0bc",
+          "n": "1",
+          "near": "686.0085575982654924909"
+        },
+        {
+          "event": "mt_transfer",
+          "from_acct": "6247d9c671ca6a80cf2c75e26edb8cd75ebf00fcd3c56c39107d6ca20c9cfb29",
+          "n": "24",
+          "near": "671.762980397048891200026008"
+        },
+        {
+          "event": "mt_transfer",
+          "from_acct": "020d61dc7ca7029c08e7b17aefed9c0da97dfb3d46dc050aba111bd6ec1670f3",
+          "n": "1",
+          "near": "648.075241043336404845841825"
+        }
+      ],
+      "bytes_processed": "34.71 GB",
+      "duration": "2.1 s"
     }
   }
 }
