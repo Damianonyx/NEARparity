@@ -235,7 +235,8 @@ function barPath(x, y0, y1, w, r) {
   return `M${x},${y0}V${y1 - r}Q${x},${y1} ${x + r},${y1}H${x + w - r}Q${x + w},${y1} ${x + w},${y1 - r}V${y0}Z`;
 }
 
-let chartRange = 'all';
+// Phones: 41 weekly columns are too thin to read, so start with the last 12 weeks.
+let chartRange = matchMedia('(max-width: 600px)').matches ? '12' : 'all';
 // Wallet bars exclude transfers between NEAR's own revenue wallets; fall back to the raw change if unavailable.
 const walletVal = (r) => r.wallet_net_excl_internal_near ?? r.wallet_net_near;
 function renderLegend() {
@@ -280,7 +281,8 @@ function renderChart(L) {
   const unit = s('text', { x: 0, y: 10, 'text-anchor': 'start' }); unit.textContent = 'NEAR per week'; axis.append(unit);
   svg.append(grid);
 
-  let lastMonth = null;
+  let lastMonth = null; let lastLabelX = -1e9;
+  const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
   rows.forEach((r, i) => {
     const x = m.l + i * bw; const g = s('g', { class: 'col', 'data-i': i });
     const outer = Math.max(1, bw - 2); // 2px surface gap between columns
@@ -297,8 +299,10 @@ function renderChart(L) {
     const mo = r.period_start.slice(0, 7);
     if (mo !== lastMonth) {
       lastMonth = mo;
-      const lbl = new Date(r.period_start).toLocaleDateString('en-GB', { month: 'short', timeZone: 'UTC' });
-      const tx = s('text', { x: x + 1, y: H - 10, 'text-anchor': 'start' }); tx.textContent = lbl; axis.append(tx);
+      if (x - lastLabelX >= 30) { // skip a label that would collide with the previous one
+        const tx = s('text', { x: x + 1, y: H - 10, 'text-anchor': 'start' }); tx.textContent = MONTHS[new Date(r.period_start).getUTCMonth()]; axis.append(tx);
+        lastLabelX = x;
+      }
     }
     g.addEventListener('pointerenter', () => showTip(i, r, g));
     g.addEventListener('click', () => showTip(i, r, g));
@@ -529,6 +533,7 @@ try {
   renderClaims(latest);
   renderWallet(latest);
   renderSources(latest, status);
+  document.querySelectorAll('.seg button').forEach((x) => x.setAttribute('aria-pressed', String(x.dataset.range === chartRange)));
   document.querySelectorAll('.seg button').forEach((b) => b.addEventListener('click', () => {
     chartRange = b.dataset.range;
     document.querySelectorAll('.seg button').forEach((x) => x.setAttribute('aria-pressed', String(x === b)));

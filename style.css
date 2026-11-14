@@ -235,3 +235,23 @@ h2 { font-size: 1.3rem; margin-bottom: 0.5rem; }
 .two-col li { margin: 0.55rem 0; line-height: 1.5; }
 .sources li { margin: 0.4rem 0; }
 .site-foot { margin-top: 5rem; }
+
+/* ---------- Mobile polish: no wrapped values, 44px tap targets ---------- */
+.rows .v { white-space: nowrap; }
+.rows li { align-items: center; }
+.seg button { min-height: 40px; padding: 6px 14px; }
+#theme-toggle { min-height: 40px; padding: 4px 14px; }
+details summary { min-height: 44px; display: flex; align-items: center; gap: 6px; list-style-position: inside; }
+details summary::-webkit-details-marker { display: none; }
+details summary::before { content: '▸'; display: inline-block; transition: transform .15s; }
+details[open] > summary::before { transform: rotate(90deg); }
+.btn { min-height: 44px; display: inline-flex; align-items: center; }
+.btn-link { min-height: 44px; display: inline-flex; align-items: center; gap: 4px; }
+.link { min-height: 44px; }
+.sources li a, .site-foot a, .small a { display: inline-block; padding: 6px 0; }
+@media (max-width: 600px) {
+  .hero-value { font-size: 1.7rem; }
+  .card { padding: 18px; }
+}
+.rows .v .reason { white-space: normal; }
+.logo { min-height: 44px; }
