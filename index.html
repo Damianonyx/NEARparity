@@ -36,6 +36,7 @@
         <li><a href="#answer">Numbers</a></li>
         <li><a href="#simulator">Simulator</a></li>
         <li><a href="#chart-h">Chart</a></li>
+        <li><a href="#usage-h">Usage</a></li>
         <li><a href="#claims-h">Evidence</a></li>
         <li><a href="#sources-h">Sources</a></li>
       </ul>
@@ -104,10 +105,28 @@
       <ul class="legend" id="legend"></ul>
       <div class="chart" id="chart" role="img" aria-label="Weekly bar chart of issuance, buyback proxy and wallet net accumulation"></div>
       <div class="tooltip" id="tooltip" role="status" hidden></div>
+      <p class="takeaway" id="chart-takeaway"></p>
       <details class="table-view">
         <summary>Show data table</summary>
         <div class="table-scroll"><table id="series-table"></table></div>
       </details>
+      <div id="weekly-query"></div>
+    </section>
+
+    <section aria-labelledby="usage-h" class="panel" id="usage">
+      <h2 id="usage-h">Network usage vs Intents volume</h2>
+      <p class="small">Is the activity behind the buyback growing? On-chain usage from NearBlocks, next to NEAR Intents swap volume from DefiLlama. Last 30 days compared with the 30 before.</p>
+      <div class="tiles" id="usage-tiles"></div>
+      <p class="takeaway" id="usage-takeaway"></p>
+      <ul class="legend" id="usage-legend"></ul>
+      <div class="chart" id="usage-chart" role="img" aria-label="Weekly index (week of 1 Feb 2026 = 100) of Intents volume, active accounts and transactions"></div>
+      <div class="tooltip" id="usage-tooltip" role="status" hidden></div>
+      <p class="small" id="usage-break"></p>
+      <details class="table-view">
+        <summary>Show data table</summary>
+        <div class="table-scroll"><table id="usage-table"></table></div>
+      </details>
+      <div id="usage-query"></div>
     </section>
 
     <section aria-labelledby="claims-h" class="plain">

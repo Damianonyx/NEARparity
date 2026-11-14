@@ -259,3 +259,18 @@ details[open] > summary::before { transform: rotate(90deg); }
 /* ---------- Data health: staleness banner and contained section errors ---------- */
 .banner { margin-top: 1.6rem; padding: 12px 14px; border: 1px dashed var(--ink); border-radius: 8px; font-size: 0.88rem; background: var(--panel); }
 .section-error { font-size: 0.85rem; color: var(--ink-2); border-left: 3px solid var(--ink); padding: 4px 10px; margin: 0.5rem 0; }
+
+/* ---------- Queries, takeaways, usage tiles ---------- */
+.query { margin-top: 0.5rem; }
+.query .q { margin: 0.6rem 0 0.2rem; }
+.query .q-label { margin: 0 0 0.3rem; font-size: 0.8rem; color: var(--ink-2); }
+.query pre { margin: 0; padding: 10px 12px; background: var(--pill-bg); border: 1px solid var(--line); border-radius: 6px; overflow-x: auto; font: 0.72rem/1.5 var(--mono); white-space: pre; }
+.query code { font-family: var(--mono); }
+.takeaway { margin: 0.9rem 0 0.4rem; font-size: 0.95rem; line-height: 1.5; max-width: 70ch; }
+.tiles { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 1rem 0 0.6rem; }
+@media (min-width: 760px) { .tiles { grid-template-columns: repeat(4, 1fr); } }
+.tile { border: 1px solid var(--line); border-radius: 8px; background: var(--surface); padding: 12px; min-width: 0; }
+.tile-label { margin: 0; font-size: 0.78rem; color: var(--ink-2); }
+.tile-value { font-size: 1.35rem; font-weight: 700; margin: 0.2rem 0; font-variant-numeric: tabular-nums; }
+.tile-change { margin: 0 0 0.4rem; font-size: 0.78rem; color: var(--ink-2); font-variant-numeric: tabular-nums; }
+.chart .end-label { fill: var(--ink-2); font-size: 11px; font-variant-numeric: tabular-nums; }

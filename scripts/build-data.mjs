@@ -8,7 +8,8 @@ import {
   metric, parityRequiredDailyVolume, reconcileBurns, safeRatio, sumDaily, toYocto,
   utcWindow, weeklyBuckets, yoctoToNear,
 } from './lib/calc.mjs';
-import { createStatus, createStore } from './lib/io.mjs';
+import { createStatus, createStore, getJson } from './lib/io.mjs';
+import { USAGE_FIELDS, USAGE_URL, changeCorrelation, changePct, llamaWindowSum, parseUsage, priorWindow, windowStat } from './lib/usage.mjs';
 import { ARCHIVAL_URLS, blockBefore, createRpc, epochChecks, mapLimit, sampleInflationRates, walkEpochs, walletBalances } from './lib/near.mjs';
 import { DASHBOARD_URL, LLAMA, fetchDashboard, fetchLlamaSeries, fetchPrice, fetchTransfers } from './lib/sources.mjs';
 import { discoverStakingPools, firstPositiveDay, internalTransfers, walletCreatedAt } from './lib/wallet.mjs';
@@ -100,6 +101,18 @@ const llama = {};
 for (const [k, [key, url]] of Object.entries(LLAMA)) llama[k] = await group(`llama_${k}`, () => fetchLlamaSeries(ctx, key, url));
 const price = await group('price', () => fetchPrice(ctx, { from: BACKFILL_FROM, to: window.end }));
 const dashboard = await group('revenue_dashboard', () => fetchDashboard(ctx));
+// Network usage (NearBlocks daily charts, keyless). Past days are immutable, so a failed fetch falls back to the cache.
+const usage = await group('usage', async () => {
+  const body = await getJson(setStatus, 'nearblocks_charts', USAGE_URL, { retries: 2 });
+  const rows = parseUsage(body.charts, '2025-01-01').filter((r) => r.date < window.end.slice(0, 10));
+  if (!rows.length) throw new Error('No usage rows returned');
+  await store.writeJson('data/usage.json', {
+    description: 'Daily NEAR network usage as reported by NearBlocks (/v1/charts), complete UTC days since 2025-01-01. Field definitions are NearBlocks’ own.',
+    source: USAGE_URL, updated_at: new Date().toISOString(), fields: USAGE_FIELDS, rows,
+  });
+  return { rows };
+});
+const usageRows = usage?.rows ?? (await store.readJson('data/usage.json', null))?.rows ?? null;
 
 // ---------- data-derived dates (never hard-coded in the UI) ----------
 const meta = {
@@ -107,6 +120,18 @@ const meta = {
   wallet_created_at: walletCreatedAt(transferHistory?.txns, wallet?.account_id) ?? prevLatest?.meta?.wallet_created_at ?? null,
   holders_revenue_labelled_from: firstPositiveDay(llama.holders?.series) ?? prevLatest?.meta?.holders_revenue_labelled_from ?? null,
   staking_pools: pools,
+  // Largest single-day fall in NearBlocks transactions since backfill_from (a structural break worth showing).
+  usage_largest_txn_drop: (() => {
+    const r = (usageRows || []).filter((x) => x.date >= BACKFILL_FROM.slice(0, 10));
+    let best = null;
+    for (let i = 1; i < r.length; i++) {
+      const a = r[i - 1]; const b = r[i];
+      if (!a.txns || b.txns == null) continue;
+      const change = (b.txns - a.txns) / a.txns;
+      if (!best || change < best.change) best = { from: a.date, to: b.date, txns_before: a.txns, txns_after: b.txns, change, active_accounts_before: a.active_accounts, active_accounts_after: b.active_accounts, active_contracts_before: a.active_contracts, active_contracts_after: b.active_contracts };
+    }
+    return best;
+  })(),
 };
 
 // ---------- compute metrics ----------
@@ -258,6 +283,30 @@ set('coverage_verified', [], unavailable('ratio', 'n/a', 'Verified NEAR purchase
 ratioMetric('coverage_proxy', ['llama_holders', 'price', 'chain'], 'buyback_proxy_near', 'issuance', 'ratio', 'Proxy: revenue-based buyback estimate (NEAR) ÷ measured issuance (NEAR), same 30 UTC days.', 'proxy');
 ratioMetric('coverage_wallet', ['chain', 'nearblocks'], 'wallet_net_excl_internal', 'issuance', 'ratio', `Net accumulation of the ${walletLabel}, excluding transfers from NEAR's other listed revenue wallets, ÷ measured issuance, same 30 UTC days. Not verified purchases.`, 'proxy');
 
+// ---------- network usage (NearBlocks), compared with the previous 30 days ----------
+const prior = priorWindow(window.start, window.end);
+const PW = { prior_period_start: prior.start, prior_period_end: prior.end };
+const USAGE_SRC = `NearBlocks daily charts: ${USAGE_URL}`;
+const usageMetric = (key, field, agg, unit, label) => {
+  if (!usageRows) return set(key, ['usage'], unavailable(unit, USAGE_SRC, label, `NearBlocks charts unavailable: ${groupErrors.usage}`, { reported_by: 'NearBlocks' }));
+  const now = windowStat(usageRows, field, window.start, window.end, agg);
+  const before = windowStat(usageRows, field, prior.start, prior.end, agg);
+  if (now.value == null) return set(key, ['usage'], unavailable(unit, USAGE_SRC, label, `${now.missing.length} of ${now.days} days missing (${now.missing.slice(0, 3).join(', ')}).`, { reported_by: 'NearBlocks' }));
+  set(key, ['usage'], metric({
+    value: now.value, unit, ...W, source: USAGE_SRC, source_type: 'third_party', reported_by: 'NearBlocks',
+    method: `${label} ${agg === 'sum' ? 'Sum' : 'Mean'} of ${now.days} daily values of NearBlocks' "${field}" (NearBlocks' definition). Compared with the previous ${now.days} days.`,
+    status: 'measured', prior_value: before.value, ...PW, change_pct: changePct(now.value, before.value),
+  }));
+};
+usageMetric('usage_active_accounts', 'active_accounts', 'mean', 'accounts/day', 'Daily active accounts.');
+usageMetric('usage_txns', 'txns', 'mean', 'transactions/day', 'Daily transactions.');
+usageMetric('usage_new_accounts', 'new_accounts', 'sum', 'accounts', 'New accounts created.');
+usageMetric('usage_active_contracts', 'active_contracts', 'mean', 'contracts/day', 'Daily active contracts.');
+if (M.intents_volume?.status === 'measured' && llama.volume) {
+  const pv = llamaWindowSum(llama.volume.series, prior.start, prior.end);
+  Object.assign(M.intents_volume, { prior_value: pv, ...PW, change_pct: changePct(M.intents_volume.value, pv) });
+}
+
 // Transfers summary (NearBlocks)
 let transfersSummary = null;
 if (transferHistory && wallet?.account_id) {
@@ -296,6 +345,10 @@ if (chain) {
       wallet_net_excl_internal_near: walletNet != null && internalNet != null ? walletNet - internalNet : null,
       wallet_balance_end_near: wb ? yoctoToNear(wb.total_yocto) : null,
       verified_purchases_near: null,
+      intents_volume_usd: llama.volume ? llamaWindowSum(llama.volume.series, bk.start, bk.end) : null,
+      active_accounts_avg: usageRows ? windowStat(usageRows, 'active_accounts', bk.start, bk.end).value : null,
+      txns_avg: usageRows ? windowStat(usageRows, 'txns', bk.start, bk.end).value : null,
+      active_contracts_avg: usageRows ? windowStat(usageRows, 'active_contracts', bk.start, bk.end).value : null,
     };
   });
 }
@@ -323,6 +376,7 @@ if (series && prevLatest?.series_weekly) {
     if (!p) continue;
     if (r.buyback_proxy_near == null && p.buyback_proxy_near != null) { r.buyback_proxy_near = p.buyback_proxy_near; r.buyback_proxy_status = 'proxy'; r.buyback_proxy_stale = true; }
     if (r.wallet_net_excl_internal_near == null && p.wallet_net_excl_internal_near != null) { r.wallet_net_excl_internal_near = p.wallet_net_excl_internal_near; r.wallet_internal_near = p.wallet_internal_near; r.wallet_stale = true; }
+    for (const f of ['intents_volume_usd', 'active_accounts_avg', 'txns_avg', 'active_contracts_avg']) if (r[f] == null && p[f] != null) { r[f] = p[f]; r[`${f}_stale`] = true; }
   }
 }
 
@@ -360,6 +414,49 @@ if (dashboard) {
 }
 const finalTransfers = transfersSummary ?? (prevLatest?.wallet_transfers ? { ...prevLatest.wallet_transfers, stale: true } : null);
 
+// Do Intents volume and on-chain usage move together week to week? (descriptive, full weeks only)
+if (series) {
+  const full = series.filter((r) => !r.partial);
+  const vol = full.map((r) => r.intents_volume_usd); const acc = full.map((r) => r.active_accounts_avg); const tx = full.map((r) => r.txns_avg);
+  const ca = changeCorrelation(vol, acc); const ct = changeCorrelation(vol, tx);
+  meta.usage_correlation = {
+    intents_volume_vs_active_accounts: ca, intents_volume_vs_txns: ct,
+    method: 'Pearson correlation of week-over-week % changes, full 7-day weeks since backfill_from. Descriptive only: no lag, no causality.',
+  };
+}
+
+// ---------- the query behind every figure (reproducible requests, with the actual blocks used) ----------
+const RPC0 = ARCHIVAL_URLS[0];
+const curlRpc = (body) => `curl -s ${RPC0} -H 'content-type: application/json' \\\n  -d '${JSON.stringify({ jsonrpc: '2.0', id: 1, ...body })}'`;
+const firstEpoch = chain?.records.find((r) => Date.parse(r.start_time) >= Date.parse(window.start));
+const bS = chain?.boundaries[window.start]; const bE = chain?.boundaries[window.end];
+const b64 = (o) => Buffer.from(JSON.stringify(o)).toString('base64');
+const queries = {
+  issuance: firstEpoch ? [
+    { label: `First epoch boundary in the window: its first block (${firstEpoch.start_height}) and the block before it (${firstEpoch.prev_height})`, code: `${curlRpc({ method: 'block', params: { block_id: firstEpoch.start_height } })}\n${curlRpc({ method: 'block', params: { block_id: firstEpoch.prev_height } })}` },
+    { label: 'Per boundary, then summed over every boundary whose first block falls in the window (all listed in data/epochs.json)', code: 'mint = result.header.total_supply(first) − result.header.total_supply(previous)\n     + Σ result.chunks[].balance_burnt where chunk.height_included == first block height\nissuance = Σ mint   (BigInt, yoctoNEAR)' },
+    { label: 'Previous epoch’s last block, from any block (how the walk goes back without the validators method)', code: curlRpc({ method: 'block', params: { finality: 'final' } }) + '\n# result.header.next_epoch_id = hash of the previous epoch’s last block' },
+  ] : [],
+  supply: bS && bE ? [
+    { label: `Total supply at the last block before the window start (${bS.block_height}) and end (${bE.block_height})`, code: `${curlRpc({ method: 'block', params: { block_id: bS.block_height } })}\n${curlRpc({ method: 'block', params: { block_id: bE.block_height } })}` },
+    { label: 'Supply change and derived burns', code: 'supply_change = total_supply(end) − total_supply(start)\nburns = issuance − supply_change' },
+  ] : [],
+  intents: [
+    { label: 'DefiLlama daily series (volume, gross fees, net revenue, labelled buyback revenue)', code: Object.values(LLAMA).map(([, u]) => `curl -s '${u}'`).join('\n') },
+    { label: 'For each series: sum the 30 daily values in the window (all 30 required)', code: `Σ totalDataChart[i][1] for days ${window.start.slice(0, 10)} … ${new Date(Date.parse(window.end) - 864e5).toISOString().slice(0, 10)}\ncapture_bps = net_revenue ÷ volume × 10,000` },
+  ],
+  coverage: [
+    { label: 'Buyback proxy: labelled buyback revenue (USD) ÷ that day’s NEAR price', code: `curl -s '${LLAMA.holders[1]}'\ncurl -s '${price?.source?.url ?? 'https://coins.llama.fi/chart/coingecko:near'}'\nproxy_near = Σ_day holders_usd(day) ÷ price(day, 00:00 UTC)\ncoverage = proxy_near ÷ issuance` },
+    ...(bS && bE && wallet?.account_id ? [{ label: `Buyback wallet holdings at the window’s boundary blocks (${bS.block_height}, ${bE.block_height}); repeat for both`, code: `${curlRpc({ method: 'query', params: { request_type: 'view_account', account_id: wallet.account_id, block_id: bE.block_height } })}\n${curlRpc({ method: 'query', params: { request_type: 'call_function', account_id: 'wrap.near', method_name: 'ft_balance_of', args_base64: b64({ account_id: wallet.account_id }), block_id: bE.block_height } })}\n${curlRpc({ method: 'query', params: { request_type: 'call_function', account_id: 'intents.near', method_name: 'mt_balance_of', args_base64: b64({ account_id: wallet.account_id, token_id: 'nep141:wrap.near' }), block_id: bE.block_height } })}\n# net = Δ(native + locked + wNEAR + wNEAR in intents + staked) − transfers from NEAR's other revenue wallets (NearBlocks)` }] : []),
+  ],
+  weekly: [{ label: 'The same calculations per 7-day bucket from 2026-02-01 (boundary blocks in data/boundaries.json)', code: 'issuance_week = Σ mint for boundaries in the week\nproxy_week = Σ_day holders_usd ÷ price\nwallet_week = Δ wallet holdings − internal transfers' }],
+  usage: [
+    { label: 'NearBlocks daily network charts (keyless)', code: `curl -s '${USAGE_URL}'` },
+    { label: 'Weekly values, the index, and the correlation', code: 'active_accounts_week = mean(daily active_accounts)\ntxns_week = mean(daily txns)\nintents_volume_week = Σ DefiLlama daily volume ÷ days\nindex = value ÷ value(first week from 2026-02-01) × 100\nr = pearson(week-over-week % change of volume, of active accounts), full weeks' },
+  ],
+  simulator: [{ label: 'Conditional scenario', code: 'required_daily_volume_usd = daily_issuance_near × price_usd ÷ ((capture_bps ÷ 10,000) × (allocation_pct ÷ 100))' }],
+};
+
 // ---------- health ----------
 const partial = failedGroups.size > 0;
 const consecutivePartial = partial ? (prevStatus.consecutive_partial_runs ?? 0) + 1 : 0;
@@ -387,6 +484,7 @@ const latest = {
   series_weekly: series,
   wallet_transfers: finalTransfers,
   official_dashboard: dashboardOut,
+  queries,
   sources: [
     { name: 'NEAR mainnet archival RPC (FastNEAR)', url: ARCHIVAL_URLS[0], used_for: 'Epoch boundaries, total supply, burns, protocol config, wallet balances', fallbacks: ARCHIVAL_URLS.slice(1) },
     { name: 'DefiLlama DEX volume API', url: LLAMA.volume[1], used_for: 'NEAR Intents swap volume' },
@@ -395,6 +493,7 @@ const latest = {
     { name: 'DefiLlama coins current price', url: 'https://coins.llama.fi/prices/current/coingecko:near', used_for: 'Default simulator price' },
     { name: 'NEAR revenue dashboard (official)', url: DASHBOARD_URL, used_for: 'Official listing of the buyback wallet; dashboard-attributed NEAR per wallet (cross-check)' },
     { name: 'NearBlocks API (keyless)', url: 'https://api.nearblocks.io/v1/account/{account}/txns', used_for: 'The buyback wallet’s receipts and FT events' },
+    { name: 'NearBlocks network charts (keyless)', url: USAGE_URL, used_for: 'Daily active accounts, transactions, new accounts and active contracts' },
   ],
 };
 if (!anyOk && prevLatest) {

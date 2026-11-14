@@ -54,6 +54,10 @@ await run('real data', ROOT, 8731, (html) => {
   check('scale illustration rendered', /id="scale-art"[^>]*><svg/.test(html));
   check('simulator result rendered', /id="sim-out"[\s\S]{0,400}(per day|No finite volume)/.test(html));
   check('no section errors', !html.includes('class="section-error"'));
+  check('usage tiles rendered', count(html, /<div class="tile">/g) === 4, `${count(html, /<div class="tile">/g)} tiles`);
+  check('usage chart rendered', /id="usage-chart"[^>]*>\s*<svg/.test(html));
+  check('chart takeaways rendered', /id="chart-takeaway">[^<]{20,}/.test(html) && /id="usage-takeaway">[^<]{20,}/.test(html));
+  check('a query behind every section', count(html, /<details class="query">/g) >= 7, `${count(html, /<details class="query">/g)} query blocks`);
 });
 
 // 2) Degraded data: remove metrics and the weekly series; the page must still render the rest.

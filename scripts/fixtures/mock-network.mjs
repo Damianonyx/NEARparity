@@ -107,9 +107,22 @@ function walletTxns() {
   add(WALLET.stakeAt, WALLET.id, WALLET.pool, [{ action: 'FUNCTION_CALL', method: 'deposit_and_stake', deposit: Number(WALLET.stake) }]);
   return rows.sort((a, b) => (BigInt(b.block_timestamp) > BigInt(a.block_timestamp) ? 1 : -1));
 }
+// NearBlocks daily charts: constant usage with one structural step on 2026-04-02 (txns 3M → 1M, contracts 2M → 100k).
+export const USAGE = { stepDay: '2026-04-02', txnsBefore: 3e6, txnsAfter: 1e6, accounts: 1e5, newAccounts: 5e3, contractsBefore: 2e6, contractsAfter: 1e5 };
+function usageCharts() {
+  const out = [];
+  const end = Math.floor(nowS() / DAY) * DAY; // today is incomplete and is excluded by the build
+  for (let t = Date.UTC(2025, 11, 1) / 1000; t <= end; t += DAY) {
+    const d = new Date(t * 1000).toISOString();
+    const after = d.slice(0, 10) >= USAGE.stepDay;
+    out.push({ date: d, txns: String(after ? USAGE.txnsAfter : USAGE.txnsBefore), active_accounts: String(USAGE.accounts), new_accounts: String(USAGE.newAccounts), active_contracts: String(after ? USAGE.contractsAfter : USAGE.contractsBefore) });
+  }
+  return { charts: out };
+}
 let receiptPagesServed = 0;
 function nearblocks(url) {
   const u = new URL(url);
+  if (u.pathname === '/v1/charts') return json(usageCharts());
   const cursor = Number(u.searchParams.get('cursor') || 0);
   const per = Number(u.searchParams.get('per_page') || 25);
   if (u.pathname.endsWith('/ft-txns')) {

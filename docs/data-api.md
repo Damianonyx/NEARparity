@@ -10,6 +10,7 @@ The dashboard is a static site over a public JSON dataset. Anyone can read the s
 | `https://nearparity.vercel.app/data/epochs.json` | Every epoch boundary since 2026-01-31: heights, hashes, supplies, burns, exact mint (yoctoNEAR) | Twice daily |
 | `https://nearparity.vercel.app/data/boundaries.json` | The last block before each UTC boundary used, with total supply and wallet balances | Twice daily |
 | `https://nearparity.vercel.app/data/wallet-transfers.json` | The buyback wallet's NearBlocks receipts and FT events | Twice daily |
+| `https://nearparity.vercel.app/data/usage.json` | Daily NEAR network usage from NearBlocks since 2025-01-01: `txns`, `active_accounts`, `new_accounts`, `active_contracts` (NearBlocks' definitions) | Twice daily |
 
 The contract below is enforced in CI by `node scripts/check-data.mjs`.
 
@@ -24,14 +25,15 @@ The contract below is enforced in CI by `node scripts/check-data.mjs`.
 | `failed_groups`, `notes` | object | Source groups that failed this run; non-fatal notes (for example, a paused NearBlocks backfill). |
 | `health` | object | `consecutive_partial_runs`, `rpc_fallback_calls_served`. |
 | `window` | object | `{ start, end, days: 30 }`: the 30 most recent complete UTC days, start inclusive, end exclusive. |
-| `meta` | object | Data-derived dates and facts: `wallet_created_at`, `holders_revenue_labelled_from`, `backfill_from`, `staking_pools`. |
+| `meta` | object | Data-derived dates and facts: `wallet_created_at`, `holders_revenue_labelled_from`, `backfill_from`, `staking_pools`, `usage_largest_txn_drop` (the largest one-day fall in transactions since backfill_from), `usage_correlation` (week-over-week change correlations, descriptive). |
 | `wallet` | object | The buyback wallet, its official citation (`official_source`), related revenue wallets, and the label used. |
 | `metrics` | object | Keyed metric records (below). |
 | `stale` | object | Metric key → since when its value has been carried over. |
 | `simulator` | object | Formula, label, `defaults` (daily issuance, price, capture bps, allocation %, observed volume) and `default_result`. |
-| `series_weekly` | array | One row per 7-day bucket since 2026-02-01: `issuance_near`, `supply_change_near`, `derived_burns_near`, `buyback_proxy_near`, `wallet_net_near`, `wallet_internal_near`, `wallet_net_excl_internal_near`, `wallet_balance_end_near`, `verified_purchases_near` (always null), `partial`, `days`. |
+| `series_weekly` | array | One row per 7-day bucket since 2026-02-01: `issuance_near`, `supply_change_near`, `derived_burns_near`, `buyback_proxy_near`, `wallet_net_near`, `wallet_internal_near`, `wallet_net_excl_internal_near`, `wallet_balance_end_near`, `verified_purchases_near` (always null), `intents_volume_usd`, `active_accounts_avg`, `txns_avg`, `active_contracts_avg`, `partial`, `days`. |
 | `wallet_transfers` | object | Summary of the wallet's transfers in the window (counts, counterparties, outbound list). |
 | `official_dashboard` | object | revenue.near.org wallet breakdown vs on-chain holdings now, and the difference. |
+| `queries` | object | The query behind each section (`issuance`, `supply`, `intents`, `coverage`, `weekly`, `usage`, `simulator`): a list of `{ label, code }` with runnable requests using the actual blocks of this build. |
 | `sources` | array | Name, URL and use of every source. |
 
 ### Metric record
@@ -83,6 +85,10 @@ Every metric has the same shape:
 | `verified_purchases`, `coverage_verified` | NEAR, ratio | unavailable | No swap-level record (see the reason field) |
 | `coverage_proxy` | ratio | proxy | buyback_proxy_near ÷ issuance |
 | `coverage_wallet` | ratio | proxy | wallet_net_excl_internal ÷ issuance |
+| `usage_active_accounts`, `usage_txns`, `usage_active_contracts` | per day | measured (NearBlocks) | 30-day mean of NearBlocks' daily field; each carries `prior_value`, `prior_period_start/end` and `change_pct` against the previous 30 days |
+| `usage_new_accounts` | accounts | measured (NearBlocks) | 30-day sum, with the same prior-window comparison |
+
+`intents_volume` also carries `prior_value` and `change_pct` for the same comparison.
 
 ## Example
 

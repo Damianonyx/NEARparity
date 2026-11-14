@@ -210,3 +210,35 @@ test('dashboard rows parse from escaped page data; prices match the nearest UTC 
   assert.equal(byDay.has('2026-11-15'), false); // 15 minutes off → rejected, not guessed
   assert.equal(byDay.get('2026-11-16'), 3.3);
 });
+
+// ---------- network usage helpers ----------
+import { changeCorrelation, changePct, indexTo100, llamaWindowSum, parseUsage, priorWindow, windowStat } from './lib/usage.mjs';
+
+test('usage rows parse to numbers; missing fields stay null, never 0', () => {
+  const rows = parseUsage([
+    { date: '2026-11-02T00:00:00.000Z', txns: '10', active_accounts: '4', new_accounts: null, active_contracts: 'x' },
+    { date: '2026-11-01T00:00:00.000Z', txns: '8', active_accounts: '2', new_accounts: '1', active_contracts: '3' },
+    { date: '2024-01-01T00:00:00.000Z', txns: '1' },
+  ], '2025-01-01');
+  assert.deepEqual(rows.map((r) => r.date), ['2026-11-01', '2026-11-02']);
+  assert.equal(rows[1].new_accounts, null); assert.equal(rows[1].active_contracts, null);
+});
+
+test('usage window stats need every day; the prior window is the same length just before', () => {
+  const rows = [{ date: '2026-11-01', txns: 2 }, { date: '2026-11-02', txns: 4 }, { date: '2026-11-03', txns: 6 }];
+  assert.equal(windowStat(rows, 'txns', '2026-11-01T00:00:00Z', '2026-11-03T00:00:00Z').value, 3);
+  assert.equal(windowStat(rows, 'txns', '2026-11-01T00:00:00Z', '2026-11-04T00:00:00Z', 'sum').value, 12);
+  const gap = windowStat(rows, 'txns', '2026-10-31T00:00:00Z', '2026-11-02T00:00:00Z');
+  assert.equal(gap.value, null); assert.deepEqual(gap.missing, ['2026-10-31']);
+  assert.deepEqual(priorWindow('2026-10-15T00:00:00.000Z', '2026-11-14T00:00:00.000Z'), { start: '2026-09-15T00:00:00.000Z', end: '2026-10-15T00:00:00.000Z' });
+  assert.equal(changePct(80, 100), -0.2); assert.equal(changePct(1, 0), null); assert.equal(changePct(null, 1), null);
+  assert.deepEqual(indexTo100([null, 50, 100, null]), [null, 100, 200, null]);
+  assert.equal(llamaWindowSum([[1793491200, 5], [1793577600, 7]], '2026-11-01T00:00:00Z', '2026-11-03T00:00:00Z'), 12);
+  assert.equal(llamaWindowSum([[1793491200, 5]], '2026-11-01T00:00:00Z', '2026-11-03T00:00:00Z'), null);
+});
+
+test('week-over-week change correlation', () => {
+  assert.ok(Math.abs(changeCorrelation([1, 2, 4, 8, 4], [10, 20, 40, 80, 40]).r - 1) < 1e-12);
+  assert.ok(Math.abs(changeCorrelation([1, 2, 1, 2, 1], [2, 1, 2, 1, 2]).r + 1) < 1e-9);
+  assert.deepEqual(changeCorrelation([1, 2], [1, 2]), { r: null, n: 1 });
+});

@@ -73,6 +73,25 @@ With the snapshot defaults (88,935 NEAR/day, $3.32 per NEAR, **4.76 bps** net re
 
 NEAR's official revenue dashboard ([revenue.near.org](https://revenue.near.org/)) says that NEAR "captures a growing share of fees, feeding buybacks that permanently remove NEAR from circulation". The NEAR in the buyback wallet is held, not burned. Total supply rose by 2.64 M NEAR in the window, and burns explain only 25 k NEAR of the difference from issuance. "Removed from circulation" is accurate only in the sense of "held by a NEAR-controlled multisig", and that is reversible: the wallet has sent NEAR out (17 outbound receipts in its history, including 12,000 NEAR on 10 Jul 2026, NearBlocks).
 
+### 2.6 Network usage behind the buyback (measured, as reported by NearBlocks)
+
+The buyback is funded by Intents fees, so it helps to know whether activity on NEAR is growing alongside it. These figures come from NearBlocks' daily network charts. Every daily row is in [`data/usage.json`](data/usage.json), and the figures below can be recomputed from the rows for the dates given.
+
+| 30-day mean (15 Oct – 13 Nov 2026) vs the previous 30 days (15 Sep – 14 Oct) | Now | Before | Change |
+|---|---|---|---|
+| Daily active accounts | 64,822 | 74,812 | **−13.4%** |
+| Daily transactions | 678,139 | 872,564 | **−22.3%** |
+| New accounts (30-day total) | 283,950 | 345,347 | −17.8% |
+| Daily active contracts | 69,939 | 55,981 | +24.9% |
+| Intents volume (DefiLlama, 30-day total) | $3.80 B | $4.84 B | −21.5% |
+
+- **Weekly index, week of 1 Feb 2026 = 100.** By the last full week (starting 1 Nov), Intents volume per day was at **97**, daily active accounts at **27** and daily transactions at **19**.
+- **The two have come apart since August.** Intents volume roughly doubled from its summer level, while active accounts kept falling. Week-over-week changes in Intents volume and active accounts are essentially uncorrelated over 39 full weeks (r = −0.19; computed by the build, `meta.usage_correlation`; descriptive only, no lag or causality tested).
+- **There is one structural break.** On 2 Apr 2026, daily transactions fell from 3,758,663 to 1,063,375 (−72%) and active contracts from 1,381,922 to 184,649, while active accounts barely moved (139,048 → 137,183). The drop was in activity per account, not in the number of accounts. Its cause is not verified here.
+- **The 2025 baseline was higher still.** The 2025 daily averages were 421k active accounts and 5.34 M transactions (NearBlocks rows, 1 Jan – 31 Dec 2025).
+
+What this means for the claim: the buyback depends on cross-chain swap volume through Intents, which has held up, not on NEAR's own on-chain activity, which has fallen. That makes the buyback more sensitive to Intents' competitive position than to NEAR adoption. It also means Intents volume is a poor stand-in for NEAR network usage over this period.
+
 ## 3. Counterevidence and the strongest case against the claim
 
 - **The trend is improving.** Proxy coverage rose from about 11% (Feb–Jul) to 16–17% (Jul–Nov). If Intents volume keeps compounding, coverage rises with it, because issuance is nearly flat.
@@ -93,6 +112,8 @@ NEAR's official revenue dashboard ([revenue.near.org](https://revenue.near.org/)
 - **Third-party data.** DefiLlama volume, fees and revenue are reported as published, and DefiLlama revises its history: in a later build the same day, gross fees for this same window read $6.27 M rather than $5.83 M, and net revenue $1.802 M rather than $1.807 M. This is why every number here cites a fixed snapshot. If DefiLlama has not yet filled the last day, the build keeps the previous value, marked stale, rather than understating it.
 - **The window is short.** The 30-day comparison reflects one market regime. Weekly history starts on 1 Feb 2026.
 
+- **Network usage comes from NearBlocks, not BigQuery.** The track prompt suggests the NEAR BigQuery public dataset, which needs a Google Cloud billing project. NearBlocks' keyless daily charts provide the same three measures (active accounts, transactions, contract activity). The definitions are NearBlocks' own and are not formally documented, so the absolute levels should be read as NearBlocks-reported.
+
 ## 5. Findings that would invalidate the thesis
 
 The claim "buybacks are not keeping pace with issuance" would be wrong, or would stop being true, if any of the following held:
@@ -101,7 +122,8 @@ The claim "buybacks are not keeping pace with issuance" would be wrong, or would
 2. **Coverage reaches parity.** Proxy or verified coverage of 100% or more of issuance in three consecutive 30-day windows would mean buybacks are keeping pace.
 3. **Supply stops growing because of the buyback.** If purchased NEAR were burned, so that the 30-day total supply change fell to zero or below while issuance continued, the "held, not burned" point would no longer apply.
 4. **Undercounting is shown.** If other NEAR wallets were shown to hold buyback NEAR not captured by either measure, coverage would need restating.
-5. **The parity gap closes.** HSP-029 taking effect on-chain (`max_inflation_rate` falling below 1/40), combined with volume or capture-rate growth, would close the gap if the simulator's required volume fell to the observed 30-day average.
+5. **Usage and Intents volume re-couple at a much higher level.** If NEAR's daily active accounts and transactions grew alongside Intents volume, the buyback base would be broader than this thesis assumes.
+6. **The parity gap closes.** HSP-029 taking effect on-chain (`max_inflation_rate` falling below 1/40), combined with volume or capture-rate growth, would close the gap if the simulator's required volume fell to the observed 30-day average.
 
 ## 6. Verified context
 
@@ -124,4 +146,5 @@ node scripts/serve.mjs                   # http://localhost:8080
 ```
 
 - **Weekly figures** in §2 come from `series_weekly` in the snapshot. The 30-day figures come from `metrics`.
+- **Network-usage figures** in §2.6 come from the NearBlocks daily rows in `data/usage.json` for the stated dates, and from `meta.usage_correlation` and `meta.usage_largest_txn_drop` in `data/latest.json` (build of 2026-11-14 16:19 UTC onward). Every section on the dashboard has a *Query* panel with the exact requests.
 - **Epoch-level mints** are in `data/epochs.json`. Boundary blocks and wallet balances are in `data/boundaries.json`. Wallet transfers are in `data/wallet-transfers.json`.
