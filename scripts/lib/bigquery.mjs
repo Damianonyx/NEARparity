@@ -50,12 +50,13 @@ const cell = (field, v) => {
 };
 
 /** Run a standard-SQL query with named parameters and a hard byte cap. Returns { rows: [{col: value}], bytes }. */
-export async function runQuery({ token, project, sql, params = {}, maxBytes }) {
+export async function runQuery({ token, project, sql, params = {}, maxBytes, dryRun = false }) {
   const auth = { authorization: `Bearer ${token}` };
   let r = await postJson(`${BQ}/projects/${project}/queries`, {
-    query: sql, useLegacySql: false, parameterMode: 'NAMED', timeoutMs: 60_000,
+    query: sql, useLegacySql: false, parameterMode: 'NAMED', timeoutMs: 60_000, dryRun,
     maximumBytesBilled: String(Math.ceil(maxBytes)), queryParameters: Object.entries(params).map(([k, v]) => param(k, v)),
   }, auth);
+  if (dryRun) return { rows: [], bytes: Number(r.totalBytesProcessed || 0), dry_run: true };
   const ref = r.jobReference;
   for (let i = 0; !r.jobComplete && i < 20; i++) {
     const res = await fetch(`${BQ}/projects/${ref.projectId}/queries/${ref.jobId}?timeoutMs=60000${ref.location ? `&location=${ref.location}` : ''}`, { headers: auth, signal: AbortSignal.timeout(90_000) });
@@ -164,3 +165,24 @@ export function sumDays(state, start, end) {
   }
   return s;
 }
+
+/** Daily network usage for [@start, @end), from the public dataset (filtered on block_date, the partition column):
+ *  transactions, distinct signers (daily active accounts), and contract usage (FUNCTION_CALL receipt actions:
+ *  distinct receiving contracts and the number of calls). */
+export const DAILY_USAGE_SQL = `-- NEAR Parity daily network usage (BigQuery public NEAR dataset)
+WITH tx AS (
+  SELECT block_date AS day, COUNT(*) AS txns, COUNT(DISTINCT signer_account_id) AS active_accounts
+  FROM \`${DATASET}.transactions\`
+  WHERE block_date >= @start AND block_date < @end
+  GROUP BY day
+),
+fc AS (
+  SELECT block_date AS day, COUNT(DISTINCT receipt_receiver_account_id) AS active_contracts, COUNT(*) AS function_calls
+  FROM \`${DATASET}.receipt_actions\`
+  WHERE block_date >= @start AND block_date < @end AND action_kind = 'FUNCTION_CALL'
+  GROUP BY day
+)
+SELECT CAST(day AS STRING) AS day, IFNULL(txns, 0) AS txns, IFNULL(active_accounts, 0) AS active_accounts,
+       IFNULL(active_contracts, 0) AS active_contracts, IFNULL(function_calls, 0) AS function_calls
+FROM tx FULL JOIN fc USING (day)
+ORDER BY day`;
