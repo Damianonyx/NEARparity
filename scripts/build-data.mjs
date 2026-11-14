@@ -39,9 +39,9 @@ function setStatus(key, { ok, http_status = null, error = null, url = null }) {
   const s = status[key] || { calls: 0, failures: 0 };
   s.calls++;
   if (!ok) s.failures++;
-  Object.assign(s, { url: url ?? s.url ?? null, http_status, fetched_at: new Date().toISOString() });
-  if (ok && !s.error) s.ok = true;
-  if (!ok) { s.ok = false; s.error = error; }
+  // ok/error describe the latest call, so a request that succeeded on retry reads as ok;
+  // `failures` still counts every failed attempt.
+  Object.assign(s, { url: url ?? s.url ?? null, http_status, fetched_at: new Date().toISOString(), ok, error: ok ? null : error });
   status[key] = s;
 }
 
@@ -438,21 +438,6 @@ if (transfers) {
   };
 }
 
-// Simulator defaults (conditional scenario inputs).
-const capBps = v('net_revenue_capture_rate'); const allocPct = v('buyback_allocation');
-const simDefaults = {
-  daily_issuance_near: v('daily_issuance'), price_usd: v('price_current') ?? v('price_avg'),
-  net_revenue_capture_bps: capBps, buyback_allocation_pct: allocPct, observed_avg_daily_volume_usd: v('avg_daily_volume'),
-};
-const scenario = [simDefaults.daily_issuance_near, simDefaults.price_usd, capBps, allocPct].every((x) => x != null)
-  ? parityRequiredDailyVolume({ dailyIssuanceNear: simDefaults.daily_issuance_near, priceUsd: simDefaults.price_usd, captureRate: capBps / 10_000, allocation: allocPct / 100 })
-  : { finite: false, value: null, reason: 'Default inputs unavailable.' };
-const simulator = {
-  formula: 'Required daily volume (USD) = daily issuance (NEAR) × NEAR price (USD) ÷ (net revenue capture rate × buyback allocation)',
-  label: 'Conditional scenario under the stated assumptions. Not a prediction and not a supply-neutrality threshold.',
-  defaults: simDefaults, default_result: scenario, ...W,
-};
-
 // ---------- weekly series for the chart ----------
 let series = null;
 if (chain) {
@@ -495,6 +480,22 @@ if (series && prevLatest?.series_weekly && (failedGroups.has('llama_holders') ||
     r.buyback_proxy_near = prevBy.get(r.period_start).buyback_proxy_near; r.buyback_proxy_status = 'proxy'; r.buyback_proxy_stale = true;
   }
 }
+// Simulator defaults (conditional scenario inputs), from the metrics after stale fallbacks.
+const capBps = v('net_revenue_capture_rate'); const allocPct = v('buyback_allocation');
+const simDefaults = {
+  daily_issuance_near: v('daily_issuance'), price_usd: v('price_current') ?? v('price_avg'),
+  net_revenue_capture_bps: capBps, buyback_allocation_pct: allocPct, observed_avg_daily_volume_usd: v('avg_daily_volume'),
+};
+const scenario = [simDefaults.daily_issuance_near, simDefaults.price_usd, capBps, allocPct].every((x) => x != null)
+  ? parityRequiredDailyVolume({ dailyIssuanceNear: simDefaults.daily_issuance_near, priceUsd: simDefaults.price_usd, captureRate: capBps / 10_000, allocation: allocPct / 100 })
+  : { finite: false, value: null, reason: 'Default inputs unavailable.' };
+const simulator = {
+  formula: 'Required daily volume (USD) = daily issuance (NEAR) × NEAR price (USD) ÷ (net revenue capture rate × buyback allocation)',
+  label: 'Conditional scenario under the stated assumptions. Not a prediction and not a supply-neutrality threshold.',
+  defaults: simDefaults, default_result: scenario, ...W,
+  defaults_stale: ['daily_issuance', 'price_current', 'net_revenue_capture_rate', 'buyback_allocation', 'avg_daily_volume'].some((k) => M[k]?.stale) || undefined,
+};
+
 // Official dashboard figure vs the wallet's on-chain holdings now (different scopes; shown, not reconciled away).
 let dashboardOut = null;
 if (dashboard) {

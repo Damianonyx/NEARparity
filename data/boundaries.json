@@ -1,0 +1,651 @@
+{
+  "boundaries": {
+    "2026-02-01T00:00:00.000Z": {
+      "block_height": 183584248,
+      "block_hash": "8xw2HjeTBiDnjCWaoLfHm8wpJLUq8vrGfVr1weVVTiRB",
+      "block_time": "2026-01-31T23:59:59.751Z",
+      "total_supply": "1286599189469246681360353260257300",
+      "wallets": {
+        "buybacks.multisignature.near": {
+          "exists": false,
+          "native_yocto": "0",
+          "wnear_yocto": "0",
+          "intents_wnear_yocto": "0",
+          "total_yocto": "0"
+        }
+      }
+    },
+    "2026-02-08T00:00:00.000Z": {
+      "block_height": 184580390,
+      "block_hash": "7Gwibh4UhMaojZyG8LGvW5WsuhZgHmPxzyV7BHrzVEYE",
+      "block_time": "2026-02-07T23:59:59.610Z",
+      "total_supply": "1287197154532416880935743053761045",
+      "wallets": {
+        "buybacks.multisignature.near": {
+          "exists": false,
+          "native_yocto": "0",
+          "wnear_yocto": "0",
+          "intents_wnear_yocto": "0",
+          "total_yocto": "0"
+        }
+      }
+    },
+    "2026-02-15T00:00:00.000Z": {
+      "block_height": 185584193,
+      "block_hash": "5bZkzfggSjBSTjRUrUgVQsD89xbuF88wPVHnJwXVFSG1",
+      "block_time": "2026-02-14T23:59:59.534Z",
+      "total_supply": "1287791761108760953876361037947806",
+      "wallets": {
+        "buybacks.multisignature.near": {
+          "exists": false,
+          "native_yocto": "0",
+          "wnear_yocto": "0",
+          "intents_wnear_yocto": "0",
+          "total_yocto": "0"
+        }
+      }
+    },
+    "2026-02-22T00:00:00.000Z": {
+      "block_height": 186581466,
+      "block_hash": "GNxyF1Q73R4ck2GDS8i9Dw9H3ir6GkqKPkNHXtheBRQX",
+      "block_time": "2026-02-21T23:59:59.986Z",
+      "total_supply": "1288390410041087126035891759701177",
+      "wallets": {
+        "buybacks.multisignature.near": {
+          "exists": false,
+          "native_yocto": "0",
+          "wnear_yocto": "0",
+          "intents_wnear_yocto": "0",
+          "total_yocto": "0"
+        }
+      }
+    },
+    "2026-03-01T00:00:00.000Z": {
+      "block_height": 187573900,
+      "block_hash": "LtDSycVXdfkEZ5zGBBLd1WoFehG3GNvJmwB2t4nqqgc",
+      "block_time": "2026-02-28T23:59:59.484Z",
+      "total_supply": "1288990514511075332204508945706516",
+      "wallets": {
+        "buybacks.multisignature.near": {
+          "exists": false,
+          "native_yocto": "0",
+          "wnear_yocto": "0",
+          "intents_wnear_yocto": "0",
+          "total_yocto": "0"
+        }
+      }
+    },
+    "2026-03-08T00:00:00.000Z": {
+      "block_height": 188567398,
+      "block_hash": "JA6UMkZUqdjgSn1Hrfcq8SnCvtzKg8wAd9tMEsWr7Hx8",
+      "block_time": "2026-03-07T23:59:59.832Z",
+      "total_supply": "1289591482899412941773267539026755",
+      "wallets": {
+        "buybacks.multisignature.near": {
+          "exists": false,
+          "native_yocto": "0",
+          "wnear_yocto": "0",
+          "intents_wnear_yocto": "0",
+          "total_yocto": "0"
+        }
+      }
+    },
+    "2026-03-15T00:00:00.000Z": {
+      "block_height": 189572754,
+      "block_hash": "BmXxwYiXKvcBNwgV2Qn22ALnxkNB2Atp9eqLKXmZv4TF",
+      "block_time": "2026-03-14T23:59:59.531Z",
+      "total_supply": "1290186561886697242474490103833609",
+      "wallets": {
+        "buybacks.multisignature.near": {
+          "exists": false,
+          "native_yocto": "0",
+          "wnear_yocto": "0",
+          "intents_wnear_yocto": "0",
+          "total_yocto": "0"
+        }
+      }
+    },
+    "2026-03-22T00:00:00.000Z": {
+      "block_height": 190574630,
+      "block_hash": "D6X8fRTuge8TacURFALbWUeq5uQiSdWCHs3i89jFGHFH",
+      "block_time": "2026-03-21T23:59:59.694Z",
+      "total_supply": "1290809880245596108352666146817391",
+      "wallets": {
+        "buybacks.multisignature.near": {
+          "exists": true,
+          "native_yocto": "39998442762078857400000000",
+          "wnear_yocto": "0",
+          "intents_wnear_yocto": "0",
+          "total_yocto": "39998442762078857400000000"
+        }
+      }
+    },
+    "2026-03-29T00:00:00.000Z": {
+      "block_height": 191581298,
+      "block_hash": "2ATsAJ4KC9oMEjkcJYgA5dy54TpX5qJuQcS9QxXxTJNN",
+      "block_time": "2026-03-28T23:59:59.953Z",
+      "total_supply": "1291403567870687348456651474579162",
+      "wallets": {
+        "buybacks.multisignature.near": {
+          "exists": true,
+          "native_yocto": "39998442762078857400000000",
+          "wnear_yocto": "0",
+          "intents_wnear_yocto": "0",
+          "total_yocto": "39998442762078857400000000"
+        }
+      }
+    },
+    "2026-04-05T00:00:00.000Z": {
+      "block_height": 192589111,
+      "block_hash": "4JoqJwLbzNw9dipk2zqH5EjWgxviDfmB3cMW3sGyCfQC",
+      "block_time": "2026-04-04T23:59:59.622Z",
+      "total_supply": "1292001112473529392522130709802756",
+      "wallets": {
+        "buybacks.multisignature.near": {
+          "exists": true,
+          "native_yocto": "39998442762078857400000000",
+          "wnear_yocto": "0",
+          "intents_wnear_yocto": "0",
+          "total_yocto": "39998442762078857400000000"
+        }
+      }
+    },
+    "2026-04-12T00:00:00.000Z": {
+      "block_height": 193604013,
+      "block_hash": "EDrhuUduVqYtztLsAqN3LyDm6jy48oYcEohQ7hqe5j1C",
+      "block_time": "2026-04-11T23:59:59.449Z",
+      "total_supply": "1292628320272017518527862070148416",
+      "wallets": {
+        "buybacks.multisignature.near": {
+          "exists": true,
+          "native_yocto": "39998442762078857400000000",
+          "wnear_yocto": "0",
+          "intents_wnear_yocto": "0",
+          "total_yocto": "39998442762078857400000000"
+        }
+      }
+    },
+    "2026-04-19T00:00:00.000Z": {
+      "block_height": 194605990,
+      "block_hash": "24YZMqmxQkSu23PRsK3FUobNXeGSKPfYHFuep8uuwEVB",
+      "block_time": "2026-04-18T23:59:59.862Z",
+      "total_supply": "1293235834776710624255541257928332",
+      "wallets": {
+        "buybacks.multisignature.near": {
+          "exists": true,
+          "native_yocto": "39998442762078857400000000",
+          "wnear_yocto": "0",
+          "intents_wnear_yocto": "0",
+          "total_yocto": "39998442762078857400000000"
+        }
+      }
+    },
+    "2026-04-26T00:00:00.000Z": {
+      "block_height": 195608287,
+      "block_hash": "FaGZivdgdHS9yJBiW2VpsP4rfb4JbBcMRgGS45GJwQtr",
+      "block_time": "2026-04-25T23:59:59.662Z",
+      "total_supply": "1293844365598935336631346066396091",
+      "wallets": {
+        "buybacks.multisignature.near": {
+          "exists": true,
+          "native_yocto": "7468163880663338272034157615",
+          "wnear_yocto": "0",
+          "intents_wnear_yocto": "0",
+          "total_yocto": "7468163880663338272034157615"
+        }
+      }
+    },
+    "2026-05-03T00:00:00.000Z": {
+      "block_height": 196628378,
+      "block_hash": "E3Bu871ZySAyQmDk3gWn2RDqSo9LxvX6eq7RfwAufrM9",
+      "block_time": "2026-05-02T23:59:59.672Z",
+      "total_supply": "1294469244404387331205986329697847",
+      "wallets": {
+        "buybacks.multisignature.near": {
+          "exists": true,
+          "native_yocto": "47374676598270160562533298091",
+          "wnear_yocto": "0",
+          "intents_wnear_yocto": "0",
+          "total_yocto": "47374676598270160562533298091"
+        }
+      }
+    },
+    "2026-05-10T00:00:00.000Z": {
+      "block_height": 197645903,
+      "block_hash": "8CAS9E978insxfWZscfatdufoDqPwqu6CPosCwGkQUky",
+      "block_time": "2026-05-09T23:59:59.647Z",
+      "total_supply": "1295069317514996317559309686069725",
+      "wallets": {
+        "buybacks.multisignature.near": {
+          "exists": true,
+          "native_yocto": "99518154128822730191157081355",
+          "wnear_yocto": "0",
+          "intents_wnear_yocto": "0",
+          "total_yocto": "99518154128822730191157081355"
+        }
+      }
+    },
+    "2026-05-17T00:00:00.000Z": {
+      "block_height": 198638373,
+      "block_hash": "5NYzD8AvGnoeuq4VRpEPfZ93rNRqvKkz2AWuSvTbun9X",
+      "block_time": "2026-05-16T23:59:59.512Z",
+      "total_supply": "1295683056598454636789245232426030",
+      "wallets": {
+        "buybacks.multisignature.near": {
+          "exists": true,
+          "native_yocto": "141605554055470183225704431571",
+          "wnear_yocto": "0",
+          "intents_wnear_yocto": "0",
+          "total_yocto": "141605554055470183225704431571"
+        }
+      }
+    },
+    "2026-05-24T00:00:00.000Z": {
+      "block_height": 199630781,
+      "block_hash": "DkZ3NcdHBnX55hConLBm7hvgBWEFdpdzgidkpq1pAfNw",
+      "block_time": "2026-05-23T23:59:59.780Z",
+      "total_supply": "1296297834678964533450798441676265",
+      "wallets": {
+        "buybacks.multisignature.near": {
+          "exists": true,
+          "native_yocto": "195982758067131207493638589490",
+          "wnear_yocto": "0",
+          "intents_wnear_yocto": "0",
+          "total_yocto": "195982758067131207493638589490"
+        }
+      }
+    },
+    "2026-05-31T00:00:00.000Z": {
+      "block_height": 200630583,
+      "block_hash": "BmToN18pGmME72f4acGj41Wtu8WRioFJhECynVqrrZD8",
+      "block_time": "2026-05-30T23:59:59.842Z",
+      "total_supply": "1296908672802339026594806154658593",
+      "wallets": {
+        "buybacks.multisignature.near": {
+          "exists": true,
+          "native_yocto": "252962295086089939228177643123",
+          "wnear_yocto": "0",
+          "intents_wnear_yocto": "0",
+          "total_yocto": "252962295086089939228177643123"
+        }
+      }
+    },
+    "2026-06-07T00:00:00.000Z": {
+      "block_height": 201627474,
+      "block_hash": "CZ7YvWfcuZCLbhaLd8gfLPqfycfQszhYC7RaM4ZTuVRr",
+      "block_time": "2026-06-06T23:59:59.663Z",
+      "total_supply": "1297520693714335475654318736531327",
+      "wallets": {
+        "buybacks.multisignature.near": {
+          "exists": true,
+          "native_yocto": "365835541012616480110431551321",
+          "wnear_yocto": "0",
+          "intents_wnear_yocto": "0",
+          "total_yocto": "365835541012616480110431551321"
+        }
+      }
+    },
+    "2026-06-14T00:00:00.000Z": {
+      "block_height": 202595225,
+      "block_hash": "ETx443Vbsr3GtBB2sXTWKeW6m7WDHtNCKuaTEGYPzdqP",
+      "block_time": "2026-06-13T23:59:59.183Z",
+      "total_supply": "1298147346956827956327080305625326",
+      "wallets": {
+        "buybacks.multisignature.near": {
+          "exists": true,
+          "native_yocto": "409312547781210917562906883006",
+          "wnear_yocto": "0",
+          "intents_wnear_yocto": "0",
+          "total_yocto": "409312547781210917562906883006"
+        }
+      }
+    },
+    "2026-06-21T00:00:00.000Z": {
+      "block_height": 203590219,
+      "block_hash": "74jm2XGWBsZPr5WZTbLvbshYkZVMXtm9JC51k4tRNWFQ",
+      "block_time": "2026-06-20T23:59:59.628Z",
+      "total_supply": "1298761995671075561935259249386477",
+      "wallets": {
+        "buybacks.multisignature.near": {
+          "exists": true,
+          "native_yocto": "443890303009423058957148583067",
+          "wnear_yocto": "0",
+          "intents_wnear_yocto": "0",
+          "total_yocto": "443890303009423058957148583067"
+        }
+      }
+    },
+    "2026-06-28T00:00:00.000Z": {
+      "block_height": 204589293,
+      "block_hash": "Homwsmh72sDoe8h9N2XtyAG4KuGqYRQ2fKAWvXHwovtB",
+      "block_time": "2026-06-27T23:59:59.908Z",
+      "total_supply": "1299375273364271803696786016045544",
+      "wallets": {
+        "buybacks.multisignature.near": {
+          "exists": true,
+          "native_yocto": "472654730072964654508800954971",
+          "wnear_yocto": "0",
+          "intents_wnear_yocto": "0",
+          "total_yocto": "472654730072964654508800954971"
+        }
+      }
+    },
+    "2026-07-05T00:00:00.000Z": {
+      "block_height": 205586098,
+      "block_hash": "5USd28M1pjnxMDPXBfKmuN9AXnKgG1rPAXK9FBpqRoWb",
+      "block_time": "2026-07-04T23:59:59.664Z",
+      "total_supply": "1299988372191726395112680741791537",
+      "wallets": {
+        "buybacks.multisignature.near": {
+          "exists": true,
+          "native_yocto": "506850294681717600650426462072",
+          "wnear_yocto": "0",
+          "intents_wnear_yocto": "0",
+          "total_yocto": "506850294681717600650426462072"
+        }
+      }
+    },
+    "2026-07-12T00:00:00.000Z": {
+      "block_height": 206577652,
+      "block_hash": "4TLd2VHNRCsHdVQmXK78vK8bLkHqddXYDW8BZ13b5FJa",
+      "block_time": "2026-07-11T23:59:59.772Z",
+      "total_supply": "1300605980058196645369942640723079",
+      "wallets": {
+        "buybacks.multisignature.near": {
+          "exists": true,
+          "native_yocto": "534003365273552319552363388133",
+          "wnear_yocto": "0",
+          "intents_wnear_yocto": "0",
+          "total_yocto": "534003365273552319552363388133"
+        }
+      }
+    },
+    "2026-07-19T00:00:00.000Z": {
+      "block_height": 207562927,
+      "block_hash": "FcuD5kUQ4yPKXt5BKmiAvRPn4YW6ca1EcP7vLdVY1DAZ",
+      "block_time": "2026-07-18T23:59:59.917Z",
+      "total_supply": "1301227893471968131505464706656724",
+      "wallets": {
+        "buybacks.multisignature.near": {
+          "exists": true,
+          "native_yocto": "584381852778637196557798203874",
+          "wnear_yocto": "0",
+          "intents_wnear_yocto": "0",
+          "total_yocto": "584381852778637196557798203874"
+        }
+      }
+    },
+    "2026-07-26T00:00:00.000Z": {
+      "block_height": 208545896,
+      "block_hash": "AFw8axB8jgxBth3RzNkfKUD2aX4cdRNib6N4EPgrDR3V",
+      "block_time": "2026-07-25T23:59:59.928Z",
+      "total_supply": "1301848311824803831936998850108122",
+      "wallets": {
+        "buybacks.multisignature.near": {
+          "exists": true,
+          "native_yocto": "628322692238888162977527403900",
+          "wnear_yocto": "0",
+          "intents_wnear_yocto": "0",
+          "total_yocto": "628322692238888162977527403900"
+        }
+      }
+    },
+    "2026-08-02T00:00:00.000Z": {
+      "block_height": 209533097,
+      "block_hash": "GpPA14eyzGvpEcUP2wcz5PPvJaZQxwKdKDBXHotrHruG",
+      "block_time": "2026-08-01T23:59:59.589Z",
+      "total_supply": "1302440933209944333366914015040151",
+      "wallets": {
+        "buybacks.multisignature.near": {
+          "exists": true,
+          "native_yocto": "668110361984863707784314858975",
+          "wnear_yocto": "0",
+          "intents_wnear_yocto": "0",
+          "total_yocto": "668110361984863707784314858975"
+        }
+      }
+    },
+    "2026-08-09T00:00:00.000Z": {
+      "block_height": 210520391,
+      "block_hash": "EwrWvwwRVufLMn1BdqtYrb7uB1hkJ32GpEEbzdMXUHZs",
+      "block_time": "2026-08-08T23:59:59.857Z",
+      "total_supply": "1303061926219219879615179409881677",
+      "wallets": {
+        "buybacks.multisignature.near": {
+          "exists": true,
+          "native_yocto": "707657257227680235948049302308",
+          "wnear_yocto": "0",
+          "intents_wnear_yocto": "0",
+          "total_yocto": "707657257227680235948049302308"
+        }
+      }
+    },
+    "2026-08-16T00:00:00.000Z": {
+      "block_height": 211507161,
+      "block_hash": "AhK8e3vy669QRLCo3Gee8dTkqujpK8zPjTS1CYeNUsBj",
+      "block_time": "2026-08-15T23:59:59.917Z",
+      "total_supply": "1303683828096472537428898914748598",
+      "wallets": {
+        "buybacks.multisignature.near": {
+          "exists": true,
+          "native_yocto": "748489563562543629283975913966",
+          "wnear_yocto": "0",
+          "intents_wnear_yocto": "0",
+          "total_yocto": "748489563562543629283975913966"
+        }
+      }
+    },
+    "2026-08-23T00:00:00.000Z": {
+      "block_height": 212494411,
+      "block_hash": "BEkkUfn7w4xKS4WojxeztawpcHzMXBetgZJWRDHnqaR2",
+      "block_time": "2026-08-22T23:59:59.885Z",
+      "total_supply": "1304305849419027071973525540813788",
+      "wallets": {
+        "buybacks.multisignature.near": {
+          "exists": true,
+          "native_yocto": "846982716237192727079612964776",
+          "wnear_yocto": "0",
+          "intents_wnear_yocto": "0",
+          "total_yocto": "846982716237192727079612964776"
+        }
+      }
+    },
+    "2026-08-30T00:00:00.000Z": {
+      "block_height": 213482575,
+      "block_hash": "H3KzQkLU8uv36oHoSgXrLKSi2eCRUaUzMkiQmHCj2vbq",
+      "block_time": "2026-08-29T23:59:59.651Z",
+      "total_supply": "1304927268734753870510102886061937",
+      "wallets": {
+        "buybacks.multisignature.near": {
+          "exists": true,
+          "native_yocto": "923543517561443709928739849906",
+          "wnear_yocto": "0",
+          "intents_wnear_yocto": "0",
+          "total_yocto": "923543517561443709928739849906"
+        }
+      }
+    },
+    "2026-09-06T00:00:00.000Z": {
+      "block_height": 214450005,
+      "block_hash": "p3mqjR1gosKSvHvZYt9jnGJW86TLddHoBVj1cJrxTUK",
+      "block_time": "2026-09-05T23:59:59.924Z",
+      "total_supply": "1305532884603699467915502945064652",
+      "wallets": {
+        "buybacks.multisignature.near": {
+          "exists": true,
+          "native_yocto": "1031612177586484854759152535674",
+          "wnear_yocto": "0",
+          "intents_wnear_yocto": "0",
+          "total_yocto": "1031612177586484854759152535674"
+        }
+      }
+    },
+    "2026-09-13T00:00:00.000Z": {
+      "block_height": 215426596,
+      "block_hash": "CtDvk88uadAatENMM37w7x1pP7AmPKqsQDm6TrDxm6RS",
+      "block_time": "2026-09-12T23:59:59.540Z",
+      "total_supply": "1306161329057404016983319366840566",
+      "wallets": {
+        "buybacks.multisignature.near": {
+          "exists": true,
+          "native_yocto": "1613457120540861337939025590785",
+          "wnear_yocto": "0",
+          "intents_wnear_yocto": "0",
+          "total_yocto": "1613457120540861337939025590785"
+        }
+      }
+    },
+    "2026-09-20T00:00:00.000Z": {
+      "block_height": 216412271,
+      "block_hash": "DtJyLCoAn1mrwXS4XJhxtJ2JWwZpKvMsZCiASa5iR2sS",
+      "block_time": "2026-09-19T23:59:59.820Z",
+      "total_supply": "1306784674342463325192062023599662",
+      "wallets": {
+        "buybacks.multisignature.near": {
+          "exists": true,
+          "native_yocto": "1716882388898630646816476441800",
+          "wnear_yocto": "0",
+          "intents_wnear_yocto": "0",
+          "total_yocto": "1716882388898630646816476441800"
+        }
+      }
+    },
+    "2026-09-27T00:00:00.000Z": {
+      "block_height": 217410111,
+      "block_hash": "481fwdFUZcym7oPyxKZ3dkctRhhdcfJJz7FGpuYAEYML",
+      "block_time": "2026-09-26T23:59:59.933Z",
+      "total_supply": "1307399637456411796834399098785866",
+      "wallets": {
+        "buybacks.multisignature.near": {
+          "exists": true,
+          "native_yocto": "1807047110197867296847022165363",
+          "wnear_yocto": "0",
+          "intents_wnear_yocto": "0",
+          "total_yocto": "1807047110197867296847022165363"
+        }
+      }
+    },
+    "2026-10-04T00:00:00.000Z": {
+      "block_height": 218420664,
+      "block_hash": "53gjfKSKhmMCoQroQTzhG1rFMWyHQ1CxGgorCPtMT6z5",
+      "block_time": "2026-10-03T23:59:59.377Z",
+      "total_supply": "1308004137079667068400927809563487",
+      "wallets": {
+        "buybacks.multisignature.near": {
+          "exists": true,
+          "native_yocto": "1869501250582179979963250009820",
+          "wnear_yocto": "0",
+          "intents_wnear_yocto": "0",
+          "total_yocto": "1869501250582179979963250009820"
+        }
+      }
+    },
+    "2026-10-11T00:00:00.000Z": {
+      "block_height": 219447522,
+      "block_hash": "97P9ZhGncTn12uZm7MeKurJm7ttRqU8exQkggxg6Mskg",
+      "block_time": "2026-10-10T23:59:59.834Z",
+      "total_supply": "1308629061401030720226644944069368",
+      "wallets": {
+        "buybacks.multisignature.near": {
+          "exists": true,
+          "native_yocto": "1941541424418627092844313278718",
+          "wnear_yocto": "0",
+          "intents_wnear_yocto": "0",
+          "total_yocto": "1941541424418627092844313278718"
+        }
+      }
+    },
+    "2026-10-15T00:00:00.000Z": {
+      "block_height": 220001293,
+      "block_hash": "FBH78wRms1CKcTbigoguniQrtS2X1jgfqp3Ur2zrAZFk",
+      "block_time": "2026-10-14T23:59:59.571Z",
+      "total_supply": "1308982203937301155871904028062841",
+      "wallets": {
+        "buybacks.multisignature.near": {
+          "exists": true,
+          "native_yocto": "1977862015166105671095141878631",
+          "wnear_yocto": "0",
+          "intents_wnear_yocto": "0",
+          "total_yocto": "1977862015166105671095141878631"
+        }
+      }
+    },
+    "2026-10-18T00:00:00.000Z": {
+      "block_height": 220436709,
+      "block_hash": "2ZU5ufstyH4gHC73LQ83fgzgtSc2X6PT3Cfx8Aumuftg",
+      "block_time": "2026-10-17T23:59:59.712Z",
+      "total_supply": "1309243179111609607560554826656544",
+      "wallets": {
+        "buybacks.multisignature.near": {
+          "exists": true,
+          "native_yocto": "2008453431590361180292424700134",
+          "wnear_yocto": "0",
+          "intents_wnear_yocto": "0",
+          "total_yocto": "2008453431590361180292424700134"
+        }
+      }
+    },
+    "2026-10-25T00:00:00.000Z": {
+      "block_height": 221460753,
+      "block_hash": "Bbe6h14r3msKB78V6699fFzBe9ForaCd7mYmUrvqxper",
+      "block_time": "2026-10-24T23:59:59.615Z",
+      "total_supply": "1309873315605870433246499348349257",
+      "wallets": {
+        "buybacks.multisignature.near": {
+          "exists": true,
+          "native_yocto": "2063654814829638970316666604108",
+          "wnear_yocto": "0",
+          "intents_wnear_yocto": "0",
+          "total_yocto": "2063654814829638970316666604108"
+        }
+      }
+    },
+    "2026-11-01T00:00:00.000Z": {
+      "block_height": 222491355,
+      "block_hash": "oqstWdCWHxJqfv59y6yTBERTmYgMkmpqagrNyam7SeN",
+      "block_time": "2026-10-31T23:59:59.613Z",
+      "total_supply": "1310472976202154732906070252726082",
+      "wallets": {
+        "buybacks.multisignature.near": {
+          "exists": true,
+          "native_yocto": "2144976649835487232936209450114",
+          "wnear_yocto": "0",
+          "intents_wnear_yocto": "0",
+          "total_yocto": "2144976649835487232936209450114"
+        }
+      }
+    },
+    "2026-11-08T00:00:00.000Z": {
+      "block_height": 223537266,
+      "block_hash": "7Jzbv8euYGe8i7ioMHxAVMiLi5hjge9JNK2Kn1FLiacv",
+      "block_time": "2026-11-07T23:59:59.825Z",
+      "total_supply": "1311114816689782003450850962029673",
+      "wallets": {
+        "buybacks.multisignature.near": {
+          "exists": true,
+          "native_yocto": "2210368537479003103284075869637",
+          "wnear_yocto": "0",
+          "intents_wnear_yocto": "0",
+          "total_yocto": "2210368537479003103284075869637"
+        }
+      }
+    },
+    "2026-11-14T00:00:00.000Z": {
+      "block_height": 224435950,
+      "block_hash": "7UUvSyjFMLXj5ifot25jYcnSNrNnWVP3cCW2ermb8w2S",
+      "block_time": "2026-11-13T23:59:59.947Z",
+      "total_supply": "1311625144032720116407840772458244",
+      "wallets": {
+        "buybacks.multisignature.near": {
+          "exists": true,
+          "native_yocto": "2279854459857469662535533339472",
+          "wnear_yocto": "0",
+          "intents_wnear_yocto": "0",
+          "total_yocto": "2279854459857469662535533339472"
+        }
+      }
+    }
+  },
+  "description": "Last block before each UTC instant (end-exclusive periods), with total supply and wallet balances. yoctoNEAR strings.",
+  "updated_at": "2026-11-14T12:21:51.157Z"
+}
