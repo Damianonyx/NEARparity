@@ -1,7 +1,7 @@
 {
   "schema_version": 2,
-  "generated_at": "2026-11-14T20:14:47.897Z",
-  "last_successful_refresh": "2026-11-14T20:14:47.897Z",
+  "generated_at": "2026-11-14T20:53:18.585Z",
+  "last_successful_refresh": "2026-11-14T20:53:18.585Z",
   "partial_refresh": false,
   "failed_groups": {},
   "notes": {},
@@ -21,6 +21,7 @@
     "wallet_created_at": "2026-03-18T12:42:28.722Z",
     "holders_revenue_labelled_from": "2026-02-23",
     "staking_pools": [],
+    "usage_source": "BigQuery",
     "usage_largest_txn_drop": {
       "from": "2026-04-01",
       "to": "2026-04-02",
@@ -29,8 +30,8 @@
       "change": -0.7170869003153515,
       "active_accounts_before": 139048,
       "active_accounts_after": 137183,
-      "active_contracts_before": 1381922,
-      "active_contracts_after": 184649
+      "active_contracts_before": 955,
+      "active_contracts_after": 998
     },
     "usage_correlation": {
       "intents_volume_vs_active_accounts": {
@@ -41,7 +42,175 @@
         "r": 0.1860167767422078,
         "n": 39
       },
-      "method": "Pearson correlation of week-over-week % changes, full 7-day weeks since backfill_from. Descriptive only: no lag, no causality."
+      "method": "Pearson correlation of week-over-week % changes, full 7-day weeks since backfill_from. Descriptive only: no lag, no causality.",
+      "usage_source": "BigQuery"
+    },
+    "leading_indicator": {
+      "usage_source": "BigQuery",
+      "weeks": 40,
+      "first_week": "2026-02-01T00:00:00.000Z",
+      "last_week": "2026-11-01T00:00:00.000Z",
+      "active_accounts": {
+        "volume": [
+          {
+            "lag": 0,
+            "n": 39,
+            "r": -0.18969427346354933,
+            "rho": -0.08461538461538462,
+            "band": 0.31385118145797075
+          },
+          {
+            "lag": 1,
+            "n": 38,
+            "r": 0.10483562366690817,
+            "rho": 0.05131852500273553,
+            "band": 0.3179539854162946
+          },
+          {
+            "lag": 2,
+            "n": 37,
+            "r": 0.2713764149084313,
+            "rho": 0.2728781412991939,
+            "band": 0.3222220151185003
+          },
+          {
+            "lag": 3,
+            "n": 36,
+            "r": -0.09234350101924414,
+            "rho": -0.055341055341055344,
+            "band": 0.32666666666666666
+          },
+          {
+            "lag": 4,
+            "n": 35,
+            "r": -0.13636730848839146,
+            "rho": -0.029131652661064426,
+            "band": 0.3313004678535785
+          }
+        ],
+        "price": [
+          {
+            "lag": 0,
+            "n": 39,
+            "r": -0.00258314371517117,
+            "rho": -0.011133603238866396,
+            "band": 0.31385118145797075
+          },
+          {
+            "lag": 1,
+            "n": 38,
+            "r": 0.28252080734380614,
+            "rho": 0.030747346536820222,
+            "band": 0.3179539854162946
+          },
+          {
+            "lag": 2,
+            "n": 37,
+            "r": 0.26057796914081344,
+            "rho": 0.04599336178283547,
+            "band": 0.3222220151185003
+          },
+          {
+            "lag": 3,
+            "n": 36,
+            "r": -0.16694570650019638,
+            "rho": 0.08133848133848134,
+            "band": 0.32666666666666666
+          },
+          {
+            "lag": 4,
+            "n": 35,
+            "r": -0.07250025114706032,
+            "rho": -0.03753501400560224,
+            "band": 0.3313004678535785
+          }
+        ],
+        "verdict": {
+          "supports_hypothesis": false,
+          "text": "Neither Intents volume nor NEAR price leads daily active accounts: no lag of 1–4 weeks is above the noise band on both measures."
+        }
+      },
+      "txns": {
+        "volume": [
+          {
+            "lag": 0,
+            "n": 39,
+            "r": 0.1860167767422078,
+            "rho": 0.3637651821862348,
+            "band": 0.31385118145797075
+          },
+          {
+            "lag": 1,
+            "n": 38,
+            "r": 0.11873928531995656,
+            "rho": 0.24039829302987198,
+            "band": 0.3179539854162946
+          },
+          {
+            "lag": 2,
+            "n": 37,
+            "r": -0.06161965710659108,
+            "rho": -0.03816974869606449,
+            "band": 0.3222220151185003
+          },
+          {
+            "lag": 3,
+            "n": 36,
+            "r": -0.08329562469726064,
+            "rho": -0.20077220077220076,
+            "band": 0.32666666666666666
+          },
+          {
+            "lag": 4,
+            "n": 35,
+            "r": 0.18159948683016802,
+            "rho": 0.13109243697478992,
+            "band": 0.3313004678535785
+          }
+        ],
+        "price": [
+          {
+            "lag": 0,
+            "n": 39,
+            "r": 0.12312303751519453,
+            "rho": 0.23319838056680162,
+            "band": 0.31385118145797075
+          },
+          {
+            "lag": 1,
+            "n": 38,
+            "r": 0.3475003349360456,
+            "rho": 0.14739030528504213,
+            "band": 0.3179539854162946
+          },
+          {
+            "lag": 2,
+            "n": 37,
+            "r": -0.009579784428616352,
+            "rho": 0.015173067804646752,
+            "band": 0.3222220151185003
+          },
+          {
+            "lag": 3,
+            "n": 36,
+            "r": 0.01356475142234348,
+            "rho": 0.12664092664092663,
+            "band": 0.32666666666666666
+          },
+          {
+            "lag": 4,
+            "n": 35,
+            "r": -0.31789647789119413,
+            "rho": -0.3915966386554622,
+            "band": 0.3313004678535785
+          }
+        ],
+        "verdict": {
+          "supports_hypothesis": false,
+          "text": "Neither Intents volume nor NEAR price leads daily transactions: no lag of 1–4 weeks is above the noise band on both measures."
+        }
+      },
+      "method": "Week-over-week % changes of Intents volume (DefiLlama) and of the weekly mean NEAR price, at week t, against the change in weekly usage at week t + lag (lag 0–4). Pearson r and Spearman ρ (rank-based, robust to one-off jumps such as 2 Apr 2026). The noise band is ±1.96/√n (about 95%): a lead counts only if both r and ρ are positive and above it. Descriptive, not causal; about 40 weekly points."
     }
   },
   "wallet": {
@@ -296,10 +465,10 @@
       "reported_by": "DefiLlama"
     },
     "price_current": {
-      "value": 3.0821,
+      "value": 2.984655205,
       "unit": "USD",
-      "period_start": "2026-11-14T20:10:48.000Z",
-      "period_end": "2026-11-14T20:10:48.000Z",
+      "period_start": "2026-11-14T20:53:02.000Z",
+      "period_end": "2026-11-14T20:53:02.000Z",
       "source": "DefiLlama coins API: https://coins.llama.fi/prices/current/coingecko:near",
       "method": "Latest price for coingecko:near.",
       "status": "measured",
@@ -460,32 +629,34 @@
       "unit": "accounts/day",
       "period_start": "2026-10-15T00:00:00.000Z",
       "period_end": "2026-11-14T00:00:00.000Z",
-      "source": "NearBlocks daily charts: https://api.nearblocks.io/v1/charts",
-      "method": "Daily active accounts. Mean of 30 daily values of NearBlocks' \"active_accounts\" (NearBlocks' definition). Compared with the previous 30 days.",
+      "source": "BigQuery public NEAR dataset (bigquery-public-data.crypto_near_mainnet_us), filtered on block_date: data/bigquery-usage.json",
+      "method": "Daily active accounts. Mean of 30 daily values: distinct transaction signers per UTC day (transactions.signer_account_id). Compared with the previous 30 days. NearBlocks' own figure for the same days is kept as a cross-check (nearblocks_value).",
       "status": "measured",
       "reason": null,
-      "source_type": "third_party",
-      "reported_by": "NearBlocks",
+      "source_type": "onchain",
+      "reported_by": "BigQuery",
       "prior_value": 74811.93333333333,
       "prior_period_start": "2026-09-15T00:00:00.000Z",
       "prior_period_end": "2026-10-15T00:00:00.000Z",
-      "change_pct": -0.13353440048334536
+      "change_pct": -0.13353440048334536,
+      "nearblocks_value": 64821.96666666667
     },
     "usage_txns": {
       "value": 678138.8333333334,
       "unit": "transactions/day",
       "period_start": "2026-10-15T00:00:00.000Z",
       "period_end": "2026-11-14T00:00:00.000Z",
-      "source": "NearBlocks daily charts: https://api.nearblocks.io/v1/charts",
-      "method": "Daily transactions. Mean of 30 daily values of NearBlocks' \"txns\" (NearBlocks' definition). Compared with the previous 30 days.",
+      "source": "BigQuery public NEAR dataset (bigquery-public-data.crypto_near_mainnet_us), filtered on block_date: data/bigquery-usage.json",
+      "method": "Daily transactions. Mean of 30 daily values: transactions per UTC day (rows of transactions). Compared with the previous 30 days. NearBlocks' own figure for the same days is kept as a cross-check (nearblocks_value).",
       "status": "measured",
       "reason": null,
-      "source_type": "third_party",
-      "reported_by": "NearBlocks",
+      "source_type": "onchain",
+      "reported_by": "BigQuery",
       "prior_value": 872564.3333333334,
       "prior_period_start": "2026-09-15T00:00:00.000Z",
       "prior_period_end": "2026-10-15T00:00:00.000Z",
-      "change_pct": -0.22282081970651255
+      "change_pct": -0.22282081970651255,
+      "nearblocks_value": 678138.8333333334
     },
     "usage_new_accounts": {
       "value": 283950,
@@ -504,20 +675,38 @@
       "change_pct": -0.17778350470686005
     },
     "usage_active_contracts": {
-      "value": 69938.8,
+      "value": 1407.7,
       "unit": "contracts/day",
       "period_start": "2026-10-15T00:00:00.000Z",
       "period_end": "2026-11-14T00:00:00.000Z",
-      "source": "NearBlocks daily charts: https://api.nearblocks.io/v1/charts",
-      "method": "Daily active contracts. Mean of 30 daily values of NearBlocks' \"active_contracts\" (NearBlocks' definition). Compared with the previous 30 days.",
+      "source": "BigQuery public NEAR dataset (bigquery-public-data.crypto_near_mainnet_us), filtered on block_date: data/bigquery-usage.json",
+      "method": "Daily active contracts. Mean of 30 daily values: distinct accounts receiving FUNCTION_CALL actions per UTC day (receipt_actions.receipt_receiver_account_id). Compared with the previous 30 days. NearBlocks' own figure for the same days is kept as a cross-check (nearblocks_value).",
       "status": "measured",
       "reason": null,
-      "source_type": "third_party",
-      "reported_by": "NearBlocks",
-      "prior_value": 55981.2,
+      "source_type": "onchain",
+      "reported_by": "BigQuery",
+      "prior_value": 1726.3666666666666,
       "prior_period_start": "2026-09-15T00:00:00.000Z",
       "prior_period_end": "2026-10-15T00:00:00.000Z",
-      "change_pct": 0.2493265596307333
+      "change_pct": -0.18458805583981766,
+      "nearblocks_value": 69938.8
+    },
+    "usage_function_calls": {
+      "value": 1774565.1666666667,
+      "unit": "calls/day",
+      "period_start": "2026-10-15T00:00:00.000Z",
+      "period_end": "2026-11-14T00:00:00.000Z",
+      "source": "BigQuery public NEAR dataset (bigquery-public-data.crypto_near_mainnet_us), filtered on block_date: data/bigquery-usage.json",
+      "method": "Daily contract calls. Mean of 30 daily values: FUNCTION_CALL receipt actions per UTC day (receipt_actions). Compared with the previous 30 days. NearBlocks' own figure for the same days is kept as a cross-check (nearblocks_value).",
+      "status": "measured",
+      "reason": null,
+      "source_type": "onchain",
+      "reported_by": "BigQuery",
+      "prior_value": 2399102.7333333334,
+      "prior_period_start": "2026-09-15T00:00:00.000Z",
+      "prior_period_end": "2026-10-15T00:00:00.000Z",
+      "change_pct": -0.26032131012536047,
+      "nearblocks_value": null
     }
   },
   "stale": {},
@@ -526,14 +715,14 @@
     "label": "Conditional scenario under the stated assumptions. Not a prediction and not a supply-neutrality threshold.",
     "defaults": {
       "daily_issuance_near": 88934.8197390998,
-      "price_usd": 3.0821,
+      "price_usd": 2.984655205,
       "net_revenue_capture_bps": 4.745619515601705,
       "buyback_allocation_pct": 100,
       "observed_avg_daily_volume_usd": 126582068.23333333
     },
     "default_result": {
       "finite": true,
-      "value": 577597944.8346591,
+      "value": 559336398.0558931,
       "reason": null
     },
     "period_start": "2026-10-15T00:00:00.000Z",
@@ -558,7 +747,9 @@
       "intents_volume_usd": 929881167,
       "active_accounts_avg": 254618.85714285713,
       "txns_avg": 3532888.285714286,
-      "active_contracts_avg": 2238391.5714285714
+      "active_contracts_avg": 1031.5714285714287,
+      "usage_source": "BigQuery",
+      "price_avg_usd": 1.1385221142944977
     },
     {
       "period_start": "2026-02-08T00:00:00.000Z",
@@ -578,7 +769,9 @@
       "intents_volume_usd": 569035023,
       "active_accounts_avg": 337319.71428571426,
       "txns_avg": 3509884.4285714286,
-      "active_contracts_avg": 2216052.714285714
+      "active_contracts_avg": 1006,
+      "usage_source": "BigQuery",
+      "price_avg_usd": 1.011577386761964
     },
     {
       "period_start": "2026-02-15T00:00:00.000Z",
@@ -598,7 +791,9 @@
       "intents_volume_usd": 392253079,
       "active_accounts_avg": 356900.28571428574,
       "txns_avg": 3426457.8571428573,
-      "active_contracts_avg": 2155585.285714286
+      "active_contracts_avg": 1029.857142857143,
+      "usage_source": "BigQuery",
+      "price_avg_usd": 1.0450196543215355
     },
     {
       "period_start": "2026-02-22T00:00:00.000Z",
@@ -618,7 +813,9 @@
       "intents_volume_usd": 487091826,
       "active_accounts_avg": 155040.85714285713,
       "txns_avg": 3485211.8571428573,
-      "active_contracts_avg": 2190972.8571428573
+      "active_contracts_avg": 1021,
+      "usage_source": "BigQuery",
+      "price_avg_usd": 1.0596948985881036
     },
     {
       "period_start": "2026-03-01T00:00:00.000Z",
@@ -638,7 +835,9 @@
       "intents_volume_usd": 479510600,
       "active_accounts_avg": 146833.85714285713,
       "txns_avg": 3400192.1428571427,
-      "active_contracts_avg": 2181473.714285714
+      "active_contracts_avg": 1024.5714285714287,
+      "usage_source": "BigQuery",
+      "price_avg_usd": 1.26485223152347
     },
     {
       "period_start": "2026-03-08T00:00:00.000Z",
@@ -658,7 +857,9 @@
       "intents_volume_usd": 393880610,
       "active_accounts_avg": 148573.42857142858,
       "txns_avg": 3294637.285714286,
-      "active_contracts_avg": 2197611.8571428573
+      "active_contracts_avg": 1025.5714285714287,
+      "usage_source": "BigQuery",
+      "price_avg_usd": 1.2778690830528494
     },
     {
       "period_start": "2026-03-15T00:00:00.000Z",
@@ -678,7 +879,9 @@
       "intents_volume_usd": 483043864,
       "active_accounts_avg": 141732.14285714287,
       "txns_avg": 3199230.285714286,
-      "active_contracts_avg": 2185743
+      "active_contracts_avg": 997.2857142857143,
+      "usage_source": "BigQuery",
+      "price_avg_usd": 1.3791149154825857
     },
     {
       "period_start": "2026-03-22T00:00:00.000Z",
@@ -698,7 +901,9 @@
       "intents_volume_usd": 506143194,
       "active_accounts_avg": 138174.2857142857,
       "txns_avg": 3824640.8571428573,
-      "active_contracts_avg": 2186615.714285714
+      "active_contracts_avg": 992.7142857142857,
+      "usage_source": "BigQuery",
+      "price_avg_usd": 1.263013850422997
     },
     {
       "period_start": "2026-03-29T00:00:00.000Z",
@@ -718,7 +923,9 @@
       "intents_volume_usd": 494102366,
       "active_accounts_avg": 135705.85714285713,
       "txns_avg": 2637840.4285714286,
-      "active_contracts_avg": 1217304.857142857
+      "active_contracts_avg": 968.1428571428571,
+      "usage_source": "BigQuery",
+      "price_avg_usd": 1.1774888609647625
     },
     {
       "period_start": "2026-04-05T00:00:00.000Z",
@@ -738,7 +945,9 @@
       "intents_volume_usd": 540023028,
       "active_accounts_avg": 132430.14285714287,
       "txns_avg": 958664.4285714285,
-      "active_contracts_avg": 187507.85714285713
+      "active_contracts_avg": 1022.8571428571429,
+      "usage_source": "BigQuery",
+      "price_avg_usd": 1.3033615140478383
     },
     {
       "period_start": "2026-04-12T00:00:00.000Z",
@@ -758,7 +967,9 @@
       "intents_volume_usd": 421189981,
       "active_accounts_avg": 132127.57142857142,
       "txns_avg": 855458.1428571428,
-      "active_contracts_avg": 113055.42857142857
+      "active_contracts_avg": 1051.5714285714287,
+      "usage_source": "BigQuery",
+      "price_avg_usd": 1.3970525153514035
     },
     {
       "period_start": "2026-04-19T00:00:00.000Z",
@@ -778,7 +989,9 @@
       "intents_volume_usd": 389349402,
       "active_accounts_avg": 126813,
       "txns_avg": 750933.2857142857,
-      "active_contracts_avg": 97868.71428571429
+      "active_contracts_avg": 1101.857142857143,
+      "usage_source": "BigQuery",
+      "price_avg_usd": 1.3767581523589274
     },
     {
       "period_start": "2026-04-26T00:00:00.000Z",
@@ -798,7 +1011,9 @@
       "intents_volume_usd": 354596895,
       "active_accounts_avg": 122011.71428571429,
       "txns_avg": 743423.2857142857,
-      "active_contracts_avg": 93330.57142857143
+      "active_contracts_avg": 967.4285714285714,
+      "usage_source": "BigQuery",
+      "price_avg_usd": 1.345299023948056
     },
     {
       "period_start": "2026-05-03T00:00:00.000Z",
@@ -818,7 +1033,9 @@
       "intents_volume_usd": 407413114,
       "active_accounts_avg": 126586.57142857143,
       "txns_avg": 769929.8571428572,
-      "active_contracts_avg": 101293.28571428571
+      "active_contracts_avg": 1182.5714285714287,
+      "usage_source": "BigQuery",
+      "price_avg_usd": 1.383289440727218
     },
     {
       "period_start": "2026-05-10T00:00:00.000Z",
@@ -838,7 +1055,9 @@
       "intents_volume_usd": 368994290,
       "active_accounts_avg": 118589.85714285714,
       "txns_avg": 764832.5714285715,
-      "active_contracts_avg": 98831.14285714286
+      "active_contracts_avg": 1001.5714285714286,
+      "usage_source": "BigQuery",
+      "price_avg_usd": 1.5679253158121556
     },
     {
       "period_start": "2026-05-17T00:00:00.000Z",
@@ -858,7 +1077,9 @@
       "intents_volume_usd": 460312223,
       "active_accounts_avg": 119535.28571428571,
       "txns_avg": 848006.8571428572,
-      "active_contracts_avg": 92305.57142857143
+      "active_contracts_avg": 990,
+      "usage_source": "BigQuery",
+      "price_avg_usd": 1.706808374539672
     },
     {
       "period_start": "2026-05-24T00:00:00.000Z",
@@ -878,7 +1099,9 @@
       "intents_volume_usd": 538798345,
       "active_accounts_avg": 119297.28571428571,
       "txns_avg": 864686.7142857143,
-      "active_contracts_avg": 89985.71428571429
+      "active_contracts_avg": 1020,
+      "usage_source": "BigQuery",
+      "price_avg_usd": 2.4928785158077673
     },
     {
       "period_start": "2026-05-31T00:00:00.000Z",
@@ -898,7 +1121,9 @@
       "intents_volume_usd": 822031121,
       "active_accounts_avg": 116718.14285714286,
       "txns_avg": 929986.5714285715,
-      "active_contracts_avg": 96390.57142857143
+      "active_contracts_avg": 1011.7142857142857,
+      "usage_source": "BigQuery",
+      "price_avg_usd": 2.399393874341658
     },
     {
       "period_start": "2026-06-07T00:00:00.000Z",
@@ -918,7 +1143,9 @@
       "intents_volume_usd": 535275036,
       "active_accounts_avg": 113836.85714285714,
       "txns_avg": 808420,
-      "active_contracts_avg": 95013
+      "active_contracts_avg": 985.4285714285714,
+      "usage_source": "BigQuery",
+      "price_avg_usd": 2.034118280534877
     },
     {
       "period_start": "2026-06-14T00:00:00.000Z",
@@ -938,7 +1165,9 @@
       "intents_volume_usd": 464292981,
       "active_accounts_avg": 112286.14285714286,
       "txns_avg": 795639,
-      "active_contracts_avg": 96543.85714285714
+      "active_contracts_avg": 976.1428571428571,
+      "usage_source": "BigQuery",
+      "price_avg_usd": 2.2330736981395902
     },
     {
       "period_start": "2026-06-21T00:00:00.000Z",
@@ -958,7 +1187,9 @@
       "intents_volume_usd": 461030863,
       "active_accounts_avg": 109512.28571428571,
       "txns_avg": 740382.4285714285,
-      "active_contracts_avg": 94278.14285714286
+      "active_contracts_avg": 935.7142857142857,
+      "usage_source": "BigQuery",
+      "price_avg_usd": 1.9902096872289794
     },
     {
       "period_start": "2026-06-28T00:00:00.000Z",
@@ -978,7 +1209,9 @@
       "intents_volume_usd": 528597207,
       "active_accounts_avg": 105815.71428571429,
       "txns_avg": 745278.5714285715,
-      "active_contracts_avg": 98080
+      "active_contracts_avg": 955.5714285714286,
+      "usage_source": "BigQuery",
+      "price_avg_usd": 1.8754266191504396
     },
     {
       "period_start": "2026-07-05T00:00:00.000Z",
@@ -998,7 +1231,9 @@
       "intents_volume_usd": 524898372,
       "active_accounts_avg": 102630.57142857143,
       "txns_avg": 791053.8571428572,
-      "active_contracts_avg": 95551.14285714286
+      "active_contracts_avg": 880.4285714285714,
+      "usage_source": "BigQuery",
+      "price_avg_usd": 1.9629158820501953
     },
     {
       "period_start": "2026-07-12T00:00:00.000Z",
@@ -1018,7 +1253,9 @@
       "intents_volume_usd": 518788514,
       "active_accounts_avg": 89964.28571428571,
       "txns_avg": 725904.8571428572,
-      "active_contracts_avg": 87585.28571428571
+      "active_contracts_avg": 883.1428571428571,
+      "usage_source": "BigQuery",
+      "price_avg_usd": 1.94917489891806
     },
     {
       "period_start": "2026-07-19T00:00:00.000Z",
@@ -1038,7 +1275,9 @@
       "intents_volume_usd": 462373972,
       "active_accounts_avg": 87769.85714285714,
       "txns_avg": 720028.7142857143,
-      "active_contracts_avg": 87946.85714285714
+      "active_contracts_avg": 873.7142857142857,
+      "usage_source": "BigQuery",
+      "price_avg_usd": 1.9019859646433197
     },
     {
       "period_start": "2026-07-26T00:00:00.000Z",
@@ -1058,7 +1297,9 @@
       "intents_volume_usd": 432442264,
       "active_accounts_avg": 85051.28571428571,
       "txns_avg": 705180.8571428572,
-      "active_contracts_avg": 83625.71428571429
+      "active_contracts_avg": 900.7142857142857,
+      "usage_source": "BigQuery",
+      "price_avg_usd": 1.7027460089075912
     },
     {
       "period_start": "2026-08-02T00:00:00.000Z",
@@ -1078,7 +1319,9 @@
       "intents_volume_usd": 453937477,
       "active_accounts_avg": 83071.85714285714,
       "txns_avg": 673964.4285714285,
-      "active_contracts_avg": 88600.42857142857
+      "active_contracts_avg": 889.2857142857143,
+      "usage_source": "BigQuery",
+      "price_avg_usd": 1.685075876621777
     },
     {
       "period_start": "2026-08-09T00:00:00.000Z",
@@ -1098,7 +1341,9 @@
       "intents_volume_usd": 447593778,
       "active_accounts_avg": 81453.85714285714,
       "txns_avg": 649243,
-      "active_contracts_avg": 79673.71428571429
+      "active_contracts_avg": 879.7142857142857,
+      "usage_source": "BigQuery",
+      "price_avg_usd": 1.6210980851613563
     },
     {
       "period_start": "2026-08-16T00:00:00.000Z",
@@ -1118,7 +1363,9 @@
       "intents_volume_usd": 799370006,
       "active_accounts_avg": 80749.14285714286,
       "txns_avg": 720172.8571428572,
-      "active_contracts_avg": 70753.71428571429
+      "active_contracts_avg": 896.7142857142857,
+      "usage_source": "BigQuery",
+      "price_avg_usd": 1.7008248709882712
     },
     {
       "period_start": "2026-08-23T00:00:00.000Z",
@@ -1138,7 +1385,9 @@
       "intents_volume_usd": 828567729,
       "active_accounts_avg": 79795.85714285714,
       "txns_avg": 691021.2857142857,
-      "active_contracts_avg": 50701.71428571428
+      "active_contracts_avg": 925.4285714285714,
+      "usage_source": "BigQuery",
+      "price_avg_usd": 1.9083190113332127
     },
     {
       "period_start": "2026-08-30T00:00:00.000Z",
@@ -1158,7 +1407,9 @@
       "intents_volume_usd": 946646768,
       "active_accounts_avg": 76705.57142857143,
       "txns_avg": 678892.7142857143,
-      "active_contracts_avg": 55041.42857142857
+      "active_contracts_avg": 946.7142857142857,
+      "usage_source": "BigQuery",
+      "price_avg_usd": 1.929238764469008
     },
     {
       "period_start": "2026-09-06T00:00:00.000Z",
@@ -1178,7 +1429,9 @@
       "intents_volume_usd": 963558833,
       "active_accounts_avg": 71776.85714285714,
       "txns_avg": 744799.8571428572,
-      "active_contracts_avg": 52215.28571428572
+      "active_contracts_avg": 966,
+      "usage_source": "BigQuery",
+      "price_avg_usd": 2.36366118156234
     },
     {
       "period_start": "2026-09-13T00:00:00.000Z",
@@ -1198,7 +1451,9 @@
       "intents_volume_usd": 1131985296,
       "active_accounts_avg": 51334.57142857143,
       "txns_avg": 781402.1428571428,
-      "active_contracts_avg": 48834.857142857145
+      "active_contracts_avg": 1087,
+      "usage_source": "BigQuery",
+      "price_avg_usd": 2.7142981784225055
     },
     {
       "period_start": "2026-09-20T00:00:00.000Z",
@@ -1218,7 +1473,9 @@
       "intents_volume_usd": 1277553319,
       "active_accounts_avg": 56730.142857142855,
       "txns_avg": 802784.2857142857,
-      "active_contracts_avg": 49076
+      "active_contracts_avg": 1352.2857142857142,
+      "usage_source": "BigQuery",
+      "price_avg_usd": 4.3287915818770815
     },
     {
       "period_start": "2026-09-27T00:00:00.000Z",
@@ -1238,7 +1495,9 @@
       "intents_volume_usd": 1001122929,
       "active_accounts_avg": 86285.71428571429,
       "txns_avg": 995444.4285714285,
-      "active_contracts_avg": 62014.71428571428
+      "active_contracts_avg": 2491.714285714286,
+      "usage_source": "BigQuery",
+      "price_avg_usd": 4.994833208780284
     },
     {
       "period_start": "2026-10-04T00:00:00.000Z",
@@ -1258,7 +1517,9 @@
       "intents_volume_usd": 1092426937,
       "active_accounts_avg": 109578.42857142857,
       "txns_avg": 875927.1428571428,
-      "active_contracts_avg": 62980.28571428572
+      "active_contracts_avg": 1814.2857142857142,
+      "usage_source": "BigQuery",
+      "price_avg_usd": 4.968212596662023
     },
     {
       "period_start": "2026-10-11T00:00:00.000Z",
@@ -1278,7 +1539,9 @@
       "intents_volume_usd": 859896527,
       "active_accounts_avg": 56155.71428571428,
       "txns_avg": 778483,
-      "active_contracts_avg": 54666.857142857145
+      "active_contracts_avg": 1556.142857142857,
+      "usage_source": "BigQuery",
+      "price_avg_usd": 5.214288386276484
     },
     {
       "period_start": "2026-10-18T00:00:00.000Z",
@@ -1298,7 +1561,9 @@
       "intents_volume_usd": 823186652,
       "active_accounts_avg": 51966.71428571428,
       "txns_avg": 606495.5714285715,
-      "active_contracts_avg": 58454.142857142855
+      "active_contracts_avg": 1402.142857142857,
+      "usage_source": "BigQuery",
+      "price_avg_usd": 4.930247170101851
     },
     {
       "period_start": "2026-10-25T00:00:00.000Z",
@@ -1318,7 +1583,9 @@
       "intents_volume_usd": 884323997,
       "active_accounts_avg": 50376.28571428572,
       "txns_avg": 584519.8571428572,
-      "active_contracts_avg": 53567.142857142855
+      "active_contracts_avg": 1333.4285714285713,
+      "usage_source": "BigQuery",
+      "price_avg_usd": 4.475561888676903
     },
     {
       "period_start": "2026-11-01T00:00:00.000Z",
@@ -1338,7 +1605,9 @@
       "intents_volume_usd": 906437455,
       "active_accounts_avg": 68607.85714285714,
       "txns_avg": 654898.8571428572,
-      "active_contracts_avg": 65815.14285714286
+      "active_contracts_avg": 1376.2857142857142,
+      "usage_source": "BigQuery",
+      "price_avg_usd": 3.9695365465738806
     },
     {
       "period_start": "2026-11-08T00:00:00.000Z",
@@ -1358,7 +1627,9 @@
       "intents_volume_usd": 864967963,
       "active_accounts_avg": 97207,
       "txns_avg": 882409.1666666666,
-      "active_contracts_avg": 115190.83333333333
+      "active_contracts_avg": 1500.1666666666667,
+      "usage_source": "BigQuery",
+      "price_avg_usd": 3.5875699821978557
     }
   ],
   "wallet_transfers": {
@@ -1366,7 +1637,7 @@
     "period_end": "2026-11-14T00:00:00.000Z",
     "source": "https://api.nearblocks.io/v1/account/buybacks.multisignature.near/txns?per_page=100",
     "complete_history": true,
-    "receipts_cached": 3423,
+    "receipts_cached": 3424,
     "ft_events_cached": 1,
     "first_receipt_time": "2026-03-18T12:42:28.722Z",
     "inbound_count": 773,
@@ -1391,7 +1662,7 @@
   },
   "official_dashboard": {
     "source": "NEAR revenue dashboard (official): https://revenue.near.org/",
-    "fetched_at": "2026-11-14T20:14:40.800Z",
+    "fetched_at": "2026-11-14T20:53:12.651Z",
     "wallet_breakdown": [
       {
         "account": "fefundsadmin.sputnik-dao.near",
@@ -1415,15 +1686,15 @@
       "share_pct": 40.9
     },
     "onchain_now": {
-      "block_height": 224562965,
-      "block_time": "2026-11-14T20:14:36.607Z",
-      "total_near": 2287386.620045841,
-      "native_near": 2287386.620045841,
+      "block_height": 224567005,
+      "block_time": "2026-11-14T20:53:03.167Z",
+      "total_near": 2287860.6272929204,
+      "native_near": 2287860.6272929204,
       "wnear_near": 0,
       "intents_wnear_near": 0,
       "staked_near": 0
     },
-    "difference_near": 505574.81781383255,
+    "difference_near": 506048.8250609117,
     "note": "The dashboard attributes captured revenue to wallets; on-chain holdings can differ (other inflows, outflows, timing). Neither figure alone proves purchases."
   },
   "onchain_trace": {
@@ -1542,12 +1813,20 @@
     ],
     "usage": [
       {
-        "label": "NearBlocks daily network charts (keyless)",
+        "label": "BigQuery public NEAR dataset, per UTC day (run by the refresh workflow for each new day; filtered on block_date, the partition column)",
+        "code": "-- NEAR Parity daily network usage (BigQuery public NEAR dataset)\nWITH tx AS (\n  SELECT block_date AS day, COUNT(*) AS txns, COUNT(DISTINCT signer_account_id) AS active_accounts\n  FROM `bigquery-public-data.crypto_near_mainnet_us.transactions`\n  WHERE block_date >= @start AND block_date < @end\n  GROUP BY day\n),\nfc AS (\n  SELECT block_date AS day, COUNT(DISTINCT receipt_receiver_account_id) AS active_contracts, COUNT(*) AS function_calls\n  FROM `bigquery-public-data.crypto_near_mainnet_us.receipt_actions`\n  WHERE block_date >= @start AND block_date < @end AND action_kind = 'FUNCTION_CALL'\n  GROUP BY day\n)\nSELECT CAST(day AS STRING) AS day, IFNULL(txns, 0) AS txns, IFNULL(active_accounts, 0) AS active_accounts,\n       IFNULL(active_contracts, 0) AS active_contracts, IFNULL(function_calls, 0) AS function_calls\nFROM tx FULL JOIN fc USING (day)\nORDER BY day"
+      },
+      {
+        "label": "NearBlocks daily network charts (keyless; cross-check, and the 2025 baseline)",
         "code": "curl -s 'https://api.nearblocks.io/v1/charts'"
       },
       {
         "label": "Weekly values, the index, and the correlation",
         "code": "active_accounts_week = mean(daily active_accounts)\ntxns_week = mean(daily txns)\nintents_volume_week = Σ DefiLlama daily volume ÷ days\nindex = value ÷ value(first week from 2026-02-01) × 100\nr = pearson(week-over-week % change of volume, of active accounts), full weeks"
+      },
+      {
+        "label": "Leading-indicator test (the track hypothesis)",
+        "code": "for lag in 0..4:\n  r(lag)   = pearson(Δ% volume[t], Δ% usage[t + lag])\n  rho(lag) = spearman(same pairs)\n  same for Δ% weekly mean NEAR price\nlead = lag ≥ 1 with r > 1.96/√n and rho > 1.96/√n"
       }
     ],
     "simulator": [
