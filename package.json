@@ -6,8 +6,13 @@
   "type": "module",
   "license": "MIT",
   "homepage": "https://nearparity.vercel.app/",
-  "repository": { "type": "git", "url": "https://github.com/Damianonyx/NEARparity.git" },
-  "engines": { "node": ">=22" },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Damianonyx/NEARparity.git"
+  },
+  "engines": {
+    "node": ">=22"
+  },
   "scripts": {
     "start": "node scripts/serve.mjs",
     "build": "node --use-env-proxy scripts/build-data.mjs",
@@ -18,6 +23,7 @@
     "lint": "node scripts/lint.mjs",
     "check:data": "node scripts/check-data.mjs",
     "check:apis": "node --use-env-proxy scripts/check-apis.mjs",
-    "verify:claims": "node --use-env-proxy scripts/verify-claims.mjs"
+    "verify:claims": "node --use-env-proxy scripts/verify-claims.mjs",
+    "check:explorer": "node --use-env-proxy scripts/check-explorer.mjs"
   }
 }

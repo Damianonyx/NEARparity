@@ -24,6 +24,7 @@ Requirements: Node 22 (22.21 or newer if you are behind an HTTP proxy). **No `np
 | `npm run test:ui` | Headless Chrome renders the page with the real data and with deliberately broken data, and checks that sections fail independently. |
 | `npm run lint` · `npm run check:data` | Syntax and project rules for every JS file; the data contract for `data/latest.json`. |
 | `npm run check:apis` · `npm run verify:claims` | Access check of every endpoint; re-fetch of the primary sources cited in THESIS.md. |
+| `EXPLORER_JWT=… npm run check:explorer` (optional) | Key-gated check against the NEAR Intents Explorer API (1Click index): whether the buyback operator's swaps are indexed (they are not) and which 1Click transactions name the buyback wallet. Saves `docs/explorer-check.json`. Get a key at partners.near-intents.org (key type: Explorer). |
 | `NEAR_PARITY_SIMULATE_FAIL=chain,price npm run build` (in a copy of the repo) | The stale fallback in action: the named sources "fail", and their last good values are kept and marked stale with their date. |
 
 ## Architecture
@@ -95,6 +96,7 @@ data/                             committed dataset and public API (docs/data-ap
 | DefiLlama coins `coins.llama.fi/chart/coingecko:near` and `/prices/current/coingecko:near` | Daily and current NEAR/USD price. Documented fallback: CoinGecko `api/v3/coins/near/market_chart` |
 | NEAR revenue dashboard (official) `https://revenue.near.org/` | Official listing of the buyback wallet; NEAR attributed to each revenue wallet (cross-check) |
 | NearBlocks API (keyless) `api.nearblocks.io/v1/account/{account}/txns` and `/ft-txns` | The buyback wallet's receipts and FT events |
+| NEAR Intents Explorer API `explorer.near-intents.org/api/v0/transactions` (key-gated, optional; not used by the daily build) | One-off check of the 1Click index for the buyback operator and wallet (`docs/explorer-check.json`) |
 | NearBlocks network charts (keyless) `api.nearblocks.io/v1/charts` | Daily active accounts, transactions, new accounts and active contracts (network usage) |
 
 ## NEAR integrations used
@@ -135,6 +137,7 @@ Full field reference: [docs/data-api.md](docs/data-api.md).
 ## Limitations
 
 - **No verified purchases.** The wallet receives NEAR from `intents.near` every 30–90 minutes. Each inflow is a `native_withdraw` intent signed by one operator account inside NEAR Intents (seen in the `dip4` event logs, e.g. tx `G6xuXw8AGcPj8CA4sF2va4Cp85nSLhTttERXBkFPsFHA`), but the operator's swap legs happen inside Intents and have no keyless public index. So verified purchases and verified coverage are unavailable. The wallet is listed on NEAR's official revenue dashboard, which confirms the account, not the purchases.
+- **The Explorer API cannot verify the buybacks.** The first-party 1Click index has no transactions by the buyback operator, and its rate limit (about one request per 30 s in practice) makes it impractical for 30-day volume totals, so DefiLlama remains the volume source. It did reveal four third-party transfers into the wallet (3,988.7 NEAR, June–September), which slightly overstate the wallet measure.
 - **Wallet scope.** Holdings include native NEAR, wNEAR, wNEAR inside `intents.near`, and NEAR delegated to any staking pool the wallet has called (none so far). Liquid-staking tokens are not counted.
 - **Network usage comes from NearBlocks** (keyless), not the NEAR BigQuery public dataset suggested in the track prompt, which needs a Google Cloud billing project. NearBlocks' field definitions are not formally documented; a step change on 2026-04-02 (transactions −72% in a day, active accounts flat) is shown but its cause is not verified.
 - **The proxy depends on a label.** DefiLlama's holders revenue equals its net revenue from 2026-02-23 onward. Converting it to NEAR at each day's 00:00 UTC price ignores execution prices and timing.

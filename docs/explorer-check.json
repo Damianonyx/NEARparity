@@ -1,0 +1,86 @@
+{
+  "checked_at": "2026-11-14T17:02:24.952Z",
+  "source": "https://explorer.near-intents.org/api/v0/transactions",
+  "operator": "23f0bb1c85fba5ecba38d149c8b916d3a03ed53a00a2fce89b2066dacef24c74",
+  "wallet": "buybacks.multisignature.near",
+  "operator_transactions_found": 0,
+  "wallet_transactions_found": 5,
+  "successful_wnear_into_wallet": {
+    "count": 4,
+    "near_total": 3988.7164834922933
+  },
+  "wallet_transactions": [
+    {
+      "created_at": "2026-09-09T12:08:49.468Z",
+      "status": "SUCCESS",
+      "origin_asset": "nep141:wrap.near",
+      "destination_asset": "nep141:wrap.near",
+      "amount_in_usd": "2583.897389738974",
+      "amount_out": "989.9",
+      "recipient": "buybacks.multisignature.near",
+      "senders": [],
+      "referral": "trezu",
+      "near_tx_hashes": [
+        "DbQwfZFHV3BmRN5DhSFjageys9bXKVbvMd5U3dYzdVjs",
+        "3ihccLWsPJnMEgF1o37Vb9vWhwqW4h4j3iA7qX5oQGKG"
+      ]
+    },
+    {
+      "created_at": "2026-08-11T19:35:49.251Z",
+      "status": "SUCCESS",
+      "origin_asset": "nep141:wrap.near",
+      "destination_asset": "nep141:wrap.near",
+      "amount_in_usd": "1424.716543835189",
+      "amount_out": "925.140612879992791522236906",
+      "recipient": "buybacks.multisignature.near",
+      "senders": [],
+      "referral": "new.intents-referral.near",
+      "near_tx_hashes": [
+        "GZsvHjUjt9D2ubMVPFu422oF4F6PMTgLznPcXuNsaxyq"
+      ]
+    },
+    {
+      "created_at": "2026-06-12T16:58:26.894Z",
+      "status": "SUCCESS",
+      "origin_asset": "nep141:wrap.near",
+      "destination_asset": "nep141:wrap.near",
+      "amount_in_usd": "4248.9855",
+      "amount_out": "2072.675870612300685866928533",
+      "recipient": "buybacks.multisignature.near",
+      "senders": [],
+      "referral": "new.intents-referral.near",
+      "near_tx_hashes": [
+        "EBTpEgGgMS25UCFiMeuGDNyHpskxfQ8DTfmQcAwdDaiC"
+      ]
+    },
+    {
+      "created_at": "2026-06-12T16:54:12.073Z",
+      "status": "SUCCESS",
+      "origin_asset": "nep141:wrap.near",
+      "destination_asset": "nep141:wrap.near",
+      "amount_in_usd": "2.0500",
+      "amount_out": "1.0",
+      "recipient": "buybacks.multisignature.near",
+      "senders": [],
+      "referral": "new.intents-referral.near",
+      "near_tx_hashes": [
+        "6mC5knunngbHShwU3B3aJ9zBYvxAp5WeadNFNTAGN2jC"
+      ]
+    },
+    {
+      "created_at": "2026-06-12T16:03:50.590Z",
+      "status": "SUCCESS",
+      "origin_asset": "nep141:sol-5ce3bf3a31af18be40ba30f721101b4341690186.omft.near",
+      "destination_asset": "nep141:sol-5ce3bf3a31af18be40ba30f721101b4341690186.omft.near",
+      "amount_in_usd": "0.9997",
+      "amount_out": "1.0",
+      "recipient": "buybacks.multisignature.near",
+      "senders": [],
+      "referral": "new.intents-referral.near",
+      "near_tx_hashes": [
+        "F1qpCYXVhGT3TdJo8TmA41MX8evF9jrLdyFLCapdC7Fd"
+      ]
+    }
+  ],
+  "reading": "The 1Click index has no transactions by the buyback operator: its buyback swaps happen inside NEAR Intents outside 1Click, so this API cannot verify them. Transactions naming the wallet are third-party 1Click transfers into it."
+}
