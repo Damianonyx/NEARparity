@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>NEAR Parity</title>
+  <meta name="description" content="Are NEAR Intents buybacks keeping pace with new NEAR issuance? Measured issuance, Intents economics, buyback coverage and supply change, with transparent calculations.">
+  <meta name="color-scheme" content="light dark">
+  <link rel="stylesheet" href="style.css">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='16' rx='3' fill='%23111'/%3E%3Cpath d='M4 11h8M4 8h8M4 5h8' stroke='%23fff' stroke-width='1.5'/%3E%3C/svg%3E">
+</head>
+<body>
+  <a class="skip" href="#main">Skip to content</a>
+  <header class="site">
+    <div class="wrap">
+      <div class="brand-row">
+        <p class="brand">NEAR Parity</p>
+        <button id="theme-toggle" class="ghost" type="button" aria-label="Toggle dark mode">Theme</button>
+      </div>
+      <h1>Are NEAR Intents buybacks keeping pace with new NEAR issuance?</h1>
+      <p class="lede">A research dashboard comparing newly minted NEAR with Intents revenue, buyback evidence and actual supply change. Buybacks do not automatically reduce supply: purchased NEAR can sit in a treasury wallet. Matching issuance with purchases would not establish zero inflation or price appreciation.</p>
+      <p class="meta" id="refresh-meta">Loading data…</p>
+    </div>
+  </header>
+
+  <main id="main" class="wrap">
+    <section class="answer" id="answer" aria-live="polite"></section>
+
+    <section aria-labelledby="cards-h">
+      <h2 id="cards-h" class="section-h">Last 30 days <span class="muted" id="window-label"></span></h2>
+      <div class="cards" id="cards"></div>
+    </section>
+
+    <section aria-labelledby="sim-h" class="panel" id="simulator">
+      <h2 id="sim-h">Buyback parity simulator</h2>
+      <p class="tag-line"><span class="pill pill-scenario">Conditional scenario</span> Not a prediction, and not a supply-neutrality threshold.</p>
+      <p class="small">Required daily volume (USD) = daily issuance (NEAR) × NEAR price (USD) ÷ (net revenue capture rate × buyback allocation)</p>
+      <form id="sim-form" class="sim-grid" novalidate>
+        <label>NEAR price (USD)
+          <input id="sim-price" type="number" inputmode="decimal" min="0" step="0.01" required>
+        </label>
+        <label>Net revenue capture (bps of volume)
+          <input id="sim-capture" type="number" inputmode="decimal" min="0" step="0.01" required>
+        </label>
+        <label>Buyback allocation (% of net revenue)
+          <input id="sim-alloc" type="number" inputmode="decimal" min="0" max="100" step="1" required>
+        </label>
+        <div class="sim-fixed">
+          <span class="label">Daily issuance (measured, NEAR)</span>
+          <span id="sim-issuance" class="num"></span>
+        </div>
+      </form>
+      <div class="sim-out" id="sim-out" aria-live="polite"></div>
+      <p class="small"><button type="button" class="link" id="sim-reset">Reset to the latest 30-day data</button> <span class="muted" id="sim-defaults-note"></span></p>
+    </section>
+
+    <section aria-labelledby="chart-h" class="panel">
+      <div class="chart-head">
+        <h2 id="chart-h">Issuance vs buyback evidence, weekly</h2>
+        <div class="seg" role="group" aria-label="Chart range">
+          <button type="button" data-range="all" aria-pressed="true">Since 1 Feb</button>
+          <button type="button" data-range="12" aria-pressed="false">Last 12 weeks</button>
+        </div>
+      </div>
+      <p class="small">Weeks start 2026-02-01 (UTC). No verified purchase series exists, so the chart shows the two labelled alternatives: the DefiLlama revenue-based <strong>proxy</strong> and the <strong>net accumulation</strong> of the listed revenue wallet.</p>
+      <ul class="legend" id="legend"></ul>
+      <div class="chart" id="chart" role="img" aria-label="Weekly bar chart of issuance, buyback proxy and wallet net accumulation"></div>
+      <div class="tooltip" id="tooltip" role="status" hidden></div>
+      <details class="table-view">
+        <summary>Show data table</summary>
+        <div class="table-scroll"><table id="series-table"></table></div>
+      </details>
+    </section>
+
+    <section aria-labelledby="claims-h" class="panel">
+      <h2 id="claims-h">What this supports / What it can't establish</h2>
+      <div class="two-col">
+        <div>
+          <h3>Supports</h3>
+          <ul id="supports"></ul>
+        </div>
+        <div>
+          <h3>Can't establish</h3>
+          <ul id="cannot"></ul>
+        </div>
+      </div>
+    </section>
+
+    <section aria-labelledby="wallet-h" class="panel">
+      <h2 id="wallet-h">The buyback wallet</h2>
+      <div id="wallet"></div>
+    </section>
+
+    <section aria-labelledby="sources-h" class="panel">
+      <h2 id="sources-h">Sources and refresh status</h2>
+      <div class="table-scroll"><table id="status-table"></table></div>
+      <ul class="sources" id="sources"></ul>
+      <p class="small">Raw data: <a href="data/latest.json">latest.json</a> · <a href="data/status.json">status.json</a> · <a href="data/epochs.json">epochs.json</a> · <a href="data/boundaries.json">boundaries.json</a> · <a href="data/wallet-transfers.json">wallet-transfers.json</a>. Missing data is shown as unavailable, never as zero.</p>
+    </section>
+  </main>
+
+  <footer class="wrap site-foot">
+    <p class="small">Built for the NEAR Hackathon (Investment Thesis track). Code written with Claude Code and Codex. <a href="https://github.com/Damianonyx/NEARparity">Source on GitHub</a> · <a href="https://github.com/Damianonyx/NEARparity/blob/main/THESIS.md">THESIS.md</a></p>
+  </footer>
+
+  <script type="module" src="app.js"></script>
+</body>
+</html>

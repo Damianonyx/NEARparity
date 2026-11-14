@@ -15,5 +15,13 @@
     "That it is the only wallet receiving buyback NEAR.",
     "Why its on-chain balance differs from the dashboard's all-time figure."
   ],
-  "reason": "Balances and net accumulation do not establish purchases or burns. Purchased NEAR held in a wallet is not burned and does not reduce total supply."
+  "reason": "Balances and net accumulation do not establish purchases or burns. Purchased NEAR held in a wallet is not burned and does not reduce total supply.",
+  "related_revenue_wallets": {
+    "accounts": [
+      "fefundsadmin.sputnik-dao.near",
+      "1csfundsadmin.sputnik-dao.near"
+    ],
+    "source": "Listed alongside the buyback wallet in the same revenue.near.org 'Wallet Breakdown (All-time)' table.",
+    "use": "Transfers between these wallets and the buyback wallet move already-captured revenue; they are excluded from the wallet's net accumulation used for coverage (DefiLlama's revenue methodology also excludes transfers between NEAR's revenue wallets)."
+  }
 }
