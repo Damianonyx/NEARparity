@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-11-14T17:05:05.828Z",
-  "last_successful_refresh": "2026-11-14T17:05:05.828Z",
+  "generated_at": "2026-11-14T18:11:23.974Z",
+  "last_successful_refresh": "2026-11-14T18:11:23.974Z",
   "partial_refresh": false,
   "consecutive_partial_runs": 0,
   "sources": {
@@ -8,101 +8,101 @@
       "ok": true,
       "http_status": 200,
       "error": null,
-      "fetched_at": "2026-11-14T17:05:05.827Z",
+      "fetched_at": "2026-11-14T18:11:23.973Z",
       "url": "https://archival-rpc.mainnet.fastnear.com",
       "calls": 5,
       "failures": 0,
-      "last_ok_at": "2026-11-14T17:05:05.827Z"
+      "last_ok_at": "2026-11-14T18:11:23.973Z"
     },
     "defillama_volume": {
       "ok": true,
       "http_status": 200,
       "error": null,
-      "fetched_at": "2026-11-14T17:04:59.373Z",
+      "fetched_at": "2026-11-14T18:11:20.504Z",
       "url": "https://api.llama.fi/summary/dexs/near-intents",
       "calls": 1,
       "failures": 0,
-      "last_ok_at": "2026-11-14T17:04:59.373Z"
+      "last_ok_at": "2026-11-14T18:11:20.504Z"
     },
     "defillama_fees": {
       "ok": true,
       "http_status": 200,
       "error": null,
-      "fetched_at": "2026-11-14T17:05:00.134Z",
+      "fetched_at": "2026-11-14T18:11:20.521Z",
       "url": "https://api.llama.fi/summary/fees/near-intents?dataType=dailyFees",
       "calls": 1,
       "failures": 0,
-      "last_ok_at": "2026-11-14T17:05:00.134Z"
+      "last_ok_at": "2026-11-14T18:11:20.521Z"
     },
     "defillama_revenue": {
       "ok": true,
       "http_status": 200,
       "error": null,
-      "fetched_at": "2026-11-14T17:05:00.896Z",
+      "fetched_at": "2026-11-14T18:11:20.535Z",
       "url": "https://api.llama.fi/summary/fees/near-intents?dataType=dailyRevenue",
       "calls": 1,
       "failures": 0,
-      "last_ok_at": "2026-11-14T17:05:00.896Z"
+      "last_ok_at": "2026-11-14T18:11:20.535Z"
     },
     "defillama_holders_revenue": {
       "ok": true,
       "http_status": 200,
       "error": null,
-      "fetched_at": "2026-11-14T17:05:01.672Z",
+      "fetched_at": "2026-11-14T18:11:21.145Z",
       "url": "https://api.llama.fi/summary/fees/near-intents?dataType=dailyHoldersRevenue",
       "calls": 1,
       "failures": 0,
-      "last_ok_at": "2026-11-14T17:05:01.672Z"
+      "last_ok_at": "2026-11-14T18:11:21.145Z"
     },
     "price_defillama_chart": {
       "ok": true,
       "http_status": 200,
       "error": null,
-      "fetched_at": "2026-11-14T17:05:02.634Z",
+      "fetched_at": "2026-11-14T18:11:21.656Z",
       "url": "https://coins.llama.fi/chart/coingecko:near?start=1769904000&span=287&period=1d&searchWidth=600",
       "calls": 1,
       "failures": 0,
-      "last_ok_at": "2026-11-14T17:05:02.634Z"
+      "last_ok_at": "2026-11-14T18:11:21.656Z"
     },
     "price_defillama_current": {
       "ok": true,
       "http_status": 200,
       "error": null,
-      "fetched_at": "2026-11-14T17:05:03.281Z",
+      "fetched_at": "2026-11-14T18:11:21.791Z",
       "url": "https://coins.llama.fi/prices/current/coingecko:near",
       "calls": 1,
       "failures": 0,
-      "last_ok_at": "2026-11-14T17:05:03.281Z"
+      "last_ok_at": "2026-11-14T18:11:21.791Z"
     },
     "nearblocks": {
       "ok": true,
       "http_status": 200,
       "error": null,
-      "fetched_at": "2026-11-14T17:04:53.277Z",
+      "fetched_at": "2026-11-14T18:11:16.108Z",
       "url": "https://api.nearblocks.io/v1/account/buybacks.multisignature.near/ft-txns?per_page=100",
       "calls": 2,
       "failures": 0,
-      "last_ok_at": "2026-11-14T17:04:53.277Z"
+      "last_ok_at": "2026-11-14T18:11:16.108Z"
     },
     "near_revenue_dashboard": {
       "ok": true,
       "http_status": 200,
       "error": null,
-      "fetched_at": "2026-11-14T17:05:04.312Z",
+      "fetched_at": "2026-11-14T18:11:23.022Z",
       "url": "https://revenue.near.org/",
       "calls": 1,
       "failures": 0,
-      "last_ok_at": "2026-11-14T17:05:04.312Z"
+      "last_ok_at": "2026-11-14T18:11:23.022Z"
     },
     "nearblocks_charts": {
       "ok": true,
       "http_status": 200,
       "error": null,
-      "fetched_at": "2026-11-14T17:05:05.259Z",
+      "fetched_at": "2026-11-14T18:11:23.720Z",
       "url": "https://api.nearblocks.io/v1/charts",
       "calls": 1,
       "failures": 0,
-      "last_ok_at": "2026-11-14T17:05:05.259Z"
+      "last_ok_at": "2026-11-14T18:11:23.720Z"
     }
   },
   "failed_groups": {},

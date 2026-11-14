@@ -1,7 +1,7 @@
 {
   "schema_version": 2,
-  "generated_at": "2026-11-14T17:05:05.828Z",
-  "last_successful_refresh": "2026-11-14T17:05:05.828Z",
+  "generated_at": "2026-11-14T18:11:23.974Z",
+  "last_successful_refresh": "2026-11-14T18:11:23.974Z",
   "partial_refresh": false,
   "failed_groups": {},
   "notes": {},
@@ -296,10 +296,10 @@
       "reported_by": "DefiLlama"
     },
     "price_current": {
-      "value": 3.0964898100000005,
+      "value": 3.1238743199999996,
       "unit": "USD",
-      "period_start": "2026-11-14T17:04:54.000Z",
-      "period_end": "2026-11-14T17:04:54.000Z",
+      "period_start": "2026-11-14T18:11:09.000Z",
+      "period_end": "2026-11-14T18:11:09.000Z",
       "source": "DefiLlama coins API: https://coins.llama.fi/prices/current/coingecko:near",
       "method": "Latest price for coingecko:near.",
       "status": "measured",
@@ -370,7 +370,7 @@
       "source": "n/a",
       "method": "Would require swap records attributed to the buyback wallet.",
       "status": "unavailable",
-      "reason": "The wallet is listed on an official source (https://revenue.near.org/). Its inflows are native_withdraw intents from an operator account inside NEAR Intents; the swap legs inside Intents have no keyless public index, so purchases are not verified."
+      "reason": "The wallet is listed on an official source (https://revenue.near.org/). Its inflows are native_withdraw intents from many accounts inside NEAR Intents (docs/withdrawer-sample.json); the purchases happen in separate transactions with no keyless public index, so they are not verified."
     },
     "coverage_verified": {
       "value": null,
@@ -475,14 +475,14 @@
     "label": "Conditional scenario under the stated assumptions. Not a prediction and not a supply-neutrality threshold.",
     "defaults": {
       "daily_issuance_near": 88934.8197390998,
-      "price_usd": 3.0964898100000005,
+      "price_usd": 3.1238743199999996,
       "net_revenue_capture_bps": 4.745619515601705,
       "buyback_allocation_pct": 100,
       "observed_avg_daily_volume_usd": 126582068.23333333
     },
     "default_result": {
       "finite": true,
-      "value": 580294653.1447598,
+      "value": 585426620.5359229,
       "reason": null
     },
     "period_start": "2026-10-15T00:00:00.000Z",
@@ -1315,7 +1315,7 @@
     "period_end": "2026-11-14T00:00:00.000Z",
     "source": "https://api.nearblocks.io/v1/account/buybacks.multisignature.near/txns?per_page=100",
     "complete_history": true,
-    "receipts_cached": 3417,
+    "receipts_cached": 3418,
     "ft_events_cached": 1,
     "first_receipt_time": "2026-03-18T12:42:28.722Z",
     "inbound_count": 773,
@@ -1336,11 +1336,11 @@
     },
     "outbound_recent": [],
     "staking_pools": [],
-    "note": "Inbound transfers from intents.near are native_withdraw intents from an operator account inside NEAR Intents; they are consistent with NEAR bought there, but transfers alone do not show the swap. Receipt amounts are approximate (NearBlocks floats)."
+    "note": "Inbound transfers from intents.near are native_withdraw intents from many accounts inside NEAR Intents; they are consistent with NEAR bought there, but transfers alone do not show the swap. Receipt amounts are approximate (NearBlocks floats)."
   },
   "official_dashboard": {
     "source": "NEAR revenue dashboard (official): https://revenue.near.org/",
-    "fetched_at": "2026-11-14T17:05:04.312Z",
+    "fetched_at": "2026-11-14T18:11:23.022Z",
     "wallet_breakdown": [
       {
         "account": "fefundsadmin.sputnik-dao.near",
@@ -1364,15 +1364,15 @@
       "share_pct": 40.9
     },
     "onchain_now": {
-      "block_height": 224543095,
-      "block_time": "2026-11-14T17:04:55.197Z",
-      "total_near": 2284591.8599438937,
-      "native_near": 2284591.8599438937,
+      "block_height": 224550050,
+      "block_time": "2026-11-14T18:11:18.039Z",
+      "total_near": 2284931.406278087,
+      "native_near": 2284931.406278087,
       "wnear_near": 0,
       "intents_wnear_near": 0,
       "staked_near": 0
     },
-    "difference_near": 502780.0577118851,
+    "difference_near": 503119.60404607817,
     "note": "The dashboard attributes captured revenue to wallets; on-chain holdings can differ (other inflows, outflows, timing). Neither figure alone proves purchases."
   },
   "queries": {
