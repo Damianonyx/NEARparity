@@ -4,6 +4,19 @@
   "resume_cursor": null,
   "txns": [
     {
+      "receipt_id": "BjvXFY8ZAixtznoMrRaSG7wnYsFaQ83RjtZaPf9Tf1aA",
+      "tx_hash": "6H9mrNeVZWFcrULvFmE9eeW8vppPwpVSoxoegLKWnLEA",
+      "time": "2026-11-14T16:27:20.500Z",
+      "block_height": 224539140,
+      "from": "intents.near",
+      "to": "buybacks.multisignature.near",
+      "actions": [
+        "TRANSFER"
+      ],
+      "deposit_near_approx": 328.62804358413024,
+      "success": true
+    },
+    {
       "receipt_id": "2rWrzRRyhaspT5DaBfMPVdahuaJsnRDNVzTSiaPFyHaW",
       "tx_hash": "8AcKygihrXHtjfqAqYDucWkFSjp8VGsoud1zXKKGcZBR",
       "time": "2026-11-14T16:12:20.607Z",
@@ -44421,7 +44434,7 @@
   ],
   "description": "Receipts (txns) and fungible-token events (ft_txns) involving the buyback wallet, from NearBlocks (no key). Receipt deposits are NearBlocks floats (approximate); FT deltas are exact smallest-unit strings. Balances come from the archival RPC.",
   "source": "https://api.nearblocks.io/v1/account/buybacks.multisignature.near/txns?per_page=100",
-  "updated_at": "2026-11-14T16:21:18.008Z",
+  "updated_at": "2026-11-14T16:47:02.304Z",
   "ft_txns": [
     {
       "event_index": "17832951238845625000000000051000001",
