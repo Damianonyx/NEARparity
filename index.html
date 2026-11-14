@@ -45,16 +45,33 @@
     <div class="hero-grid wrap-wide" id="top">
       <div class="hero-copy">
         <h1 class="pixel-title"><span class="sr-only">NEAR Parity</span><span id="pixel-title" aria-hidden="true"></span></h1>
-        <p class="hero-q">Are NEAR Intents buybacks keeping pace with new NEAR issuance?</p>
+        <p class="hero-q">Are NEAR Intents buybacks keeping pace with <span class="accent">new NEAR issuance?</span></p>
         <p class="hero-lede">Measured issuance, Intents revenue and buyback evidence, with every calculation shown. Buybacks do not reduce supply by themselves: purchased NEAR can sit in a treasury wallet.</p>
+        <div class="chips" aria-label="Track"><span class="chip">Onchain data</span><span class="chip">Dashboards</span><span class="chip">Research</span></div>
         <div class="hero-cta">
           <a class="btn" href="#answer">See the numbers</a>
-          <a class="btn-link" href="#cards-h">How it's calculated <span aria-hidden="true">›</span></a>
+          <a class="btn-link" href="#cards-h">How it's calculated <span aria-hidden="true">↗</span></a>
         </div>
         <p class="meta" id="refresh-meta">Loading data…</p>
       </div>
       <figure class="hero-art">
-        <div id="scale-art" class="scale-art" role="img" aria-label="Scanline illustration of a balance scale weighing newly issued NEAR against the buyback proxy"></div>
+        <div class="sim-hero">
+          <canvas id="hero-canvas" aria-hidden="true"></canvas>
+          <div class="hero-readout" aria-live="polite">
+            <span class="ro-label">Buybacks cover</span>
+            <span class="ro-big" id="ro-cov">—</span>
+            <span class="ro-label">of new NEAR issuance</span>
+            <span class="ro-parity" id="ro-parity" hidden>Parity</span>
+          </div>
+          <label class="hero-slider" for="hero-k">
+            <span>What if Intents volume were <strong id="ro-k">1.0×</strong> today’s?</span>
+            <input id="hero-k" type="range" min="0" max="1" step="0.001" value="0">
+          </label>
+          <div class="hero-sim-meta">
+            <span id="ro-need"></span>
+            <button id="hero-play" class="ghost" type="button" aria-pressed="true">Pause demo</button>
+          </div>
+        </div>
         <figcaption id="scale-caption">Scale drawn from the latest data.</figcaption>
       </figure>
     </div>
@@ -62,16 +79,20 @@
 
   <main id="main" class="wrap">
     <div class="banner" id="banner" role="status" hidden></div>
+    <p class="eyebrow-label section-first">01 / The answer</p>
     <section class="answer" id="answer" aria-live="polite"></section>
 
     <section aria-labelledby="cards-h">
-      <h2 id="cards-h" class="section-h">Last 30 days <span class="muted" id="window-label"></span></h2>
+      <p class="eyebrow-label">02 / The evidence</p>
+      <h2 id="cards-h" class="section-h">Last 30 <span class="accent">days</span></h2>
+      <p class="window-line" id="window-label"></p>
       <p class="section-sub">Thirty complete UTC days. Each figure carries its status: measured, proxy or unavailable.</p>
       <div class="cards" id="cards"></div>
     </section>
 
     <section aria-labelledby="sim-h" class="panel" id="simulator">
-      <h2 id="sim-h">Buyback parity simulator</h2>
+      <p class="eyebrow-label">03 / The model</p>
+      <h2 id="sim-h">Buyback parity <span class="accent">simulator</span></h2>
       <p class="tag-line"><span class="pill pill-scenario">Conditional scenario</span> Not a prediction, and not a supply-neutrality threshold.</p>
       <details class="formula"><summary>Formula</summary><p class="small">Required daily volume (USD) = daily issuance (NEAR) × NEAR price (USD) ÷ (net revenue capture rate × buyback allocation). Rates are converted to decimals: bps ÷ 10,000 and % ÷ 100.</p></details>
       <form id="sim-form" class="sim-grid" novalidate>
@@ -95,7 +116,8 @@
 
     <section aria-labelledby="chart-h" class="panel">
       <div class="chart-head">
-        <h2 id="chart-h">Issuance vs buyback evidence, weekly</h2>
+        <p class="eyebrow-label">04 / History</p>
+      <h2 id="chart-h">Issuance vs <span class="accent">buybacks</span></h2>
         <div class="seg" role="group" aria-label="Chart range">
           <button type="button" data-range="all" aria-pressed="true">Since 1 Feb</button>
           <button type="button" data-range="12" aria-pressed="false">Last 12 weeks</button>
@@ -114,7 +136,8 @@
     </section>
 
     <section aria-labelledby="usage-h" class="panel" id="usage">
-      <h2 id="usage-h">Network usage vs Intents volume</h2>
+      <p class="eyebrow-label">05 / Network usage</p>
+      <h2 id="usage-h">Usage vs <span class="accent">Intents volume</span></h2>
       <p class="small">Is the activity behind the buyback growing? On-chain usage from NearBlocks, next to NEAR Intents swap volume from DefiLlama. Last 30 days compared with the 30 before.</p>
       <div class="tiles" id="usage-tiles"></div>
       <p class="takeaway" id="usage-takeaway"></p>
@@ -130,7 +153,8 @@
     </section>
 
     <section aria-labelledby="claims-h" class="plain">
-      <h2 id="claims-h">What this supports / What it can't establish</h2>
+      <p class="eyebrow-label">06 / What it means</p>
+      <h2 id="claims-h">Supports / <span class="accent">can't establish</span></h2>
       <div class="two-col">
         <div>
           <h3>Supports</h3>
@@ -144,13 +168,15 @@
     </section>
 
     <section aria-labelledby="wallet-h" class="plain">
-      <h2 id="wallet-h">The buyback wallet</h2>
+      <p class="eyebrow-label">07 / The wallet</p>
+      <h2 id="wallet-h">The buyback <span class="accent">wallet</span></h2>
       <p class="section-sub" id="wallet-summary"></p>
       <details><summary>Wallet details, reconciliation and transfers</summary><div id="wallet"></div></details>
     </section>
 
     <section aria-labelledby="sources-h" class="plain">
-      <h2 id="sources-h">Sources and refresh status</h2>
+      <p class="eyebrow-label">08 / Sources</p>
+      <h2 id="sources-h">Sources and <span class="accent">status</span></h2>
       <ul class="sources" id="sources"></ul>
       <details><summary>Refresh status by source</summary><div class="table-scroll"><table id="status-table"></table></div></details>
       <p class="small">Raw data: <a href="data/latest.json">latest.json</a> · <a href="data/status.json">status.json</a> · <a href="data/epochs.json">epochs.json</a> · <a href="data/boundaries.json">boundaries.json</a> · <a href="data/wallet-transfers.json">wallet-transfers.json</a>. Missing data is shown as unavailable, never as zero.</p>

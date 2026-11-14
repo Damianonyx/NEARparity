@@ -65,7 +65,7 @@ function renderMeta(L) {
   if (L.partial_refresh || staleKeys.length) {
     meta.append(' · ', el('strong', {}, 'Partial refresh:'), ` ${Object.keys(L.failed_groups || {}).join(', ') || 'some sources'} failed; affected values keep their last good data and are marked stale.`);
   }
-  $('#window-label').textContent = `· ${fmtDay(L.window.start)} – ${fmtDay(lastDay(L.window.end))}`;
+  $('#window-label').textContent = `${fmtDay(L.window.start)} – ${fmtDay(lastDay(L.window.end))}`;
 }
 
 function renderAnswer(L) {
@@ -100,10 +100,11 @@ function queryBlock(items, summary = 'Query') {
     ...items.map((q) => el('div', { class: 'q' }, el('p', { class: 'q-label' }, q.label), el('pre', {}, el('code', {}, q.code)))));
 }
 
+let cardNo = 0;
 function card({ title, hero, rows = [], source, how, query }) {
   const hm = hero.m; const ok = hm && hm.status !== 'unavailable' && hm.value != null;
   return el('article', { class: 'card' },
-    el('div', { class: 'card-head' }, el('h3', {}, title), el('span', { class: 'period' }, shortPeriod(hm))),
+    el('div', { class: 'card-head' }, el('h3', {}, el('span', { class: 'num' }, `[ 0${++cardNo} ]`), title), el('span', { class: 'period' }, shortPeriod(hm))),
     el('p', { class: 'hero-label' }, hero.label),
     el('div', { class: 'hero-value' }, ok ? (hero.fmt || fmtNear)(hm.value) : 'Unavailable', ' ', ...pill(hm)),
     ok && hero.note ? el('p', { class: 'hero-note' }, hero.note) : (!ok ? el('p', { class: 'hero-note' }, hm?.reason || '') : null),
@@ -500,7 +501,7 @@ function usageSeries(L) {
   const acc = rows.map((r) => r.active_accounts_avg ?? null);
   const tx = rows.map((r) => r.txns_avg ?? null);
   return { rows, series: [
-    { label: 'Intents volume', src: 'DefiLlama', idx: indexTo100(vol), raw: vol, fmt: (v) => `${fmtUsd(v)}/day`, style: 'stroke: var(--ink); stroke-width: 2.5', dash: '' },
+    { label: 'Intents volume', src: 'DefiLlama', idx: indexTo100(vol), raw: vol, fmt: (v) => `${fmtUsd(v)}/day`, style: 'stroke: var(--accent); stroke-width: 2.5', dash: '' },
     { label: 'Active accounts', src: 'NearBlocks', idx: indexTo100(acc), raw: acc, fmt: (v) => `${nf0.format(v)}/day`, style: 'stroke: var(--ink-2); stroke-width: 2', dash: '7 4' },
     { label: 'Transactions', src: 'NearBlocks', idx: indexTo100(tx), raw: tx, fmt: (v) => `${nf0.format(v)}/day`, style: 'stroke: var(--muted); stroke-width: 2', dash: '2 3' },
   ] };
@@ -588,13 +589,13 @@ const GLYPHS = {
 };
 function renderPixelTitle(lines = ['NEAR', 'PARITY']) {
   const cols = Math.max(...lines.map((l) => l.length * 6 - 1)); const rows = lines.length * 7 + (lines.length - 1) * 3;
-  let d = '';
+  const ds = lines.map(() => '');
   lines.forEach((line, li) => [...line].forEach((ch, ci) => (GLYPHS[ch] || []).forEach((bits, ry) => {
-    const y = li * 10 + ry; let x = ci * 6;
-    for (const run of bits.matchAll(/1+/g)) d += `M${x + run.index} ${y}h${run[0].length}v1h-${run[0].length}z`;
+    const y = li * 10 + ry; const x = ci * 6;
+    for (const run of bits.matchAll(/1+/g)) ds[li] += `M${x + run.index} ${y}h${run[0].length}v1h-${run[0].length}z`;
   })));
   const svg = s('svg', { viewBox: `0 0 ${cols} ${rows}`, 'shape-rendering': 'crispEdges', 'aria-hidden': 'true' });
-  svg.append(s('path', { d }));
+  ds.forEach((d, i) => svg.append(s('path', { d, class: i === ds.length - 1 ? 'accent-path' : '' })));
   $('#pixel-title').append(svg);
 }
 
@@ -605,61 +606,140 @@ const segDist = (px, py, ax, ay, bx, by) => {
   return Math.hypot(px - (ax + t * dx), py - (ay + t * dy));
 };
 
-/** Balance scale rasterised to a 64×46 grid and drawn as horizontal scanlines.
- *  Left pan = issuance (fixed weight); right pan = buyback proxy, weight ∝ coverage; tilt ∝ (1 − coverage). */
-function renderScale(L) {
-  const cov = L?.metrics?.coverage_proxy?.value ?? null;
-  const c = cov == null ? null : Math.max(0, Math.min(1, cov));
-  const Wd = 64; const Ht = 46; const u = 10;
-  const theta = c == null ? 0 : 0.28 * (1 - c);
-  const P = { x: 32, y: 9 }; const arm = 22;
-  const Lend = { x: P.x - arm * Math.cos(theta), y: P.y + arm * Math.sin(theta) };
-  const Rend = { x: P.x + arm * Math.cos(theta), y: P.y - arm * Math.sin(theta) };
-  const pans = [Lend, Rend].map((e) => ({ x: e.x, y: e.y + 14, e }));
-  const wL = { w: 12, h: 8 }; const k = c == null ? 0 : Math.sqrt(c);
-  const wR = { w: Math.max(c ? 1.5 : 0, 12 * k), h: Math.max(c ? 1.5 : 0, 8 * k) };
-  const shade = (x, y) => {
-    if (Math.hypot(x - P.x, y - P.y) <= 2.3) return 1;
-    if (segDist(x, y, Lend.x, Lend.y, Rend.x, Rend.y) <= 1.05) return 1;
-    for (const [i, pan] of pans.entries()) {
-      const wt = i === 0 ? wL : wR;
-      if (wt.w && x >= pan.x - wt.w / 2 && x < pan.x + wt.w / 2 && y >= pan.y - wt.h && y < pan.y) return 0.95;
-      const ex = (x - pan.x) / 9.5; const ey = (y - pan.y) / 3.4;
-      if (y >= pan.y && ex * ex + ey * ey <= 1) return 0.7;
-      if (segDist(x, y, pan.e.x, pan.e.y, pan.x - 8.5, pan.y) <= 0.45 || segDist(x, y, pan.e.x, pan.e.y, pan.x + 8.5, pan.y) <= 0.45) return 0.4;
-    }
-    if (x >= 30.9 && x < 33.1 && y >= P.y && y < 41) return 0.8;
-    if (y >= 41 && y < 45 && Math.abs(x - 32) <= 4 + (y - 41) * 2.6) return 0.85;
-    return 0;
-  };
-  const svg = s('svg', { viewBox: `0 0 ${Wd * u} ${(Ht + 1) * u}`, 'aria-hidden': 'true' });
-  const rand = rng(7);
-  for (let i = 0; i < 12; i++) { // decorative streaks, upper left (clear of the beam and pans)
-    const y = Math.floor(rand() * 9); const len = 5 + Math.floor(rand() * 16); const x0 = Math.floor(rand() * Math.max(1, 27 - len));
-    svg.append(s('rect', { class: 'streak', x: x0 * u, y: y * u + 4, width: len * u, height: 2 }));
+// ---------- hero: interactive buyback simulation (canvas) ----------
+// The scale weighs newly issued NEAR (left) against the revenue-based buyback (right). The slider asks
+// "what if Intents volume were k× today's?" holding capture rate, allocation and price fixed:
+// coverage(k) = measured proxy coverage × k. Tokens fall into each pan at rates proportional to issuance
+// and to buybacks. Conditional illustration only; the measured figures are in the cards below.
+function startHeroSim(L) {
+  const c0 = L?.metrics?.coverage_proxy?.status !== 'unavailable' ? L?.metrics?.coverage_proxy?.value : null;
+  const canvas = $('#hero-canvas'); const ctx = canvas.getContext('2d');
+  const slider = $('#hero-k'); const playBtn = $('#hero-play');
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const KMIN = 0.5; const KMAX = 12;
+  const tToK = (t) => KMIN * (KMAX / KMIN) ** t; const kToT = (k) => Math.log(k / KMIN) / Math.log(KMAX / KMIN);
+  const kStar = c0 ? 1 / c0 : null;
+  let k = 1; let theta = null; let autoplay = !reduce && c0 != null; let phase = 0; let last = performance.now();
+  const tokens = []; let spawnL = 0; let spawnR = 0;
+  slider.value = String(kToT(1));
+  const Wd = 64; const Ht = 46;
+  const css = () => { const cs = getComputedStyle(document.documentElement); return { ink: cs.getPropertyValue('--ink').trim(), accent: cs.getPropertyValue('--accent-fill').trim(), streak: cs.getPropertyValue('--streak').trim(), muted: cs.getPropertyValue('--muted').trim() }; };
+  let colors = css(); matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => { colors = css(); });
+  new MutationObserver(() => { colors = css(); }).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+
+  function geometry(cov) {
+    const c = Math.max(0, cov);
+    const target = c <= 1 ? 0.28 * (1 - c) : -0.28 * Math.min(1, (c - 1) / 2);
+    return { target, kR: Math.sqrt(Math.min(c, 3)) };
   }
-  for (let y = 0; y < Ht; y++) {
-    let x = 0;
-    while (x < Wd) {
-      const sh = Math.round(shade(x + 0.5, y + 0.5) * 4) / 4;
-      if (!sh) { x++; continue; }
-      let x2 = x + 1;
-      while (x2 < Wd && Math.round(shade(x2 + 0.5, y + 0.5) * 4) / 4 === sh) x2++;
-      const h = u * (0.22 + 0.58 * sh);
-      svg.append(s('rect', { class: 'ink', x: x * u, y: y * u + (u - h) / 2, width: (x2 - x) * u, height: h }));
-      x = x2;
-    }
+  function layout(th) {
+    const P = { x: 32, y: 9 }; const arm = 22;
+    const Lend = { x: P.x - arm * Math.cos(th), y: P.y + arm * Math.sin(th) };
+    const Rend = { x: P.x + arm * Math.cos(th), y: P.y - arm * Math.sin(th) };
+    return { P, Lend, Rend, pans: [Lend, Rend].map((e) => ({ x: e.x, y: e.y + 14, e })) };
   }
-  svg.append(s('rect', { class: 'streak', x: 0, y: 45 * u + 3, width: Wd * u, height: 2 }));
-  const label = (txt, x, y) => { const t = s('text', { x: x * u, y: y * u, 'text-anchor': 'middle', style: 'fill: var(--muted); font: 600 15px var(--mono); letter-spacing: 1px' }); t.textContent = txt; svg.append(t); };
-  label('ISSUED', pans[0].x, Math.min(Ht, pans[0].y + 6.2));
-  label(c == null ? 'PROXY N/A' : 'BUYBACK PROXY', pans[1].x, Math.min(Ht, pans[1].y + 6.2));
-  const box = $('#scale-art'); box.textContent = ''; box.append(svg);
+  function draw(th, kR) {
+    const dpr = Math.min(2, window.devicePixelRatio || 1);
+    const w = canvas.clientWidth; const h = canvas.clientHeight;
+    if (canvas.width !== Math.round(w * dpr)) { canvas.width = Math.round(w * dpr); canvas.height = Math.round(h * dpr); }
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0); ctx.clearRect(0, 0, w, h);
+    const u = w / Wd;
+    const { P, Lend, Rend, pans } = layout(th);
+    const wL = { w: 12, h: 8 }; const wR = { w: Math.max(1.5, 12 * Math.min(kR, 1.25)), h: Math.max(1.5, 8 * Math.min(kR, 1.25)) };
+    const shade = (x, y) => {
+      if (Math.hypot(x - P.x, y - P.y) <= 2.3) return [1, 'ink'];
+      if (segDist(x, y, Lend.x, Lend.y, Rend.x, Rend.y) <= 1.05) return [1, 'ink'];
+      for (const [i, pan] of pans.entries()) {
+        const wt = i === 0 ? wL : wR;
+        if (x >= pan.x - wt.w / 2 && x < pan.x + wt.w / 2 && y >= pan.y - wt.h && y < pan.y) return [0.95, i === 0 ? 'ink' : 'accent'];
+        const ex = (x - pan.x) / 9.5; const ey = (y - pan.y) / 3.4;
+        if (y >= pan.y && ex * ex + ey * ey <= 1) return [0.7, 'ink'];
+        if (segDist(x, y, pan.e.x, pan.e.y, pan.x - 8.5, pan.y) <= 0.45 || segDist(x, y, pan.e.x, pan.e.y, pan.x + 8.5, pan.y) <= 0.45) return [0.4, 'ink'];
+      }
+      if (x >= 30.9 && x < 33.1 && y >= P.y && y < 41) return [0.8, 'ink'];
+      if (y >= 41 && y < 45 && Math.abs(x - 32) <= 4 + (y - 41) * 2.6) return [0.85, 'ink'];
+      return null;
+    };
+    // background streaks
+    ctx.fillStyle = colors.streak;
+    const rand = rng(7);
+    for (let i = 0; i < 12; i++) { const y = Math.floor(rand() * 9); const len = 5 + Math.floor(rand() * 16); const x0 = Math.floor(rand() * Math.max(1, 27 - len)); ctx.fillRect(x0 * u, y * u + u * 0.4, len * u, Math.max(1, u * 0.15)); }
+    ctx.fillRect(0, 45 * u + u * 0.3, Wd * u, Math.max(1, u * 0.15));
+    for (let y = 0; y < Ht; y++) {
+      let x = 0;
+      while (x < Wd) {
+        const sh = shade(x + 0.5, y + 0.5); if (!sh) { x++; continue; }
+        const q = Math.round(sh[0] * 4) / 4; let x2 = x + 1;
+        while (x2 < Wd) { const s2 = shade(x2 + 0.5, y + 0.5); if (!s2 || Math.round(s2[0] * 4) / 4 !== q || s2[1] !== sh[1]) break; x2++; }
+        const hh = u * (0.22 + 0.58 * q);
+        ctx.fillStyle = sh[1] === 'accent' ? colors.accent : colors.ink;
+        ctx.fillRect(x * u, y * u + (u - hh) / 2, (x2 - x) * u, hh);
+        x = x2;
+      }
+    }
+    // tokens
+    for (const tk of tokens) { ctx.fillStyle = tk.side ? colors.accent : colors.ink; ctx.globalAlpha = tk.a; ctx.fillRect(tk.x * u, tk.y * u, u * 0.9, u * 0.9); }
+    ctx.globalAlpha = 1;
+    ctx.fillStyle = colors.muted; ctx.font = `600 ${Math.max(9, u * 1.4)}px ui-monospace, Menlo, monospace`; ctx.textAlign = 'center';
+    ctx.fillText('ISSUED', pans[0].x * u, Math.min(Ht, pans[0].y + 6.2) * u);
+    ctx.fillText('BUYBACKS', pans[1].x * u, Math.min(Ht, pans[1].y + 6.2) * u);
+    return pans;
+  }
+  function readout(cov) {
+    $('#ro-k').textContent = `${k.toFixed(1)}×`;
+    $('#ro-cov').textContent = cov == null ? 'unavailable' : fmtPct(cov);
+    $('#ro-parity').hidden = !(cov != null && cov >= 1);
+    $('#ro-need').textContent = kStar ? `Parity needs ≈${kStar.toFixed(1)}× today’s Intents volume (conditional; capture, allocation and price held fixed).` : 'Coverage unavailable.';
+  }
+  // Pause the loop while the hero is off screen (battery); resume where it left off.
+  let visible = true;
+  new IntersectionObserver(([e]) => {
+    const was = visible; visible = e.isIntersecting;
+    if (visible && !was && !reduce) requestAnimationFrame((t) => { last = t; frame(t); });
+  }).observe(canvas);
+  function frame(now) {
+    if (!visible && !reduce) return;
+    const dt = Math.min(0.1, (now - last) / 1000); last = now;
+    if (autoplay && kStar) { // demo: sweep from today's volume up to parity and back
+      phase += dt / 12;
+      const tA = kToT(1); const tB = kToT(Math.min(KMAX, kStar * 1.05));
+      const p = (1 - Math.cos(2 * Math.PI * (phase % 1))) / 2;
+      slider.value = String(tA + (tB - tA) * Math.min(1, p * 1.15));
+      k = tToK(Number(slider.value));
+    }
+    const cov = c0 == null ? null : c0 * k;
+    const { target, kR } = geometry(cov ?? 0);
+    theta = theta == null ? target : theta + (target - theta) * Math.min(1, dt * 4);
+    // token flow: issuance rate fixed; buyback rate ∝ coverage
+    if (!reduce && c0 != null) {
+      spawnL += dt * 2.2; spawnR += dt * 2.2 * Math.min(cov, 3);
+      const { pans } = layout(theta);
+      while (spawnL >= 1) { spawnL -= 1; tokens.push({ side: 0, x: pans[0].x - 5 + Math.random() * 10, y: -1, v: 10 + Math.random() * 6, a: 1 }); }
+      while (spawnR >= 1) { spawnR -= 1; tokens.push({ side: 1, x: pans[1].x - 5 + Math.random() * 10, y: -1, v: 10 + Math.random() * 6, a: 1 }); }
+      for (const tk of tokens) {
+        const pan = pans[tk.side]; tk.y += tk.v * dt;
+        const top = pan.y - (tk.side ? 3 : 8);
+        if (tk.y >= top) { tk.y = top; tk.a -= dt * 4; }
+      }
+      for (let i = tokens.length - 1; i >= 0; i--) if (tokens[i].a <= 0) tokens.splice(i, 1);
+    }
+    draw(theta, kR); readout(cov);
+    if (!reduce || Math.abs(target - theta) > 1e-3) requestAnimationFrame(frame);
+  }
+  const stopDemo = () => { autoplay = false; playBtn.textContent = 'Play demo'; playBtn.setAttribute('aria-pressed', 'false'); };
+  slider.addEventListener('input', () => { stopDemo(); k = tToK(Number(slider.value)); if (reduce) requestAnimationFrame(frame); });
+  slider.addEventListener('pointerdown', stopDemo);
+  playBtn.addEventListener('click', () => {
+    autoplay = !autoplay; playBtn.textContent = autoplay ? 'Pause demo' : 'Play demo'; playBtn.setAttribute('aria-pressed', String(autoplay));
+    if (autoplay) { phase = 0; if (reduce) requestAnimationFrame(frame); }
+  });
+  if (reduce) { playBtn.textContent = 'Play demo'; playBtn.setAttribute('aria-pressed', 'false'); }
+  window.addEventListener('resize', () => requestAnimationFrame((t) => draw(theta ?? 0, geometry(c0 == null ? 0 : c0 * k).kR)));
   const m = L?.metrics || {};
-  $('#scale-caption').textContent = c == null
-    ? 'Scale shown level only as an outline: buyback coverage is unavailable, so nothing is weighed.'
-    : `Drawn to data, last 30 days: left pan = NEAR issued (${fmtNear(m.issuance?.value)}, measured); right pan = revenue-based buyback proxy (${fmtNear(m.buyback_proxy_near?.value)}, proxy). Weight area and tilt scale with proxy coverage (${fmtPct(cov)}); a level beam would mean parity.`;
-  box.setAttribute('aria-label', `Balance scale: newly issued NEAR outweighs the buyback proxy; proxy coverage ${c == null ? 'unavailable' : fmtPct(cov)}.`);
+  $('#scale-caption').textContent = c0 == null
+    ? 'Coverage is unavailable, so nothing is weighed.'
+    : `At today’s volume the scale is drawn to data: left pan = NEAR issued in the last 30 days (${fmtNear(m.issuance?.value)}, measured); right pan = revenue-based buyback proxy (${fmtNear(m.buyback_proxy_near?.value)}, proxy). The slider is a conditional scenario, not a forecast.`;
+  requestAnimationFrame((t) => { last = t; frame(t); });
 }
 
 // ---------- data validation, staleness, resilient rendering ----------
@@ -713,7 +793,7 @@ renderLegend();
 let loaded = null;
 try { loaded = await load(); } catch (e) {
   $('#refresh-meta').textContent = 'Data could not be loaded.';
-  section('scale', '#scale-art', () => renderScale(null));
+  section('scale', '#hero-canvas', () => startHeroSim(null));
   $('#main').prepend(el('div', { class: 'error' }, `Could not load data/latest.json (${e.message}). If you opened index.html from disk, run: node scripts/serve.mjs`));
 }
 if (loaded) {
@@ -724,7 +804,7 @@ if (loaded) {
   if (problems.length) console.warn('latest.json problems:', problems);
   section('banner', '#banner', () => renderBanner(latest, problems));
   section('meta', '#refresh-meta', () => renderMeta(latest));
-  section('scale', '#scale-art', () => renderScale(latest));
+  section('scale', '#hero-canvas', () => startHeroSim(latest));
   section('answer', '#answer', () => renderAnswer(latest));
   section('cards', '#cards', () => renderCards(latest));
   section('simulator', '#sim-out', () => setupSimulator(latest));
