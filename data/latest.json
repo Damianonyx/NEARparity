@@ -1,7 +1,7 @@
 {
   "schema_version": 2,
-  "generated_at": "2026-11-14T20:07:43.688Z",
-  "last_successful_refresh": "2026-11-14T20:07:43.688Z",
+  "generated_at": "2026-11-14T20:14:47.897Z",
+  "last_successful_refresh": "2026-11-14T20:14:47.897Z",
   "partial_refresh": false,
   "failed_groups": {},
   "notes": {},
@@ -296,10 +296,10 @@
       "reported_by": "DefiLlama"
     },
     "price_current": {
-      "value": 3.08150196,
+      "value": 3.0821,
       "unit": "USD",
-      "period_start": "2026-11-14T20:07:32.000Z",
-      "period_end": "2026-11-14T20:07:32.000Z",
+      "period_start": "2026-11-14T20:10:48.000Z",
+      "period_end": "2026-11-14T20:10:48.000Z",
       "source": "DefiLlama coins API: https://coins.llama.fi/prices/current/coingecko:near",
       "method": "Latest price for coingecko:near.",
       "status": "measured",
@@ -367,45 +367,53 @@
       "unit": "NEAR",
       "period_start": "2026-10-15T00:00:00.000Z",
       "period_end": "2026-11-14T00:00:00.000Z",
-      "source": "BigQuery public NEAR dataset (bigquery-public-data.crypto_near_mainnet_us): intents.near dip4/nep245 event logs (run 2026-11-14; SQL in queries/bigquery/02-buybacks-30d.sql, queries/bigquery/03-funding-sources-30d.sql, queries/bigquery/04-hub-account-30d.sql)",
-      "method": "Lower bound of NEAR bought. The accounts that signed the native_withdraw intents to the buyback wallet in the window (at least 272) made 7979 token_diff swaps that gained wNEAR (0 NEAR sold), paid with tokens including USDT (Ethereum), USDT0 (Plasma), USDC (Base), ZEC, SUI. NEAR they received by transfer is not counted, because its payment leg is not visible in these events.",
+      "source": "BigQuery public NEAR dataset (bigquery-public-data.crypto_near_mainnet_us): intents.near event logs, queried daily (data/bigquery-daily.json)",
+      "method": "Lower bound of NEAR bought: wNEAR gained in 7979 token_diff swaps by the accounts that fund the buyback wallet (each counted from the first day it sent NEAR to the wallet), summed over the 30 days (0 NEAR sold). NEAR they received by transfer is not counted, because its payment is not visible in these events.",
       "status": "measured",
       "reason": null,
       "source_type": "onchain",
-      "snapshot": {
-        "run_on": "2026-11-14",
-        "window_matches_dashboard": true
+      "lower_bound": true,
+      "daily": {
+        "updated_at": "2026-11-14T20:14:46.363Z",
+        "latest_block_utc": "2026-11-14T19:59:59.000Z",
+        "accounts_known": 502
       },
-      "lower_bound": true
+      "value_yocto": "73168186536112395331049275042",
+      "swaps": 7979,
+      "sold_near": 0
     },
     "trace_withdrawn_to_wallet": {
       "value": 301008.214894364,
       "unit": "NEAR",
       "period_start": "2026-10-15T00:00:00.000Z",
       "period_end": "2026-11-14T00:00:00.000Z",
-      "source": "BigQuery public NEAR dataset (bigquery-public-data.crypto_near_mainnet_us): intents.near dip4/nep245 event logs (run 2026-11-14; SQL in queries/bigquery/02-buybacks-30d.sql, queries/bigquery/03-funding-sources-30d.sql, queries/bigquery/04-hub-account-30d.sql)",
-      "method": "Sum of 771 native_withdraw intents to the buyback wallet in the window. Cross-check: matches the wallet's RPC balance change for the same window to within 0.3%.",
+      "source": "BigQuery public NEAR dataset (bigquery-public-data.crypto_near_mainnet_us): intents.near event logs, queried daily (data/bigquery-daily.json)",
+      "method": "Sum of 771 native_withdraw intents to the buyback wallet over the 30 days.",
       "status": "measured",
       "reason": null,
       "source_type": "onchain",
-      "snapshot": {
-        "run_on": "2026-11-14",
-        "window_matches_dashboard": true
-      }
+      "daily": {
+        "updated_at": "2026-11-14T20:14:46.363Z",
+        "latest_block_utc": "2026-11-14T19:59:59.000Z",
+        "accounts_known": 502
+      },
+      "value_yocto": "301008214894363991440391460841",
+      "withdrawals": 771
     },
     "trace_untraced_near": {
       "value": 227840.0283582516,
       "unit": "NEAR",
       "period_start": "2026-10-15T00:00:00.000Z",
       "period_end": "2026-11-14T00:00:00.000Z",
-      "source": "BigQuery public NEAR dataset (bigquery-public-data.crypto_near_mainnet_us): intents.near dip4/nep245 event logs (run 2026-11-14; SQL in queries/bigquery/02-buybacks-30d.sql, queries/bigquery/03-funding-sources-30d.sql, queries/bigquery/04-hub-account-30d.sql)",
-      "method": "NEAR delivered to the wallet that is not matched by a swap of the withdrawing accounts. It reached them by transfer inside NEAR Intents, mostly from one high-volume account (191,434 NEAR in 500 transfers) that moved 17.7M NEAR to many accounts in the window, was funded mainly by solver-priv-liq.near, and made no swaps itself. Consistent with market-maker fills, but the payment is not visible, so it is not counted as verified purchases.",
+      "source": "BigQuery public NEAR dataset (bigquery-public-data.crypto_near_mainnet_us): intents.near event logs, queried daily (data/bigquery-daily.json)",
+      "method": "NEAR delivered to the wallet that is not matched by a swap of the accounts that fund it: it reached them by transfer inside NEAR Intents (see the one-off trace in docs/bigquery-results.json for where it came from).",
       "status": "measured",
       "reason": null,
       "source_type": "onchain",
-      "snapshot": {
-        "run_on": "2026-11-14",
-        "window_matches_dashboard": true
+      "daily": {
+        "updated_at": "2026-11-14T20:14:46.363Z",
+        "latest_block_utc": "2026-11-14T19:59:59.000Z",
+        "accounts_known": 502
       }
     },
     "coverage_verified": {
@@ -413,16 +421,17 @@
       "unit": "ratio",
       "period_start": "2026-10-15T00:00:00.000Z",
       "period_end": "2026-11-14T00:00:00.000Z",
-      "source": "BigQuery public NEAR dataset (bigquery-public-data.crypto_near_mainnet_us): intents.near dip4/nep245 event logs (run 2026-11-14; SQL in queries/bigquery/02-buybacks-30d.sql, queries/bigquery/03-funding-sources-30d.sql, queries/bigquery/04-hub-account-30d.sql); issuance: NEAR archival RPC",
-      "method": "Verified NEAR bought (lower bound) ÷ measured issuance over the same window (2,668,045 NEAR).",
+      "source": "BigQuery public NEAR dataset (bigquery-public-data.crypto_near_mainnet_us): intents.near event logs, queried daily (data/bigquery-daily.json); issuance: NEAR archival RPC",
+      "method": "Verified NEAR bought (lower bound, daily BigQuery trace) ÷ measured issuance over the same 30 UTC days.",
       "status": "measured",
       "reason": null,
       "source_type": "onchain",
-      "snapshot": {
-        "run_on": "2026-11-14",
-        "window_matches_dashboard": true
-      },
-      "lower_bound": true
+      "lower_bound": true,
+      "daily": {
+        "updated_at": "2026-11-14T20:14:46.363Z",
+        "latest_block_utc": "2026-11-14T19:59:59.000Z",
+        "accounts_known": 502
+      }
     },
     "coverage_proxy": {
       "value": 0.1573121956239935,
@@ -517,14 +526,14 @@
     "label": "Conditional scenario under the stated assumptions. Not a prediction and not a supply-neutrality threshold.",
     "defaults": {
       "daily_issuance_near": 88934.8197390998,
-      "price_usd": 3.08150196,
+      "price_usd": 3.0821,
       "net_revenue_capture_bps": 4.745619515601705,
       "buyback_allocation_pct": 100,
       "observed_avg_daily_volume_usd": 126582068.23333333
     },
     "default_result": {
       "finite": true,
-      "value": 577485869.731668,
+      "value": 577597944.8346591,
       "reason": null
     },
     "period_start": "2026-10-15T00:00:00.000Z",
@@ -1285,7 +1294,7 @@
       "wallet_internal_near": 0,
       "wallet_net_excl_internal_near": 55201.38323927779,
       "wallet_balance_end_near": 2063654.814829639,
-      "verified_purchases_near": null,
+      "verified_purchases_near": 24919.730085723426,
       "intents_volume_usd": 823186652,
       "active_accounts_avg": 51966.71428571428,
       "txns_avg": 606495.5714285715,
@@ -1305,7 +1314,7 @@
       "wallet_internal_near": 0,
       "wallet_net_excl_internal_near": 81321.83500584826,
       "wallet_balance_end_near": 2144976.6498354874,
-      "verified_purchases_near": null,
+      "verified_purchases_near": 34734.61545256369,
       "intents_volume_usd": 884323997,
       "active_accounts_avg": 50376.28571428572,
       "txns_avg": 584519.8571428572,
@@ -1325,7 +1334,7 @@
       "wallet_internal_near": 0,
       "wallet_net_excl_internal_near": 65391.88764351587,
       "wallet_balance_end_near": 2210368.537479003,
-      "verified_purchases_near": null,
+      "verified_purchases_near": 5871.903499428069,
       "intents_volume_usd": 906437455,
       "active_accounts_avg": 68607.85714285714,
       "txns_avg": 654898.8571428572,
@@ -1345,7 +1354,7 @@
       "wallet_internal_near": 0,
       "wallet_net_excl_internal_near": 69485.92237846655,
       "wallet_balance_end_near": 2279854.45985747,
-      "verified_purchases_near": null,
+      "verified_purchases_near": 922.021129622749,
       "intents_volume_usd": 864967963,
       "active_accounts_avg": 97207,
       "txns_avg": 882409.1666666666,
@@ -1382,7 +1391,7 @@
   },
   "official_dashboard": {
     "source": "NEAR revenue dashboard (official): https://revenue.near.org/",
-    "fetched_at": "2026-11-14T20:07:42.186Z",
+    "fetched_at": "2026-11-14T20:14:40.800Z",
     "wallet_breakdown": [
       {
         "account": "fefundsadmin.sputnik-dao.near",
@@ -1406,8 +1415,8 @@
       "share_pct": 40.9
     },
     "onchain_now": {
-      "block_height": 224562224,
-      "block_time": "2026-11-14T20:07:36.011Z",
+      "block_height": 224562965,
+      "block_time": "2026-11-14T20:14:36.607Z",
       "total_near": 2287386.620045841,
       "native_near": 2287386.620045841,
       "wnear_near": 0,
@@ -1508,6 +1517,10 @@
       }
     ],
     "trace": [
+      {
+        "label": "BigQuery, run daily by the refresh workflow: per-day NEAR withdrawn to the wallet and swaps by the accounts that fund it (@start, @end, @wallet, @known = accounts already seen)",
+        "code": "-- NEAR Parity daily on-chain buyback trace (BigQuery public NEAR dataset)\nWITH ev AS (\n  SELECT eo.block_date AS day,\n         JSON_VALUE(SUBSTR(l.element, 12), '$.event') AS event, d\n  FROM `bigquery-public-data.crypto_near_mainnet_us.execution_outcomes` eo,\n       UNNEST(eo.logs.list) AS l,\n       UNNEST(JSON_QUERY_ARRAY(SUBSTR(l.element, 12), '$.data')) AS d\n  WHERE eo.block_date >= @start AND eo.block_date < @end\n    AND eo.executor_account_id = 'intents.near'\n    AND eo.status NOT LIKE '%FAIL%'\n    AND STARTS_WITH(l.element, 'EVENT_JSON:')\n    AND (l.element LIKE '%\"event\":\"token_diff\"%' OR l.element LIKE '%\"event\":\"native_withdraw\"%')\n),\nwd AS (\n  SELECT day, JSON_VALUE(d, '$.account_id') AS account, CAST(JSON_VALUE(d, '$.amount') AS BIGNUMERIC) AS yocto\n  FROM ev WHERE event = 'native_withdraw' AND JSON_VALUE(d, '$.receiver_id') = @wallet\n),\nfirst_wd AS (SELECT account, MIN(day) AS first_day FROM wd GROUP BY account),\neligible AS (\n  SELECT a AS account, DATE '1970-01-01' AS from_day FROM UNNEST(@known) AS a\n  UNION ALL\n  SELECT account, first_day FROM first_wd WHERE account NOT IN UNNEST(@known)\n),\nsw AS (\n  SELECT day, JSON_VALUE(d, '$.account_id') AS account,\n         CAST(JSON_VALUE(d, '$.diff.\"nep141:wrap.near\"') AS BIGNUMERIC) AS yocto\n  FROM ev WHERE event = 'token_diff'\n),\nd_w AS (SELECT day, COUNT(*) AS withdrawals, SUM(yocto) AS withdrawn FROM wd GROUP BY day),\nd_s AS (\n  SELECT s.day, COUNTIF(s.yocto > 0) AS swaps,\n         SUM(IF(s.yocto > 0, s.yocto, 0)) AS bought, SUM(IF(s.yocto < 0, -s.yocto, 0)) AS sold\n  FROM sw s JOIN eligible e ON s.account = e.account AND s.day >= e.from_day\n  GROUP BY s.day\n),\nd_new AS (\n  SELECT first_day AS day, ARRAY_AGG(account) AS new_accounts\n  FROM first_wd WHERE account NOT IN UNNEST(@known) GROUP BY first_day\n)\nSELECT CAST(day AS STRING) AS day,\n       IFNULL(withdrawals, 0) AS withdrawals, CAST(IFNULL(withdrawn, 0) AS STRING) AS withdrawn_yocto,\n       IFNULL(swaps, 0) AS swaps, CAST(IFNULL(bought, 0) AS STRING) AS bought_yocto,\n       CAST(IFNULL(sold, 0) AS STRING) AS sold_yocto, IFNULL(new_accounts, []) AS new_accounts\nFROM d_w FULL JOIN d_s USING (day) FULL JOIN d_new USING (day)\nORDER BY day"
+      },
       {
         "label": "BigQuery: NEAR delivered to the buyback wallet, and what the accounts behind it bought (swaps)",
         "code": "-- NEAR Parity · BigQuery check 2: what did the accounts that fund the buyback wallet buy?\n-- Window: the dashboard's 30-day UTC window, 2026-10-15 (inclusive) to 2026-11-14 (exclusive).\n-- 1. Finds every dip4 native_withdraw intent to buybacks.multisignature.near (the wallet's NEAR inflows).\n-- 2. Takes the accounts that signed them and sums their dip4 token_diff (swap) events in the same window:\n--    wNEAR gained = NEAR bought, wNEAR lost = NEAR sold, the token they gave up = what they paid with.\n-- Amounts are yocto (10^-24) strings, so they are cast to BIGNUMERIC, never FLOAT.\nWITH ev AS (\n  SELECT eo.block_timestamp_utc AS ts,\n         JSON_VALUE(SUBSTR(l.element, 12), '$.event') AS event,\n         JSON_QUERY_ARRAY(SUBSTR(l.element, 12), '$.data') AS data\n  FROM `bigquery-public-data.crypto_near_mainnet_us.execution_outcomes` eo,\n       UNNEST(eo.logs.list) AS l\n  WHERE eo.block_date >= '2026-10-15' AND eo.block_date < '2026-11-14'\n    AND eo.executor_account_id = 'intents.near'\n    AND eo.status NOT LIKE '%FAIL%'\n    AND STARTS_WITH(l.element, 'EVENT_JSON:')\n    AND (l.element LIKE '%\"event\":\"token_diff\"%' OR l.element LIKE '%\"event\":\"native_withdraw\"%')\n),\nwd AS (\n  SELECT ts, JSON_VALUE(d, '$.account_id') AS account,\n         CAST(JSON_VALUE(d, '$.amount') AS BIGNUMERIC) / 1e24 AS near\n  FROM ev, UNNEST(data) AS d\n  WHERE event = 'native_withdraw'\n    AND JSON_VALUE(d, '$.receiver_id') = 'buybacks.multisignature.near'\n),\naccts AS (SELECT DISTINCT account FROM wd),\nsw AS (\n  SELECT ev.ts, JSON_VALUE(d, '$.account_id') AS account,\n         CAST(JSON_VALUE(d, '$.diff.\"nep141:wrap.near\"') AS BIGNUMERIC) / 1e24 AS n,\n         REGEXP_EXTRACT(JSON_QUERY(d, '$.diff'), r'\"([^\"]+)\"\\s*:\\s*\"-') AS paid\n  FROM ev, UNNEST(data) AS d\n  WHERE event = 'token_diff'\n),\nm_w AS (\n  SELECT FORMAT_TIMESTAMP('%Y-%m', ts) AS month, COUNT(*) AS withdrawals,\n         COUNT(DISTINCT account) AS withdraw_accounts, SUM(near) AS near_withdrawn\n  FROM wd GROUP BY month\n),\nm_b AS (\n  SELECT FORMAT_TIMESTAMP('%Y-%m', ts) AS month,\n         COUNTIF(n > 0) AS buys, SUM(IF(n > 0, n, 0)) AS near_bought,\n         SUM(IF(n < 0, -n, 0)) AS near_sold,\n         STRING_AGG(DISTINCT IF(n > 0, paid, NULL), ', ' LIMIT 6) AS paid_with\n  FROM sw JOIN accts USING (account) GROUP BY month\n)\nSELECT * FROM m_w FULL JOIN m_b USING (month) ORDER BY month"
