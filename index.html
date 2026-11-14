@@ -112,6 +112,7 @@
       </form>
       <div class="sim-out" id="sim-out" aria-live="polite"></div>
       <p class="small"><button type="button" class="link" id="sim-reset">Reset to the latest 30-day data</button> <span class="muted" id="sim-defaults-note"></span></p>
+      <div class="sensitivity" id="sensitivity"></div>
     </section>
 
     <section aria-labelledby="chart-h" class="panel">
@@ -180,7 +181,7 @@
       <h2 id="sources-h">Sources and <span class="accent">status</span></h2>
       <ul class="sources" id="sources"></ul>
       <details><summary>Refresh status by source</summary><div class="table-scroll"><table id="status-table"></table></div></details>
-      <p class="small">Raw data: <a href="data/latest.json">latest.json</a> · <a href="data/status.json">status.json</a> · <a href="data/epochs.json">epochs.json</a> · <a href="data/boundaries.json">boundaries.json</a> · <a href="data/wallet-transfers.json">wallet-transfers.json</a>. Missing data is shown as unavailable, never as zero.</p>
+      <p class="small">Raw data: <a href="data/weekly.csv" download>weekly.csv</a> (spreadsheet; empty cell = unavailable) · <a href="data/latest.json">latest.json</a> · <a href="data/status.json">status.json</a> · <a href="data/epochs.json">epochs.json</a> · <a href="data/boundaries.json">boundaries.json</a> · <a href="data/wallet-transfers.json">wallet-transfers.json</a>. Missing data is shown as unavailable, never as zero.</p>
     </section>
   </main>
 
