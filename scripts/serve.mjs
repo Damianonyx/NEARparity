@@ -7,11 +7,20 @@ import { extname, join, normalize, resolve, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const ROOT = resolve(fileURLToPath(new URL('..', import.meta.url)));
+// Mirror production: apply the headers vercel.json declares for every path. `upgrade-insecure-requests`
+// is dropped locally because the local server is plain http.
+let SITE_HEADERS = {};
+try {
+  const cfg = JSON.parse(await readFile(join(ROOT, 'vercel.json'), 'utf8'));
+  for (const { key, value } of cfg.headers?.find((h) => h.source === '/(.*)')?.headers || []) {
+    SITE_HEADERS[key] = key === 'Content-Security-Policy' ? value.replace(/;\s*upgrade-insecure-requests/, '') : value;
+  }
+} catch { /* no vercel.json: serve without extra headers */ }
 const PORT = Number(process.argv[2] || process.env.PORT || 8080);
 const TYPES = {
   '.html': 'text/html; charset=utf-8', '.css': 'text/css; charset=utf-8', '.js': 'text/javascript; charset=utf-8',
   '.mjs': 'text/javascript; charset=utf-8', '.json': 'application/json; charset=utf-8', '.md': 'text/markdown; charset=utf-8',
-  '.svg': 'image/svg+xml', '.png': 'image/png', '.ico': 'image/x-icon', '.txt': 'text/plain; charset=utf-8',
+  '.svg': 'image/svg+xml', '.webmanifest': 'application/manifest+json', '.png': 'image/png', '.ico': 'image/x-icon', '.txt': 'text/plain; charset=utf-8',
 };
 
 const server = createServer(async (req, res) => {
@@ -22,7 +31,7 @@ const server = createServer(async (req, res) => {
     if (path.split(sep).some((p) => p === '.git')) { res.writeHead(404).end('Not found'); return; }
     if ((await stat(path).catch(() => null))?.isDirectory()) path = join(path, 'index.html');
     const body = await readFile(path);
-    res.writeHead(200, { 'content-type': TYPES[extname(path)] || 'application/octet-stream', 'cache-control': 'no-store' });
+    res.writeHead(200, { ...SITE_HEADERS, 'content-type': TYPES[extname(path)] || 'application/octet-stream', 'cache-control': 'no-store' });
     res.end(req.method === 'HEAD' ? undefined : body);
   } catch {
     res.writeHead(404, { 'content-type': 'text/plain; charset=utf-8' }).end('Not found');

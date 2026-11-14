@@ -1,52 +1,65 @@
 name: Refresh data
 
-# Runs the offline tests, rebuilds data/ and commits it (main only). The site is deployed by Vercel,
-# which redeploys main on every push, including these data commits.
-# A partial refresh (some source failed) exits 2: the stale fallbacks are still committed, and the
-# run shows a warning instead of failing, so the site keeps its last good values.
+# Rebuilds data/ and commits it to main. Vercel redeploys main on every push, including these commits.
+# Runs twice daily (after DefiLlama fills the previous UTC day, and again in the afternoon), on demand,
+# and when build code changes on main. Partial refreshes keep last good values (marked stale); after two
+# partial runs in a row, or any crash, an issue labelled `data-refresh` is opened, and closed on recovery.
 on:
-  push:
-  workflow_dispatch:
   schedule:
-    - cron: '41 5 * * *' # daily, after DefiLlama has filled the previous UTC day
+    - cron: '41 5 * * *'
+    - cron: '17 13 * * *'
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'scripts/**'
+      - 'config/**'
+      - '.github/workflows/refresh.yml'
 
 permissions:
   contents: read
 
 concurrency:
-  group: refresh-${{ github.ref }}
+  group: refresh-main
   cancel-in-progress: false
 
 jobs:
-  build:
+  refresh:
     runs-on: ubuntu-latest
     timeout-minutes: 60
     permissions:
       contents: write
+      issues: write
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
         with:
           node-version: '22'
-      - name: Offline tests
-        run: node scripts/test.mjs
+      - name: Tests
+        run: node scripts/test.mjs && node scripts/test-integration.mjs
       - name: Build data (no keys, no dependencies)
+        id: build
         run: |
           set +e
           node --use-env-proxy scripts/build-data.mjs
           code=$?
+          echo "code=$code" >> "$GITHUB_OUTPUT"
+          echo "consecutive=$(node -e "console.log(require('./data/status.json').consecutive_partial_runs ?? 0)")" >> "$GITHUB_OUTPUT"
           if [ "$code" = "2" ]; then
-            echo "::warning::Partial refresh: at least one source failed; previous good values were kept and marked stale (see data/status.json)."
+            echo "::warning::Partial refresh: a source failed; previous good values were kept and marked stale (see data/status.json)."
           elif [ "$code" != "0" ]; then
             exit "$code"
           fi
-      - name: Upload data (all branches)
+      - name: Data contract
+        run: node scripts/check-data.mjs
+      - name: Upload data
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: data-${{ github.run_id }}-${{ github.run_attempt }}
           path: data/
           retention-days: 14
-      - name: Commit refreshed data (main only)
+      - name: Commit refreshed data
         if: github.ref == 'refs/heads/main'
         run: |
           git config user.name 'github-actions[bot]'
@@ -56,3 +69,20 @@ jobs:
           git commit -m "Data refresh $(date -u +%Y-%m-%dT%H:%MZ)"
           git pull --rebase origin main
           git push origin HEAD:main
+      - name: Health alert (open or update an issue)
+        if: failure() || (steps.build.outputs.code == '2' && steps.build.outputs.consecutive >= 2)
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          gh label create data-refresh --color B60205 --description "Automated data refresh health" --force >/dev/null 2>&1 || true
+          body="The data refresh did not fully succeed (exit code '${{ steps.build.outputs.code }}', consecutive partial runs: ${{ steps.build.outputs.consecutive }}). Run: $RUN_URL. The site keeps the last good values, marked stale; see data/status.json for the failing sources."
+          n=$(gh issue list --label data-refresh --state open --json number --jq '.[0].number')
+          if [ -n "$n" ]; then gh issue comment "$n" --body "$body"; else gh issue create --title "Data refresh is failing" --label data-refresh --body "$body"; fi
+      - name: Health recovered (close the issue)
+        if: success() && steps.build.outputs.code == '0'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          n=$(gh issue list --label data-refresh --state open --json number --jq '.[0].number' 2>/dev/null || true)
+          if [ -n "$n" ]; then gh issue close "$n" --comment "Recovered: the latest refresh succeeded."; fi

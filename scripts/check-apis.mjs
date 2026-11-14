@@ -261,6 +261,7 @@ const groups = await Promise.allSettled([
     }),
   probeNearBlocks(),
   probeArchiveDepth('https://archival-rpc.mainnet.fastnear.com'),
+  rpc('NEAR archival fallback (archival-rpc.mainnet.near.org): block (final)', 'https://archival-rpc.mainnet.near.org', 'block', { finality: 'final' }, blockShape),
   probeOfficialWalletSource(),
 ]);
 const unexpectedErrors = groups.filter((group) => group.status === 'rejected').map((group) => String(group.reason));
