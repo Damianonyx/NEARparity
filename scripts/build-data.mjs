@@ -5,7 +5,7 @@
 // Node 22 built-ins only; no keys. Behind a proxy: node --use-env-proxy scripts/build-data.mjs
 // Exit codes: 0 = all core sources refreshed, 2 = partial refresh (stale fallbacks written), 1 = crash.
 import {
-  metric, parityRequiredDailyVolume, reconcileBurns, safeRatio, sumDaily, toYocto,
+  DAY_MS, metric, parityRequiredDailyVolume, reconcileBurns, safeRatio, sumDaily, toYocto,
   utcWindow, weeklyBuckets, yoctoToNear,
 } from './lib/calc.mjs';
 import { createStatus, createStore, getJson } from './lib/io.mjs';
@@ -13,7 +13,8 @@ import { USAGE_FIELDS, USAGE_URL, changeCorrelation, changePct, llamaWindowSum, 
 import { ARCHIVAL_URLS, blockBefore, createRpc, epochChecks, mapLimit, sampleInflationRates, walkEpochs, walletBalances } from './lib/near.mjs';
 import { DASHBOARD_URL, LLAMA, fetchDashboard, fetchLlamaSeries, fetchPrice, fetchTransfers } from './lib/sources.mjs';
 import { discoverStakingPools, firstPositiveDay, internalTransfers, walletCreatedAt } from './lib/wallet.mjs';
-import { traceMetrics } from './lib/trace.mjs';
+import { traceMetrics, dailyTraceMetrics } from './lib/trace.mjs';
+import { DAILY_TRACE_SQL, FRESHNESS_SQL, daysToQuery, gcpAccessToken, mergeDaily, runQuery, sumDays } from './lib/bigquery.mjs';
 import { readFile } from 'node:fs/promises';
 
 export const SCHEMA_VERSION = 2;
@@ -104,6 +105,46 @@ const llama = {};
 for (const [k, [key, url]] of Object.entries(LLAMA)) llama[k] = await group(`llama_${k}`, () => fetchLlamaSeries(ctx, key, url));
 const price = await group('price', () => fetchPrice(ctx, { from: BACKFILL_FROM, to: window.end }));
 const dashboard = await group('revenue_dashboard', () => fetchDashboard(ctx));
+// Daily on-chain buyback trace (BigQuery public NEAR dataset). Optional: runs only where Google sign-in is configured
+// (GitHub Actions via Workload Identity Federation); otherwise the stored daily file / fixed snapshot is used.
+const bqConf = await store.readJson('config/bigquery.json', null);
+const bq = {
+  project: process.env.NEAR_PARITY_GCP_PROJECT || bqConf?.project, serviceAccount: process.env.NEAR_PARITY_GCP_SA || bqConf?.service_account,
+  provider: process.env.NEAR_PARITY_GCP_PROVIDER || bqConf?.workload_identity_provider,
+  maxGbPerDay: bqConf?.max_gb_per_day ?? 2, maxDays: bqConf?.max_days_per_run ?? 35,
+};
+let bqDaily = await store.readJson('data/bigquery-daily.json', null);
+const bqRun = await group('bigquery', async () => {
+  if (!wallet?.account_id || !bq.project) return { skipped: 'not configured' };
+  const token = await gcpAccessToken(bq);
+  if (!token) return { skipped: 'Google sign-in not available here (runs in GitHub Actions)' };
+  const since = new Date(now.getTime() - 3 * DAY_MS).toISOString().slice(0, 10);
+  const fresh = await runQuery({ token, project: bq.project, sql: FRESHNESS_SQL, params: { since }, maxBytes: 1e9 });
+  const latestUnix = Number(fresh.rows[0]?.latest);
+  if (!Number.isFinite(latestUnix)) throw new Error('BigQuery freshness check returned no blocks');
+  const winStartDay = window.start.slice(0, 10);
+  const state = bqDaily && bqDaily.wallet === wallet.account_id ? bqDaily : { wallet: wallet.account_id, accounts: {}, days: {} };
+  const lastDay = state.last_day && state.last_day >= new Date(Date.parse(window.start) - DAY_MS).toISOString().slice(0, 10) ? state.last_day : null;
+  const range = daysToQuery({ lastDay, from: winStartDay, latestUnix, maxDays: bq.maxDays });
+  const latestIso = new Date(latestUnix * 1000).toISOString();
+  if (!range) return { queried: null, latest_block_utc: latestIso, bytes: fresh.bytes };
+  const nDays = (Date.parse(range.end) - Date.parse(range.start)) / DAY_MS;
+  const res = await runQuery({
+    token, project: bq.project, sql: DAILY_TRACE_SQL, maxBytes: nDays * bq.maxGbPerDay * 1e9,
+    params: { start: range.start, end: range.end, wallet: wallet.account_id, known: Object.keys(state.accounts) },
+  });
+  bqDaily = {
+    ...mergeDaily(state, res.rows, range),
+    description: 'Daily on-chain buyback trace from the BigQuery public NEAR dataset (scripts/lib/bigquery.mjs, DAILY_TRACE_SQL). Amounts are yoctoNEAR integer strings.',
+    dataset: 'bigquery-public-data.crypto_near_mainnet_us', updated_at: new Date().toISOString(), latest_block_utc: latestIso,
+  };
+  await store.writeJson('data/bigquery-daily.json', bqDaily);
+  log(`  BigQuery: ${range.start} → ${range.end} (${nDays} days), ${(res.bytes / 1e9).toFixed(2)} GB processed`);
+  return { queried: range, latest_block_utc: latestIso, bytes: fresh.bytes + res.bytes, job_id: res.job_id };
+});
+if (bqRun?.skipped) log(`  BigQuery trace skipped: ${bqRun.skipped}`);
+if (bqRun && !bqRun.skipped) setStatus('bigquery', { ok: true, url: 'https://bigquery.googleapis.com' });
+else if (groupErrors.bigquery) setStatus('bigquery', { ok: false, error: groupErrors.bigquery, url: 'https://bigquery.googleapis.com' });
 // Network usage (NearBlocks daily charts, keyless). Past days are immutable, so a failed fetch falls back to the cache.
 const usage = await group('usage', async () => {
   const body = await getJson(setStatus, 'nearblocks_charts', USAGE_URL, { retries: 2 });
@@ -278,7 +319,8 @@ if (!M.wallet_net_accumulation) set('wallet_net_accumulation', ['chain'], unavai
     set('wallet_net_excl_internal', ['chain', 'nearblocks'], unavailable('NEAR', 'Archival RPC balances + NearBlocks transfers', 'Net accumulation minus internal transfers.', 'Wallet balances or transfer history unavailable.'));
   }
 }
-const traced = traceMetrics(trace, window);
+const rolling = sumDays(bqDaily, window.start, window.end);
+const traced = (rolling && dailyTraceMetrics(rolling, window, M.issuance, bqDaily)) || traceMetrics(trace, window);
 if (traced) {
   for (const [k, rec] of Object.entries(traced)) set(k, [], rec);
 } else {
@@ -352,7 +394,7 @@ if (chain) {
       wallet_net_near: walletNet, wallet_internal_near: internalNet,
       wallet_net_excl_internal_near: walletNet != null && internalNet != null ? walletNet - internalNet : null,
       wallet_balance_end_near: wb ? yoctoToNear(wb.total_yocto) : null,
-      verified_purchases_near: null,
+      verified_purchases_near: (() => { const v = sumDays(bqDaily, bk.start, bk.end); return v ? yoctoToNear(v.bought) : null; })(),
       intents_volume_usd: llama.volume ? llamaWindowSum(llama.volume.series, bk.start, bk.end) : null,
       active_accounts_avg: usageRows ? windowStat(usageRows, 'active_accounts', bk.start, bk.end).value : null,
       txns_avg: usageRows ? windowStat(usageRows, 'txns', bk.start, bk.end).value : null,
@@ -364,7 +406,7 @@ if (chain) {
 // ---------- stale fallback: never overwrite good data with nulls ----------
 // A metric that is unavailable this run (source failed, or e.g. DefiLlama has not filled the last day yet)
 // keeps its previous good value, marked stale with its own period and the reason.
-const OPTIONAL_GROUPS = new Set(['revenue_dashboard']);
+const OPTIONAL_GROUPS = new Set(['revenue_dashboard', 'bigquery']);
 const failedGroups = new Set(Object.keys(groupErrors).filter((g) => !OPTIONAL_GROUPS.has(g)));
 const stale = {};
 for (const [key, rec] of Object.entries(M)) {
@@ -464,7 +506,10 @@ const queries = {
     { label: 'Buyback proxy: labelled buyback revenue (USD) ÷ that day’s NEAR price', code: `curl -s '${LLAMA.holders[1]}'\ncurl -s '${price?.source?.url ?? 'https://coins.llama.fi/chart/coingecko:near'}'\nproxy_near = Σ_day holders_usd(day) ÷ price(day, 00:00 UTC)\ncoverage = proxy_near ÷ issuance` },
     ...(bS && bE && wallet?.account_id ? [{ label: `Buyback wallet holdings at the window’s boundary blocks (${bS.block_height}, ${bE.block_height}); repeat for both`, code: `${curlRpc({ method: 'query', params: { request_type: 'view_account', account_id: wallet.account_id, block_id: bE.block_height } })}\n${curlRpc({ method: 'query', params: { request_type: 'call_function', account_id: 'wrap.near', method_name: 'ft_balance_of', args_base64: b64({ account_id: wallet.account_id }), block_id: bE.block_height } })}\n${curlRpc({ method: 'query', params: { request_type: 'call_function', account_id: 'intents.near', method_name: 'mt_balance_of', args_base64: b64({ account_id: wallet.account_id, token_id: 'nep141:wrap.near' }), block_id: bE.block_height } })}\n# net = Δ(native + locked + wNEAR + wNEAR in intents + staked) − transfers from NEAR's other revenue wallets (NearBlocks)` }] : []),
   ],
-  trace: traceSql.length ? traceSql : (trace ? [{ label: 'BigQuery SQL', code: (trace.sql || []).join('\n') }] : []),
+  trace: [
+    ...(bqDaily?.days ? [{ label: 'BigQuery, run daily by the refresh workflow: per-day NEAR withdrawn to the wallet and swaps by the accounts that fund it (@start, @end, @wallet, @known = accounts already seen)', code: DAILY_TRACE_SQL }] : []),
+    ...(traceSql.length ? traceSql : (trace ? [{ label: 'BigQuery SQL', code: (trace.sql || []).join('\n') }] : [])),
+  ],
   weekly: [{ label: 'The same calculations per 7-day bucket from 2026-02-01 (boundary blocks in data/boundaries.json)', code: 'issuance_week = Σ mint for boundaries in the week\nproxy_week = Σ_day holders_usd ÷ price\nwallet_week = Δ wallet holdings − internal transfers' }],
   usage: [
     { label: 'NearBlocks daily network charts (keyless)', code: `curl -s '${USAGE_URL}'` },

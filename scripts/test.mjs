@@ -260,3 +260,19 @@ test('on-chain trace: fixed snapshot window, own issuance, lower bound, never re
   assert.equal(traceMetrics(null, { start: 'x', end: 'y' }), null);
   assert.equal(traceMetrics({ ...trace, issuance_near_in_window: 0 }, trace.window), null, 'no division by zero');
 });
+
+test('daily BigQuery trace: which days to query, merge, BigInt sums', async () => {
+  const { daysToQuery, mergeDaily, sumDays } = await import('./lib/bigquery.mjs');
+  const latest = Date.parse('2026-11-14T11:00:00Z') / 1000;
+  assert.deepEqual(daysToQuery({ lastDay: null, from: '2026-10-15', latestUnix: latest }), { start: '2026-10-15', end: '2026-11-14' });
+  assert.deepEqual(daysToQuery({ lastDay: '2026-11-12', from: '2026-10-15', latestUnix: latest }), { start: '2026-11-13', end: '2026-11-14' });
+  assert.equal(daysToQuery({ lastDay: '2026-11-13', from: '2026-10-15', latestUnix: latest }), null, 'today is incomplete');
+  assert.deepEqual(daysToQuery({ lastDay: null, from: '2026-01-01', latestUnix: latest, maxDays: 10 }), { start: '2026-01-01', end: '2026-01-11' }, 'capped per run');
+  const st = mergeDaily({}, [{ day: '2026-11-01', withdrawals: '2', withdrawn_yocto: '10000000000000000000000000000000', swaps: '1', bought_yocto: '5', sold_yocto: '0', new_accounts: ['a'] }], { start: '2026-11-01', end: '2026-11-03' });
+  assert.equal(st.last_day, '2026-11-02');
+  assert.deepEqual(st.days['2026-11-02'], { withdrawals: 0, withdrawn_yocto: '0', swaps: 0, bought_yocto: '0', sold_yocto: '0' }, 'a day without rows had no activity');
+  assert.deepEqual(st.accounts, { a: '2026-11-01' });
+  const s = sumDays(st, '2026-11-01T00:00:00.000Z', '2026-11-03T00:00:00.000Z');
+  assert.equal(s.withdrawn, 10n ** 31n); assert.equal(s.bought, 5n); assert.equal(s.days, 2);
+  assert.equal(sumDays(st, '2026-10-31T00:00:00.000Z', '2026-11-03T00:00:00.000Z'), null, 'a missing day → no total');
+});

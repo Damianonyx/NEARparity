@@ -30,6 +30,7 @@ jobs:
     permissions:
       contents: write
       issues: write
+      id-token: write # Google sign-in for the BigQuery trace (Workload Identity Federation; no stored keys)
     steps:
       - uses: actions/checkout@v5
       - uses: actions/setup-node@v5
@@ -37,7 +38,7 @@ jobs:
           node-version: '22'
       - name: Tests
         run: node scripts/test.mjs && node scripts/test-integration.mjs
-      - name: Build data (no keys, no dependencies)
+      - name: Build data (no stored keys, no dependencies)
         id: build
         run: |
           set +e

@@ -140,6 +140,44 @@ function dashboardHtml() {
   return `<!doctype html><html><body><script>self.__next_f.push([1,"1a:[\\"$\\",null,{\\"rows\\":${escaped}}]"])</script></body></html>`;
 }
 
+// Google sign-in (GitHub OIDC → STS → service account) and BigQuery jobs.query, for the daily trace.
+// Each simulated day: 2 withdrawals of 500 NEAR to the wallet, 3 swaps buying 250 NEAR in total; two accounts
+// appear on the first queried day. The first query response is incomplete, to exercise job polling.
+export const BQ = { withdrawnPerDay: 10n ** 27n, boughtPerDay: 250n * 10n ** 24n, swapsPerDay: 3, withdrawalsPerDay: 2 };
+let bqPending = null;
+function bigquery(url, init) {
+  const auth = (init.headers || {}).authorization;
+  if (auth !== 'Bearer sa-token') return json({ error: { message: 'bad token' } }, 401);
+  if ((init.method || 'GET') === 'GET') { const r = bqPending; bqPending = null; return json(r); }
+  const body = JSON.parse(init.body);
+  if (!body.maximumBytesBilled) return json({ error: { message: 'maximumBytesBilled required by the test' } }, 400);
+  const p = Object.fromEntries(body.queryParameters.map((q) => [q.name, q.parameterValue.value ?? q.parameterValue.arrayValues.map((v) => v.value)]));
+  const ref = { projectId: 'near-parity', jobId: `job${Date.now()}`, location: 'us-east1' };
+  if (body.query.includes('.blocks`')) {
+    return json({ jobComplete: true, jobReference: ref, schema: { fields: [{ name: 'latest', type: 'INTEGER' }] }, rows: [{ f: [{ v: String(nowS() - 3600) }] }], totalBytesProcessed: '5000000' });
+  }
+  const known = (p.known || []).filter(Boolean);
+  const rows = [];
+  for (let t = Date.parse(p.start); t < Date.parse(p.end); t += DAY * 1000) {
+    const day = new Date(t).toISOString().slice(0, 10);
+    const fresh = !known.length && day === p.start ? [{ v: 'acc-a' }, { v: 'acc-b' }] : [];
+    rows.push({ f: [{ v: day }, { v: String(BQ.withdrawalsPerDay) }, { v: BQ.withdrawnPerDay.toString() }, { v: String(BQ.swapsPerDay) }, { v: BQ.boughtPerDay.toString() }, { v: '0' }, { v: fresh }] });
+  }
+  const fields = ['day', 'withdrawals', 'withdrawn_yocto', 'swaps', 'bought_yocto', 'sold_yocto'].map((name) => ({ name, type: 'STRING' })).concat([{ name: 'new_accounts', type: 'STRING', mode: 'REPEATED' }]);
+  bqPending = { jobComplete: true, jobReference: ref, schema: { fields }, rows, totalBytesProcessed: String(rows.length * 1.2e9) };
+  return json({ jobComplete: false, jobReference: ref });
+}
+function google(url, init) {
+  const host = new URL(url).host;
+  if (host === 'fake-oidc.test') return (init.headers || {}).authorization === 'bearer req-token' ? json({ value: 'oidc-jwt' }) : json({}, 401);
+  if (host === 'sts.googleapis.com') {
+    const b = JSON.parse(init.body);
+    return b.subjectToken === 'oidc-jwt' && b.audience.startsWith('//iam.googleapis.com/projects/') ? json({ access_token: 'fed-token' }) : json({ error: 'bad exchange' }, 400);
+  }
+  if (host === 'iamcredentials.googleapis.com') return (init.headers || {}).authorization === 'Bearer fed-token' ? json({ accessToken: 'sa-token' }) : json({}, 403);
+  return bigquery(url, init);
+}
+
 const realFetch = globalThis.fetch;
 globalThis.fetch = async (input, init = {}) => {
   const url = String(input);
@@ -161,6 +199,7 @@ globalThis.fetch = async (input, init = {}) => {
     return json({ coins: { 'coingecko:near': { prices } } });
   }
   if (host === 'api.nearblocks.io') return nearblocks(url);
+  if (['fake-oidc.test', 'sts.googleapis.com', 'iamcredentials.googleapis.com', 'bigquery.googleapis.com'].includes(host)) return google(url, init);
   if (host === 'revenue.near.org') return new Response(dashboardHtml(), { status: 200, headers: { 'content-type': 'text/html' } });
   if (realFetch && process.env.MOCK_ALLOW_REAL) return realFetch(input, init);
   return json({ error: `unmocked ${url}` }, 404);

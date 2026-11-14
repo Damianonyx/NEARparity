@@ -177,9 +177,13 @@ function renderCards(L) {
 function traceCard(L) {
   const m = L.metrics; const t = L.onchain_trace; const f = t?.funding_sources || {};
   const n0 = (v) => nf0.format(v);
+  const vp = m.verified_purchases; const daily = vp?.daily;
+  const note = daily
+    ? `${n0(vp.swaps)} swaps by the accounts that fund the wallet; ${n0(vp.sold_near)} NEAR sold. Updated daily from BigQuery (data to ${fmtDay(daily.latest_block_utc)}).`
+    : (t ? `${n0(t.swaps)} swaps by the accounts that fund the wallet, paid with ${t.paid_with_examples.slice(0, 3).join(', ')} and others; ${n0(t.near_sold_in_swaps)} NEAR sold` : null);
   return card({
     title: 'On-chain buyback trace', query: L.queries?.trace,
-    hero: { label: 'NEAR bought in on-chain swaps (lower bound)', m: m.verified_purchases, note: t ? `${n0(t.swaps)} swaps by the accounts that fund the wallet, paid with ${t.paid_with_examples.slice(0, 3).join(', ')} and others; ${n0(t.near_sold_in_swaps)} NEAR sold` : null },
+    hero: { label: 'NEAR bought in on-chain swaps (lower bound)', m: vp, note },
     rows: [
       ['Delivered to the buyback wallet', m.trace_withdrawn_to_wallet],
       ['Not matched to a swap', m.trace_untraced_near],
@@ -189,7 +193,7 @@ function traceCard(L) {
     how: t ? `<p>The wallet is funded by <code>native_withdraw</code> intents signed by many accounts inside NEAR Intents (at least ${n0(t.withdrawing_accounts_min)} in this window). The SQL finds every such withdrawal to <code>${escapeHtml(L.wallet?.account_id || 'the wallet')}</code>, then every <code>token_diff</code> swap by those accounts. NEAR they gained in swaps is counted as <strong>verified purchases</strong>; the token they gave up shows what they paid with.</p>
 <p><strong>Cross-check:</strong> the ${n0(t.withdrawals)} withdrawals total ${n0(t.near_withdrawn_to_wallet)} NEAR, within 0.3% of the wallet's balance change from the archival RPC. The solvers' transfers to these accounts (${n0(f.solvers_near)} NEAR) match the swaps to within 1%.</p>
 <p><strong>Why it is a lower bound:</strong> most of the remaining NEAR reached these accounts by transfer from one high-volume account (${n0(f.hub_near)} NEAR in ${n0(f.hub_transfers)} transfers). That account moved ${(f.hub_total_outflow_near / 1e6).toFixed(1)}M NEAR to many accounts in the window, was funded mainly by <code>${escapeHtml(f.hub_main_source || '')}</code>, and made no swaps. That fits market-maker fills, but the payment side is not visible, so it is not counted.</p>
-<p>This is a one-off trace run on ${escapeHtml(t.run_on)} for one 30-day window, compared with issuance measured for that same window. Results: <a href="https://github.com/Damianonyx/NEARparity/blob/main/docs/bigquery-results.json">docs/bigquery-results.json</a>; SQL: <a href="https://github.com/Damianonyx/NEARparity/tree/main/queries/bigquery">queries/bigquery</a>. It ran in the free BigQuery sandbox (about 35 GB per query).</p>` : '<p>No on-chain trace is configured.</p>',
+${daily ? `<p><strong>Updated daily.</strong> The refresh workflow queries each new UTC day in BigQuery (about 1.2 GB per day, signed in with Workload Identity Federation, so no keys are stored) and keeps the daily totals in <a href="data/bigquery-daily.json">data/bigquery-daily.json</a>. An account counts from the first day it sent NEAR to the wallet; ${n0(daily.accounts_known)} accounts so far. The Query panel shows the daily SQL.</p>` : ''}<p>The funding breakdown above comes from a one-off trace run on ${escapeHtml(t.run_on)} for one 30-day window, compared with issuance measured for that same window. Results: <a href="https://github.com/Damianonyx/NEARparity/blob/main/docs/bigquery-results.json">docs/bigquery-results.json</a>; SQL: <a href="https://github.com/Damianonyx/NEARparity/tree/main/queries/bigquery">queries/bigquery</a>. It ran in the free BigQuery sandbox (about 35 GB per query).</p>` : '<p>No on-chain trace is configured.</p>',
   });
 }
 const eval_rate = (s) => { const [a, b] = String(s).split('/').map(Number); return b ? a / b : null; };
