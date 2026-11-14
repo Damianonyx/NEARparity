@@ -193,3 +193,45 @@ td.n, th.n { text-align: right; white-space: nowrap; }
 .scale-art .ink { fill: var(--ink); }
 .scale-art .streak { fill: var(--streak); }
 .hero-art figcaption { font-size: 0.72rem; color: var(--muted); line-height: 1.5; margin-top: 6px; max-width: 60ch; }
+
+/* ---------- Breathing room (less packed) ---------- */
+.wrap { max-width: 1000px; }
+main.wrap > section { margin-top: 4rem; }
+main.wrap > section.answer { margin-top: 3rem; }
+.section-h { margin: 0 0 0.3rem; font-size: 1.3rem; }
+.section-sub { margin: 0 0 1.4rem; color: var(--ink-2); font-size: 0.92rem; max-width: 62ch; }
+h2 { font-size: 1.3rem; margin-bottom: 0.5rem; }
+.eyebrow { font-family: var(--mono); font-size: 0.75rem; letter-spacing: 0.04em; text-transform: uppercase; color: var(--muted); margin: 0 0 0.6rem; }
+
+.answer { border: 0; border-top: 2px solid var(--ink); border-radius: 0; padding: 1.4rem 0 0; }
+.answer .big { font-size: clamp(2.8rem, 9vw, 4.2rem); letter-spacing: -0.02em; }
+.answer .big .pill { vertical-align: middle; font-size: 0.8rem; }
+.answer-line { font-size: 1.1rem; margin: 0.4rem 0 0.6rem; max-width: 40ch; }
+
+.cards { gap: 20px; }
+@media (min-width: 680px) { .cards { gap: 24px; } }
+.card { padding: 22px; border-color: var(--line); }
+.card-head { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; flex-wrap: wrap; margin-bottom: 1rem; }
+.card-head h3 { margin: 0; font-size: 1rem; }
+.card-head .period { margin: 0; font-family: var(--mono); font-size: 0.72rem; }
+.hero-label { margin: 0; font-size: 0.85rem; color: var(--ink-2); }
+.hero-value { font-size: 1.9rem; font-weight: 700; line-height: 1.2; margin: 0.15rem 0 0.2rem; font-variant-numeric: tabular-nums; letter-spacing: -0.01em; }
+.hero-value .pill { vertical-align: middle; font-size: 0.7rem; letter-spacing: 0; }
+.hero-note { margin: 0 0 0.9rem; font-size: 0.82rem; color: var(--muted); }
+.rows { margin-top: 0.4rem; }
+.rows li { padding: 9px 0; }
+.rows .v { font-weight: 600; }
+.card .src { margin-top: auto; padding-top: 0.9rem; }
+.card details { margin-top: 0.3rem; }
+
+.panel { margin-top: 4rem; padding: 22px; border-color: var(--line); background: var(--panel); }
+@media (min-width: 680px) { .panel { padding: 32px; } }
+.plain h2 { margin-bottom: 0.4rem; }
+.plain details { margin-top: 0.8rem; border-top: 1px solid var(--line); padding-top: 0.8rem; }
+.plain details > div, .plain details > .table-scroll { margin-top: 0.8rem; }
+.formula { margin: 0.2rem 0 0.4rem; }
+.sim-grid { gap: 14px; margin: 1.2rem 0; }
+.legend { margin: 0.8rem 0 1rem; }
+.two-col li { margin: 0.55rem 0; line-height: 1.5; }
+.sources li { margin: 0.4rem 0; }
+.site-foot { margin-top: 5rem; }
