@@ -569,7 +569,21 @@
     "4e1deee8546ffe129751900a550f6321ca45e5e0b9d8e11f53f106091f65a721": "2026-11-17",
     "1c1582c331c52ba9b709d1a1513398976f2ab5d53ab362a1d3b3c9a42ac0b97d": "2026-11-17",
     "f9b6d55f4f01880ee79a7f41ce81bc87271cf97838550e280b019e7ac8959ea6": "2026-11-17",
-    "05008a55d7c1be4002599a2805d996f491fc1378f8a89343702a838c62d45889": "2026-11-17"
+    "05008a55d7c1be4002599a2805d996f491fc1378f8a89343702a838c62d45889": "2026-11-17",
+    "517e476ff8d28f27d4debbac1cd2894b3f716fa0783a2d938ffca954b1389fe5": "2026-11-18",
+    "50fb5271563379bace17f662763f8fa1e132a506dd2337c7772900e0af77417a": "2026-11-18",
+    "d53eeb248f6bc66e54e44ea2ec01cd469ea46fc724cb98c9191a5e660247ad08": "2026-11-18",
+    "f0a68027feac78bd2d2cd5304b5794291177a10a6a7846353779ed6758dda189": "2026-11-18",
+    "fc4b7bd1f92a6b241a6bfb58e83423dfbd459371af2803403373b9703d705c69": "2026-11-18",
+    "78e2e34f4e95c816c85de1c4cfa6ed0345e4a74e95eda65a3be4d001bf851f40": "2026-11-18",
+    "eef54dd8a77cb143afc02970442f83770288309c2d888a3daa5c6d0ab2471477": "2026-11-18",
+    "b40bbb95bf702f4d6685cfe5f64dac0405ca7376bdf95bb71ed2a936ec5d6cbf": "2026-11-18",
+    "dae34e3ed9978f0a6dc8b5bd0995abedc87feb2411a3843d689a9fe2a6793bac": "2026-11-18",
+    "01671e3c81d0cffe189e2df59f26d7835ea095e1791d4aa9ec067263d01686cb": "2026-11-18",
+    "c265b6f9bc4302d640ccbfb739e467ea7d47618f074eab8ca258505a1f9ae7a5": "2026-11-18",
+    "9ff49235b10dcfba8b37ac12e898712833d34a968373195742e75c9e8f2d6c51": "2026-11-18",
+    "67d74a1800ec32f5f10cf075a7f38439b7bc6d975a4a631afdf2ce9f2db0e507": "2026-11-18",
+    "be7435369e46851022c9a74c23cfbef53c5ff03bc6d22c697b0380df178e63d3": "2026-11-18"
   },
   "days": {
     "2026-10-15": {
@@ -809,11 +823,18 @@
       "swaps": 5,
       "bought_yocto": "64996301752115871293821627",
       "sold_yocto": "0"
+    },
+    "2026-11-18": {
+      "withdrawals": 22,
+      "withdrawn_yocto": "8613594529411244538021534635",
+      "swaps": 11,
+      "bought_yocto": "830247742519875363123738840",
+      "sold_yocto": "0"
     }
   },
-  "last_day": "2026-11-17",
+  "last_day": "2026-11-18",
   "description": "Daily on-chain buyback trace from the BigQuery public NEAR dataset (scripts/lib/bigquery.mjs, DAILY_TRACE_SQL). Amounts are yoctoNEAR integer strings.",
   "dataset": "bigquery-public-data.crypto_near_mainnet_us",
-  "updated_at": "2026-11-18T14:30:33.840Z",
-  "latest_block_utc": "2026-11-18T13:59:58.000Z"
+  "updated_at": "2026-11-19T14:39:52.322Z",
+  "latest_block_utc": "2026-11-19T13:59:59.000Z"
 }
