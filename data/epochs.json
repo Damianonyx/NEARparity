@@ -2,7 +2,7 @@
   "description": "Per-epoch mint measured at each epoch boundary: supply(first block) − supply(previous block) + burns in the first block. yoctoNEAR strings.",
   "source": "https://archival-rpc.mainnet.fastnear.com",
   "backfill_from": "2026-02-01T00:00:00.000Z",
-  "updated_at": "2026-11-19T21:35:08.331Z",
+  "updated_at": "2026-11-20T14:19:54.969Z",
   "records": [
     {
       "epoch_id": "ADLaJWxTLzoxLgv9j7Bd1ZS96FHTqJbCn3mYTxzaEAkA",
@@ -18474,6 +18474,46 @@
       "total_supply_start": "1312165357072158527080635264340118",
       "boundary_block_burnt": "8657629374958500000000",
       "mint_yocto": "26234015232454565417523417923",
+      "max_inflation_rate": [
+        1,
+        40
+      ],
+      "protocol_version": 88,
+      "max_inflation_rate_sampled": true
+    },
+    {
+      "epoch_id": "FP7RK1TvP7VNfByoCP7Yc6Zdje4QXpFw5saH9STj61Gc",
+      "start_height": 225345137,
+      "start_hash": "2mif5EPc8QEfVE3sbzo7JMhVHmot43eQVHEBHMSywNfF",
+      "start_time": "2026-11-20T02:37:01.228Z",
+      "start_timestamp_ns": "1795142221228362723",
+      "prev_height": 225345136,
+      "prev_hash": "7cw6dUviGvoCeFXk7an2jax2panrHKDSb29kZDeuNRWo",
+      "prev_time": "2026-11-20T02:37:00.711Z",
+      "prev_next_epoch_id": "FP7RK1TvP7VNfByoCP7Yc6Zdje4QXpFw5saH9STj61Gc",
+      "total_supply_prev": "1312165103568634951746786364340118",
+      "total_supply_start": "1312191289100280000988923431349002",
+      "boundary_block_burnt": "5704367665144400000000",
+      "mint_yocto": "26185537349416907281467008884",
+      "max_inflation_rate": [
+        1,
+        40
+      ]
+    },
+    {
+      "epoch_id": "7cw6dUviGvoCeFXk7an2jax2panrHKDSb29kZDeuNRWo",
+      "start_height": 225388337,
+      "start_hash": "7MYP37RRx9JyRWkoYu2zfvQJKLshpkipbq63hVAM24n",
+      "start_time": "2026-11-20T09:50:19.300Z",
+      "start_timestamp_ns": "1795168219300216702",
+      "prev_height": 225388336,
+      "prev_hash": "3h7mpnsRDNh9dLtee3wD361GgKUiC4vkYdjZrGQvQ4zS",
+      "prev_time": "2026-11-20T09:50:18.613Z",
+      "prev_next_epoch_id": "7cw6dUviGvoCeFXk7an2jax2panrHKDSb29kZDeuNRWo",
+      "total_supply_prev": "1312190989391707272582310131349002",
+      "total_supply_start": "1312217927179396641205434033088481",
+      "boundary_block_burnt": "3585939114094200000000",
+      "mint_yocto": "26937791275307737218101739479",
       "max_inflation_rate": [
         1,
         40
