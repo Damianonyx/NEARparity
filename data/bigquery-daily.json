@@ -636,7 +636,27 @@
     "bc2e8d4bdaa9ea036bee87436c0478b3efa41beedd322a66fc01b5224e82f7c2": "2026-11-20",
     "bc010311cd7dd6cfc33f8b531f78d2ea28249c44b66ddf85277983056aaa417c": "2026-11-20",
     "b5b519aa533452aff28bc6265d37760acfb955df5762554ccfa6f228aa830fc3": "2026-11-20",
-    "0d22c6f2ae1ce16cc16dee2407598120b972eb36ca08e4c61e2abc300ca409bb": "2026-11-20"
+    "0d22c6f2ae1ce16cc16dee2407598120b972eb36ca08e4c61e2abc300ca409bb": "2026-11-20",
+    "c56ccc3406c2c4a4a3616e6bd8da64d272b9fd23d66d307745668e50f02d0395": "2026-11-21",
+    "cdc079ab8dd6328df79baaa8dd9fe56c1917d72a7a1959c47c2aaf8cc8b077f6": "2026-11-21",
+    "13e0b6907a887fd97584d6cdeb503b4431f434497d73345b1a9cd020beaff868": "2026-11-21",
+    "1cf6ac2fb855da5a48321208e0a9a663568ac4d3a881abeac69e3e57e37dc38c": "2026-11-21",
+    "399a74016a6420ca449dd297c313caf1bf5f8d11cf67c6119573a1cefadef909": "2026-11-21",
+    "1d92ece6201ae085cb6d84e13c6ff0eb79518014aa23ea3e7c54dd953d0c2156": "2026-11-21",
+    "857e65372229746249a4ae9cda9bac3001690779310b0311a5aa38967d9be88f": "2026-11-21",
+    "b10da68ec36ad1ee50535a8913d64796743e3f2d99c24a0a26c13aff859e0144": "2026-11-21",
+    "b4b51358215a3360a594bd081bb98b868feb50bfd2bc8590e4ca08f8ed56aa6f": "2026-11-21",
+    "a33742b92df96d8fff0bc232bb4ebd7a11227f17252d9b1bf5bdb4f56bc77bca": "2026-11-21",
+    "afcd6fb35d240488a521e6d7ee9fd9be4c646abaa2ac3fc622a86f6e45af78cb": "2026-11-21",
+    "104cb26d0e835395462efce28a9dfe0a33db4d48af11c02406b0ce64c596a01f": "2026-11-21",
+    "f00531fcc770cd7d2639a0600e4996270e53bcacb6bf9a098e3fcf405731f503": "2026-11-21",
+    "631b67ade60d300f4361b2b6bcc3d11ffaeac1e9fd0ab8349ab3d9d9d3c652df": "2026-11-21",
+    "21db1186f180f504b8470cafdee771a0f2fd164ca0502453098a5e2f62c9e627": "2026-11-21",
+    "8cddffb8f554f22b0c52dfdbaa63731cb9c325a5cdfce5f3f2595aa57e1fbd6f": "2026-11-21",
+    "0b4ad45647a02df814e708a55cfe0bf1ed09e98d10da000940c9c3f3e76b01ce": "2026-11-21",
+    "240b26da2ad783b81ff5e88471cc99874d65bee523e6750364ef2852732ef241": "2026-11-21",
+    "871269e3877a2204fb897145d744dd3118fd3e83bd38e41624b19512eac88141": "2026-11-21",
+    "628a75989d0cd050441c809a51222cf15abec0f69f056e9f713e5bb70d851931": "2026-11-21"
   },
   "days": {
     "2026-10-15": {
@@ -897,11 +917,18 @@
       "swaps": 6,
       "bought_yocto": "494210406550194780977729536",
       "sold_yocto": "0"
+    },
+    "2026-11-21": {
+      "withdrawals": 34,
+      "withdrawn_yocto": "17510543878143107783449192313",
+      "swaps": 4,
+      "bought_yocto": "818333552512258565550424133",
+      "sold_yocto": "0"
     }
   },
-  "last_day": "2026-11-20",
+  "last_day": "2026-11-21",
   "description": "Daily on-chain buyback trace from the BigQuery public NEAR dataset (scripts/lib/bigquery.mjs, DAILY_TRACE_SQL). Amounts are yoctoNEAR integer strings.",
   "dataset": "bigquery-public-data.crypto_near_mainnet_us",
-  "updated_at": "2026-11-21T13:40:59.191Z",
-  "latest_block_utc": "2026-11-21T12:59:59.000Z"
+  "updated_at": "2026-11-22T13:34:18.877Z",
+  "latest_block_utc": "2026-11-22T12:59:59.000Z"
 }

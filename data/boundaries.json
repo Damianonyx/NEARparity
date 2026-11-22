@@ -693,6 +693,24 @@
         }
       }
     },
+    "2026-10-23T00:00:00.000Z": {
+      "block_height": 221162120,
+      "block_hash": "HT3oUw8MpxdALxQeJVNjsZExP4LuA9ZHp7adwiZnTCG6",
+      "block_time": "2026-10-22T23:59:59.813Z",
+      "total_supply": "1309693262375393110594163774066684",
+      "wallets": {
+        "buybacks.multisignature.near": {
+          "exists": true,
+          "pools": [],
+          "native_yocto": "2049936975150822317002906855184",
+          "wnear_yocto": "0",
+          "intents_wnear_yocto": "0",
+          "staked_yocto": "0",
+          "staked_by_pool": {},
+          "total_yocto": "2049936975150822317002906855184"
+        }
+      }
+    },
     "2026-10-25T00:00:00.000Z": {
       "block_height": 221460753,
       "block_hash": "Bbe6h14r3msKB78V6699fFzBe9ForaCd7mYmUrvqxper",
@@ -878,8 +896,26 @@
           "total_yocto": "2370054050095874884043202608373"
         }
       }
+    },
+    "2026-11-22T00:00:00.000Z": {
+      "block_height": 225626526,
+      "block_hash": "Gp2VQLjFBJRrc4yvpzE2mBNJb6ESnbUQW97L4xVxP8V3",
+      "block_time": "2026-11-21T23:59:59.520Z",
+      "total_supply": "1312345779208879929687119938712455",
+      "wallets": {
+        "buybacks.multisignature.near": {
+          "exists": true,
+          "pools": [],
+          "native_yocto": "2387564593974017991826651800686",
+          "wnear_yocto": "0",
+          "intents_wnear_yocto": "0",
+          "staked_yocto": "0",
+          "staked_by_pool": {},
+          "total_yocto": "2387564593974017991826651800686"
+        }
+      }
     }
   },
   "description": "Last block before each UTC instant (end-exclusive periods), with total supply and wallet balances. yoctoNEAR strings.",
-  "updated_at": "2026-11-21T20:06:32.271Z"
+  "updated_at": "2026-11-22T13:34:13.307Z"
 }

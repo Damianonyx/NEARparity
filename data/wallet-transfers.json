@@ -4,6 +4,188 @@
   "resume_cursor": null,
   "txns": [
     {
+      "receipt_id": "5xx5vRE4uqHrD2CyMZYDkRM5b3cYsowayW3TmsKPRSnS",
+      "tx_hash": "4aDHiW6za4iJQtJZ9o5kNo6xxN6w6To6cc9K59BnYauJ",
+      "time": "2026-11-22T13:02:51.990Z",
+      "block_height": 225708613,
+      "from": "intents.near",
+      "to": "buybacks.multisignature.near",
+      "actions": [
+        "TRANSFER"
+      ],
+      "deposit_near_approx": 0,
+      "success": null
+    },
+    {
+      "receipt_id": "CUSLiKx7YwFCPQYrWfpe4tWr5iGPUFM7RPJvEdd5mAkw",
+      "tx_hash": "9ArepbmMmSzVLT1EwqXcBCR1nUaVQpZVJ8hcz7zwKHTs",
+      "time": "2026-11-22T11:07:35.495Z",
+      "block_height": 225696604,
+      "from": "intents.near",
+      "to": "buybacks.multisignature.near",
+      "actions": [
+        "TRANSFER"
+      ],
+      "deposit_near_approx": 0,
+      "success": null
+    },
+    {
+      "receipt_id": "466UR9JEh3qgwVXbhZMFUkrAobewrpJj7XLnuaJayxvt",
+      "tx_hash": "9VJ2AfmU7NtL2wAkuzHu75MALFDYjhU9ecufHy45DfhJ",
+      "time": "2026-11-22T08:32:33.881Z",
+      "block_height": 225680354,
+      "from": "intents.near",
+      "to": "buybacks.multisignature.near",
+      "actions": [
+        "TRANSFER"
+      ],
+      "deposit_near_approx": 0,
+      "success": null
+    },
+    {
+      "receipt_id": "Fcn7KxSoH4mUtKNWyqrmd5GTCqxhJ1YwqpnZhTyLht5b",
+      "tx_hash": "GrufDmiwVW4MQGJNkKfn3bUpsFQkXmsB3Pp6eSNxqMuW",
+      "time": "2026-11-22T07:02:24.851Z",
+      "block_height": 225670884,
+      "from": "intents.near",
+      "to": "buybacks.multisignature.near",
+      "actions": [
+        "TRANSFER"
+      ],
+      "deposit_near_approx": 0,
+      "success": null
+    },
+    {
+      "receipt_id": "9msf3HXRJHvC6J1qqXbvc2WuTaLdNstNyVtK8s9xrPkD",
+      "tx_hash": "4ESAxe2AoZDP9SmiQrcJ4JUPsgZ1w6YwDAVuGxxejNSC",
+      "time": "2026-11-22T05:32:30.814Z",
+      "block_height": 225661406,
+      "from": "intents.near",
+      "to": "buybacks.multisignature.near",
+      "actions": [
+        "TRANSFER"
+      ],
+      "deposit_near_approx": 0,
+      "success": null
+    },
+    {
+      "receipt_id": "6SoYnxVDKTYEF1UBzYT4EVJHoxsNZamim7NRWDD78178",
+      "tx_hash": "4YtZqEAhadZyWNR3UrrsKiY7ap9jMCxkM31akTtkiDM7",
+      "time": "2026-11-22T04:57:46.792Z",
+      "block_height": 225657746,
+      "from": "intents.near",
+      "to": "buybacks.multisignature.near",
+      "actions": [
+        "TRANSFER"
+      ],
+      "deposit_near_approx": 0,
+      "success": null
+    },
+    {
+      "receipt_id": "HGp56gCPGAy11Pq71zPHSh9BtpEbezBNCoNfiYq4PgvX",
+      "tx_hash": "5bDYKV44uYFKi5yigVcdaFfDokXV5XTzKNA2BpNn1j4Q",
+      "time": "2026-11-22T04:39:31.664Z",
+      "block_height": 225655822,
+      "from": "intents.near",
+      "to": "buybacks.multisignature.near",
+      "actions": [
+        "TRANSFER"
+      ],
+      "deposit_near_approx": 0,
+      "success": null
+    },
+    {
+      "receipt_id": "8RQSvoYsDHTnKYdy4e52byH7hhzGaMackwsitCY5rXE6",
+      "tx_hash": "EZWZTyh4rk7wjkEavVQz5Uq3sxMrsJhnNH9KRfTJ2eAZ",
+      "time": "2026-11-22T04:02:20.441Z",
+      "block_height": 225651949,
+      "from": "intents.near",
+      "to": "buybacks.multisignature.near",
+      "actions": [
+        "TRANSFER"
+      ],
+      "deposit_near_approx": 0,
+      "success": null
+    },
+    {
+      "receipt_id": "ASkyACnKGNhG51VmCeXGTBA9aSsRzuG1rF2EfxwJq7bs",
+      "tx_hash": "HMhbud2VisiCWv1osrYSxaE4KnKkyLUL9je7SgwkWHpm",
+      "time": "2026-11-22T01:42:32.779Z",
+      "block_height": 225637292,
+      "from": "intents.near",
+      "to": "buybacks.multisignature.near",
+      "actions": [
+        "TRANSFER"
+      ],
+      "deposit_near_approx": 0,
+      "success": null
+    },
+    {
+      "receipt_id": "Dfx6HtChQak4BwaS8mjfJxUWhW9QBx8LW2oELT7dvCaG",
+      "tx_hash": "6bMBDnvdP25TVAiHcpwmTWEdhpknNisuwKbzM2yiKZ2b",
+      "time": "2026-11-22T01:02:24.595Z",
+      "block_height": 225633079,
+      "from": "intents.near",
+      "to": "buybacks.multisignature.near",
+      "actions": [
+        "TRANSFER"
+      ],
+      "deposit_near_approx": 0,
+      "success": null
+    },
+    {
+      "receipt_id": "Hs4ght9zJBpVeFb3oikrVc5axnUd7cuvp3XCbXGtYHTp",
+      "tx_hash": "31AxsFAdjxPvYSLqEFRmaLYFH2ws96JYEzT34JJyeGTJ",
+      "time": "2026-11-21T23:32:19.962Z",
+      "block_height": 225623618,
+      "from": "intents.near",
+      "to": "buybacks.multisignature.near",
+      "actions": [
+        "TRANSFER"
+      ],
+      "deposit_near_approx": 0,
+      "success": null
+    },
+    {
+      "receipt_id": "4ZeruBF7ioCqTmGnu84dQyYDtupVPKAXQMMFFkFAYR9Q",
+      "tx_hash": "2RmsswsR8tiRNQDakxLKu7ZLAfi5R45ig955yU4Y8iq5",
+      "time": "2026-11-21T22:02:21.012Z",
+      "block_height": 225614163,
+      "from": "intents.near",
+      "to": "buybacks.multisignature.near",
+      "actions": [
+        "TRANSFER"
+      ],
+      "deposit_near_approx": 0,
+      "success": null
+    },
+    {
+      "receipt_id": "ECdXMfxyC3u8QEsBtmausQR7RSyka6po5DjyAkCt35NQ",
+      "tx_hash": "4vACMTk1Tw5KPx1fDhEivwfU6J4zGnJuiVFCWBA9eVRb",
+      "time": "2026-11-21T20:32:26.260Z",
+      "block_height": 225604756,
+      "from": "intents.near",
+      "to": "buybacks.multisignature.near",
+      "actions": [
+        "TRANSFER"
+      ],
+      "deposit_near_approx": 0,
+      "success": null
+    },
+    {
+      "receipt_id": "9nL43TRgLs8dqcMF9Pf1Ni9uhCqnS7w6nbSuwKnTL127",
+      "tx_hash": "4Tm55oUT9N1ZWm5JjZVKVQR69329fCDJNnoz3zgZFa3E",
+      "time": "2026-11-21T20:22:31.157Z",
+      "block_height": 225603729,
+      "from": "intents.near",
+      "to": "buybacks.multisignature.near",
+      "actions": [
+        "TRANSFER"
+      ],
+      "deposit_near_approx": 0,
+      "success": null
+    },
+    {
       "receipt_id": "3n7iKHs4ypgxyyb9Jjzgd847x2RagcnFbRLgUpoMEUov",
       "tx_hash": "7TJ3hmG58r5vYziqQkNTQeAZKA8GTVPrk6rQAVeV9oRn",
       "time": "2026-11-21T19:02:30.589Z",
@@ -47086,8 +47268,17 @@
   ],
   "description": "Receipts (txns) and fungible-token events (ft_txns) involving the buyback wallet, from NearBlocks (no key). Receipt deposits are NearBlocks floats (approximate); FT deltas are exact smallest-unit strings. Balances come from the archival RPC.",
   "source": "https://api.nearblocks.io/v1/account/buybacks.multisignature.near/txns?per_page=100",
-  "updated_at": "2026-11-21T20:06:32.115Z",
+  "updated_at": "2026-11-22T13:34:11.893Z",
   "ft_txns": [
+    {
+      "event_index": "17832951238845625000050100000000001",
+      "tx_hash": "B5vYwQLZ1qjLFGfjoEoXTSh86UfvzLTfK4Dmv4e9nAjB",
+      "time": "2026-07-05T23:45:23.412Z",
+      "contract": "token.0xshitzu.near",
+      "counterparty": "kvshnir.tg",
+      "cause": "TRANSFER",
+      "delta_yocto": "69000000000000000000"
+    },
     {
       "event_index": "17832951238845625000000000051000001",
       "tx_hash": "B5vYwQLZ1qjLFGfjoEoXTSh86UfvzLTfK4Dmv4e9nAjB",
