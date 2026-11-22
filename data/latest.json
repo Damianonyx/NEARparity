@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "generated_at": "2026-11-22T13:34:23.984Z",
+  "generated_at": "2026-11-22T20:22:32.750Z",
   "last_successful_refresh": "2026-11-21T20:06:36.546Z",
   "partial_refresh": true,
   "failed_groups": {
@@ -12,7 +12,7 @@
     ]
   },
   "health": {
-    "consecutive_partial_runs": 1,
+    "consecutive_partial_runs": 2,
     "rpc_fallback_calls_served": 0
   },
   "window": {
@@ -344,7 +344,7 @@
     },
     "epoch_checks": {
       "status": "flagged",
-      "epochs_checked": 975,
+      "epochs_checked": 976,
       "epochs_flagged": 1,
       "flagged": [
         {
@@ -384,7 +384,7 @@
       "change_pct": -0.048466481882078215
     },
     "intents_gross_fees": {
-      "value": 7020969,
+      "value": 7419631,
       "unit": "USD",
       "period_start": "2026-10-23T00:00:00.000Z",
       "period_end": "2026-11-22T00:00:00.000Z",
@@ -397,7 +397,7 @@
       "days_present": 30
     },
     "intents_net_revenue": {
-      "value": 1692534,
+      "value": 1694802,
       "unit": "USD",
       "period_start": "2026-10-23T00:00:00.000Z",
       "period_end": "2026-11-22T00:00:00.000Z",
@@ -410,7 +410,7 @@
       "days_present": 30
     },
     "intents_holders_revenue": {
-      "value": 1692534,
+      "value": 1694802,
       "unit": "USD",
       "period_start": "2026-10-23T00:00:00.000Z",
       "period_end": "2026-11-22T00:00:00.000Z",
@@ -423,7 +423,7 @@
       "days_present": 30
     },
     "net_revenue_capture_rate": {
-      "value": 4.175434698839268,
+      "value": 4.1810297922890705,
       "unit": "basis points",
       "period_start": "2026-10-23T00:00:00.000Z",
       "period_end": "2026-11-22T00:00:00.000Z",
@@ -471,10 +471,10 @@
       "reported_by": "DefiLlama"
     },
     "price_current": {
-      "value": 2.9959897690000004,
+      "value": 2.95949472,
       "unit": "USD",
-      "period_start": "2026-11-22T13:30:40.000Z",
-      "period_end": "2026-11-22T13:30:40.000Z",
+      "period_start": "2026-11-22T20:22:14.000Z",
+      "period_end": "2026-11-22T20:22:14.000Z",
       "source": "DefiLlama coins API: https://coins.llama.fi/prices/current/coingecko:near",
       "method": "Latest price for coingecko:near.",
       "status": "measured",
@@ -483,7 +483,7 @@
       "reported_by": "DefiLlama"
     },
     "buyback_proxy_near": {
-      "value": 446291.2434861245,
+      "value": 447079.58879906335,
       "unit": "NEAR",
       "period_start": "2026-10-23T00:00:00.000Z",
       "period_end": "2026-11-22T00:00:00.000Z",
@@ -609,7 +609,7 @@
       }
     },
     "coverage_proxy": {
-      "value": 0.16675044181762527,
+      "value": 0.16704499594826552,
       "unit": "ratio",
       "period_start": "2026-10-23T00:00:00.000Z",
       "period_end": "2026-11-22T00:00:00.000Z",
@@ -726,14 +726,14 @@
     "label": "Conditional scenario under the stated assumptions. Not a prediction and not a supply-neutrality threshold.",
     "defaults": {
       "daily_issuance_near": 89213.40549814606,
-      "price_usd": 2.9959897690000004,
-      "net_revenue_capture_bps": 4.175434698839268,
+      "price_usd": 2.95949472,
+      "net_revenue_capture_bps": 4.1810297922890705,
       "buyback_allocation_pct": 100,
       "observed_avg_daily_volume_usd": 135118386.63333333
     },
     "default_result": {
       "finite": true,
-      "value": 640130835.2502699,
+      "value": 631487015.5001465,
       "reason": null
     },
     "period_start": "2026-10-23T00:00:00.000Z",
@@ -1650,7 +1650,7 @@
       "issuance_near": 625165.2390717432,
       "supply_change_near": 618879.6624321555,
       "derived_burns_near": 6285.576639587788,
-      "buyback_proxy_near": 115931.65478625886,
+      "buyback_proxy_near": 116720.00009919771,
       "buyback_proxy_status": "proxy",
       "wallet_net_near": 91181.23402887803,
       "wallet_internal_near": 0,
@@ -1670,7 +1670,7 @@
     "period_end": "2026-11-22T00:00:00.000Z",
     "source": "https://api.nearblocks.io/v1/account/buybacks.multisignature.near/txns?per_page=100",
     "complete_history": true,
-    "receipts_cached": 3635,
+    "receipts_cached": 3641,
     "ft_events_cached": 2,
     "first_receipt_time": "2026-03-18T12:42:28.722Z",
     "inbound_count": 795,
@@ -1703,7 +1703,7 @@
   },
   "official_dashboard": {
     "source": "NEAR revenue dashboard (official): https://revenue.near.org/",
-    "fetched_at": "2026-11-22T13:34:15.800Z",
+    "fetched_at": "2026-11-22T20:22:26.269Z",
     "wallet_breakdown": [
       {
         "account": "fefundsadmin.sputnik-dao.near",
@@ -1727,15 +1727,15 @@
       "share_pct": 42.1
     },
     "onchain_now": {
-      "block_height": 225711865,
-      "block_time": "2026-11-22T13:34:09.500Z",
-      "total_near": 2391506.9086282575,
-      "native_near": 2391506.9086282575,
+      "block_height": 225754189,
+      "block_time": "2026-11-22T20:22:17.122Z",
+      "total_near": 2393761.4388774876,
+      "native_near": 2393761.4388774876,
       "wnear_near": 0,
       "intents_wnear_near": 0,
       "staked_near": 0
     },
-    "difference_near": 501984.9722797002,
+    "difference_near": 504239.5025289303,
     "note": "The dashboard attributes captured revenue to wallets; on-chain holdings can differ (other inflows, outflows, timing). Neither figure alone proves purchases."
   },
   "onchain_trace": {
