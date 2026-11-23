@@ -656,7 +656,16 @@
     "0b4ad45647a02df814e708a55cfe0bf1ed09e98d10da000940c9c3f3e76b01ce": "2026-11-21",
     "240b26da2ad783b81ff5e88471cc99874d65bee523e6750364ef2852732ef241": "2026-11-21",
     "871269e3877a2204fb897145d744dd3118fd3e83bd38e41624b19512eac88141": "2026-11-21",
-    "628a75989d0cd050441c809a51222cf15abec0f69f056e9f713e5bb70d851931": "2026-11-21"
+    "628a75989d0cd050441c809a51222cf15abec0f69f056e9f713e5bb70d851931": "2026-11-21",
+    "3f1e0726cff9c50503e9642bd7f141c177709184ef52a0f004e8b533766ff120": "2026-11-22",
+    "3f32524d40163c585e11ebcfe132fd73247aa4c8dde627889a779c573700275e": "2026-11-22",
+    "4649d5d2b78a7a430d24cf990cba05915cb15eef40f637af4a03510445d03388": "2026-11-22",
+    "18fe393abf63d9bb12aef2c2ea5d4c99656d5b7da0b2cb2d7bb657747b801352": "2026-11-22",
+    "4407067aa821c292d6bbd945c406de0545e41094a87f02d7e0ab3dcb694c33a6": "2026-11-22",
+    "c81282fc10e6d98d65252873346c41614ed2000f72f0ce92d57a6c81da5a0980": "2026-11-22",
+    "46d52cac62fb565896872da24030dd93f98dfd3b5ec4cf0959788458fbfb7d03": "2026-11-22",
+    "4d3b9bf4220c4d69e5a146c0c0d9cb49c230290e2cea8bb5fe4eb92820a704d5": "2026-11-22",
+    "439b2a0787b74e7a1798ce57fcab95299930a60107f682a315864d7cc6ab8208": "2026-11-22"
   },
   "days": {
     "2026-10-15": {
@@ -924,11 +933,18 @@
       "swaps": 4,
       "bought_yocto": "818333552512258565550424133",
       "sold_yocto": "0"
+    },
+    "2026-11-22": {
+      "withdrawals": 18,
+      "withdrawn_yocto": "6940193117937833404305750143",
+      "swaps": 2,
+      "bought_yocto": "189230128762653243007977415",
+      "sold_yocto": "0"
     }
   },
-  "last_day": "2026-11-21",
+  "last_day": "2026-11-22",
   "description": "Daily on-chain buyback trace from the BigQuery public NEAR dataset (scripts/lib/bigquery.mjs, DAILY_TRACE_SQL). Amounts are yoctoNEAR integer strings.",
   "dataset": "bigquery-public-data.crypto_near_mainnet_us",
-  "updated_at": "2026-11-22T13:34:18.877Z",
-  "latest_block_utc": "2026-11-22T12:59:59.000Z"
+  "updated_at": "2026-11-23T16:25:54.327Z",
+  "latest_block_utc": "2026-11-23T15:59:59.000Z"
 }
