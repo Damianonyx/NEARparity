@@ -950,8 +950,26 @@
           "total_yocto": "2394504787091955825230957550829"
         }
       }
+    },
+    "2026-11-24T00:00:00.000Z": {
+      "block_height": 225926603,
+      "block_hash": "CF5KHj4zPEnnikRpA4zirZGUq7c7W8PCGHxBNruWgNrN",
+      "block_time": "2026-11-23T23:59:59.993Z",
+      "total_supply": "1312525058093177256733306407965948",
+      "wallets": {
+        "buybacks.multisignature.near": {
+          "exists": true,
+          "pools": [],
+          "native_yocto": "2415120806828174196612659024900",
+          "wnear_yocto": "0",
+          "intents_wnear_yocto": "0",
+          "staked_yocto": "0",
+          "staked_by_pool": {},
+          "total_yocto": "2415120806828174196612659024900"
+        }
+      }
     }
   },
   "description": "Last block before each UTC instant (end-exclusive periods), with total supply and wallet balances. yoctoNEAR strings.",
-  "updated_at": "2026-11-23T16:25:45.513Z"
+  "updated_at": "2026-11-24T00:51:23.565Z"
 }

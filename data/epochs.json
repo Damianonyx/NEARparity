@@ -2,7 +2,7 @@
   "description": "Per-epoch mint measured at each epoch boundary: supply(first block) − supply(previous block) + burns in the first block. yoctoNEAR strings.",
   "source": "https://archival-rpc.mainnet.fastnear.com",
   "backfill_from": "2026-02-01T00:00:00.000Z",
-  "updated_at": "2026-11-23T16:25:43.785Z",
+  "updated_at": "2026-11-24T00:51:22.677Z",
   "records": [
     {
       "epoch_id": "ADLaJWxTLzoxLgv9j7Bd1ZS96FHTqJbCn3mYTxzaEAkA",
@@ -18733,6 +18733,27 @@
       "total_supply_start": "1312499436297427681086156945368745",
       "boundary_block_burnt": "3699025355238100000000",
       "mint_yocto": "25605583400133752384465269006",
+      "max_inflation_rate": [
+        1,
+        40
+      ],
+      "protocol_version": 88,
+      "max_inflation_rate_sampled": true
+    },
+    {
+      "epoch_id": "4hJgrnhBmBVCWbfR4dNzG27gwgDt81cgUWL8iK7PkfJ4",
+      "start_height": 225906737,
+      "start_hash": "GHPcwid8v5TFM3tiotf3EDHFet9RWHsghJnFeEaN5s5Y",
+      "start_time": "2026-11-23T20:51:09.409Z",
+      "start_timestamp_ns": "1795467069409709525",
+      "prev_height": 225906736,
+      "prev_hash": "A3768TCg1153MZv8oA6K1H4dGq2CuMcck5wvmaWgtW94",
+      "prev_time": "2026-11-23T20:51:08.880Z",
+      "prev_next_epoch_id": "4hJgrnhBmBVCWbfR4dNzG27gwgDt81cgUWL8iK7PkfJ4",
+      "total_supply_prev": "1312499062159892746008384245368747",
+      "total_supply_start": "1312525157383608339563460207965948",
+      "boundary_block_burnt": "17850078233272100000000",
+      "mint_yocto": "26095241565671788348062597201",
       "max_inflation_rate": [
         1,
         40
