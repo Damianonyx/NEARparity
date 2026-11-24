@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "generated_at": "2026-11-24T00:51:35.434Z",
+  "generated_at": "2026-11-24T16:19:41.014Z",
   "last_successful_refresh": "2026-11-21T20:06:36.546Z",
   "partial_refresh": true,
   "failed_groups": {
@@ -8,23 +8,11 @@
   },
   "notes": {
     "incomplete_metrics": [
-      "intents_volume",
-      "intents_gross_fees",
-      "intents_net_revenue",
-      "intents_holders_revenue",
-      "net_revenue_capture_rate",
-      "buyback_allocation",
-      "avg_daily_volume",
-      "buyback_proxy_near",
-      "coverage_proxy",
-      "usage_active_accounts",
-      "usage_txns",
-      "usage_new_accounts",
-      "usage_active_contracts"
+      "usage_new_accounts"
     ]
   },
   "health": {
-    "consecutive_partial_runs": 4,
+    "consecutive_partial_runs": 5,
     "rpc_fallback_calls_served": 0
   },
   "window": {
@@ -39,7 +27,7 @@
     "wallet_created_at": "2026-03-18T12:42:28.722Z",
     "holders_revenue_labelled_from": "2026-02-23",
     "staking_pools": [],
-    "usage_source": "NearBlocks",
+    "usage_source": "BigQuery",
     "usage_largest_txn_drop": {
       "from": "2026-04-01",
       "to": "2026-04-02",
@@ -48,16 +36,16 @@
       "change": -0.7170869003153515,
       "active_accounts_before": 139048,
       "active_accounts_after": 137183,
-      "active_contracts_before": 1381922,
-      "active_contracts_after": 184649
+      "active_contracts_before": 955,
+      "active_contracts_after": 998
     },
     "usage_correlation": {
       "intents_volume_vs_active_accounts": {
-        "r": -0.15524632918542894,
+        "r": -0.1610332054725551,
         "n": 41
       },
       "intents_volume_vs_txns": {
-        "r": 0.19233024274300695,
+        "r": 0.18380252827158802,
         "n": 41
       },
       "method": "Pearson correlation of week-over-week % changes, full 7-day weeks since backfill_from. Descriptive only: no lag, no causality.",
@@ -73,8 +61,8 @@
           {
             "lag": 0,
             "n": 41,
-            "r": -0.15524632918542894,
-            "rho": -0.05679442508710801,
+            "r": -0.1610332054725551,
+            "rho": -0.0735191637630662,
             "band": 0.3061005733016679
           },
           {
@@ -153,8 +141,8 @@
           {
             "lag": 0,
             "n": 41,
-            "r": 0.19233024274300695,
-            "rho": 0.36114982578397214,
+            "r": 0.18380252827158802,
+            "rho": 0.35087108013937285,
             "band": 0.3061005733016679
           },
           {
@@ -356,7 +344,7 @@
     },
     "epoch_checks": {
       "status": "flagged",
-      "epochs_checked": 980,
+      "epochs_checked": 982,
       "epochs_flagged": 1,
       "flagged": [
         {
@@ -379,10 +367,10 @@
       "method": "Within each epoch supply must not rise (only burns); boundaries must be one epoch apart; each mint should be ≤ and close to supply × max_inflation_rate × epoch duration ÷ 31,556,952 s (ratio < 0.95 or > 1.001 is flagged)."
     },
     "intents_volume": {
-      "value": 4037255871,
+      "value": 4214191667,
       "unit": "USD",
-      "period_start": "2026-10-24T00:00:00.000Z",
-      "period_end": "2026-11-23T00:00:00.000Z",
+      "period_start": "2026-10-25T00:00:00.000Z",
+      "period_end": "2026-11-24T00:00:00.000Z",
       "source": "DefiLlama (protocol slug near-intents): https://api.llama.fi/summary/dexs/near-intents",
       "method": "NEAR Intents swap volume as reported by DefiLlama. Sum of 30 daily values.",
       "status": "measured",
@@ -390,106 +378,85 @@
       "source_type": "third_party",
       "reported_by": "DefiLlama",
       "days_present": 30,
-      "prior_value": 4140531796,
-      "prior_period_start": "2026-09-24T00:00:00.000Z",
-      "prior_period_end": "2026-10-24T00:00:00.000Z",
-      "change_pct": -0.024942671639370258,
-      "stale": true,
-      "stale_since": "2026-11-23T16:26:00.045Z",
-      "stale_reason": "Unavailable this run: 1 of 30 days missing (2026-11-23)."
+      "prior_value": 4050704275,
+      "prior_period_start": "2026-09-25T00:00:00.000Z",
+      "prior_period_end": "2026-10-25T00:00:00.000Z",
+      "change_pct": 0.04036023883772656
     },
     "intents_gross_fees": {
-      "value": 7350337,
+      "value": 7704455,
       "unit": "USD",
-      "period_start": "2026-10-24T00:00:00.000Z",
-      "period_end": "2026-11-23T00:00:00.000Z",
+      "period_start": "2026-10-25T00:00:00.000Z",
+      "period_end": "2026-11-24T00:00:00.000Z",
       "source": "DefiLlama (protocol slug near-intents): https://api.llama.fi/summary/fees/near-intents?dataType=dailyFees",
       "method": "Gross fees. DefiLlama: \"Gross fees charged on NEAR Intents swaps - the protocol fee plus the affiliate (distribution) fee each frontend collects, summed across all integrators.\" Sum of 30 daily values.",
       "status": "measured",
       "reason": null,
       "source_type": "third_party",
       "reported_by": "DefiLlama",
-      "days_present": 30,
-      "stale": true,
-      "stale_since": "2026-11-23T16:26:00.045Z",
-      "stale_reason": "Unavailable this run: 1 of 30 days missing (2026-11-23)."
+      "days_present": 30
     },
     "intents_net_revenue": {
-      "value": 1680392,
+      "value": 1713123,
       "unit": "USD",
-      "period_start": "2026-10-24T00:00:00.000Z",
-      "period_end": "2026-11-23T00:00:00.000Z",
+      "period_start": "2026-10-25T00:00:00.000Z",
+      "period_end": "2026-11-24T00:00:00.000Z",
       "source": "DefiLlama (protocol slug near-intents): https://api.llama.fi/summary/fees/near-intents?dataType=dailyRevenue",
       "method": "Net revenue captured after distributions. DefiLlama: \"NEAR's net captured revenue, measured as NEAR/wNEAR swept into its revenue wallets (reconciles with revenue.near.org and the on-chain buyback). Split by destination wallet into front-end affiliate revenue and Other. Transfers between those wallets are excluded.\" Sum of 30 daily values.",
       "status": "measured",
       "reason": null,
       "source_type": "third_party",
       "reported_by": "DefiLlama",
-      "days_present": 30,
-      "stale": true,
-      "stale_since": "2026-11-23T16:26:00.045Z",
-      "stale_reason": "Unavailable this run: 1 of 30 days missing (2026-11-23)."
+      "days_present": 30
     },
     "intents_holders_revenue": {
-      "value": 1680392,
+      "value": 1713123,
       "unit": "USD",
-      "period_start": "2026-10-24T00:00:00.000Z",
-      "period_end": "2026-11-23T00:00:00.000Z",
+      "period_start": "2026-10-25T00:00:00.000Z",
+      "period_end": "2026-11-24T00:00:00.000Z",
       "source": "DefiLlama (protocol slug near-intents): https://api.llama.fi/summary/fees/near-intents?dataType=dailyHoldersRevenue",
       "method": "DefiLlama holders revenue, labelled as buyback money from 2026-02-23. DefiLlama: \"Since 2026-02-23, NEAR's captured Intents revenue is used to buy back $NEAR on the open market (not burned), returning value to holders.\" Sum of 30 daily values. A label, not confirmed purchases.",
       "status": "proxy",
       "reason": null,
       "source_type": "third_party",
       "reported_by": "DefiLlama",
-      "days_present": 30,
-      "stale": true,
-      "stale_since": "2026-11-23T16:26:00.045Z",
-      "stale_reason": "Unavailable this run: 1 of 30 days missing (2026-11-23)."
+      "days_present": 30
     },
     "net_revenue_capture_rate": {
-      "value": 4.162213279743844,
+      "value": 4.065128345763017,
       "unit": "basis points",
-      "period_start": "2026-10-24T00:00:00.000Z",
-      "period_end": "2026-11-23T00:00:00.000Z",
+      "period_start": "2026-10-25T00:00:00.000Z",
+      "period_end": "2026-11-24T00:00:00.000Z",
       "source": "Derived from intents_net_revenue and intents_volume",
       "method": "Net revenue ÷ swap volume over the period, in basis points (1 bp = 0.0001).",
       "status": "measured",
       "reason": null,
       "source_type": "derived",
-      "reported_by": "DefiLlama",
-      "stale": true,
-      "stale_since": "2026-11-23T16:26:00.045Z",
-      "stale_reason": "Unavailable this run: Needs both intents_net_revenue and intents_volume (one is unavailable or zero)."
+      "reported_by": "DefiLlama"
     },
     "buyback_allocation": {
       "value": 100,
       "unit": "percent",
-      "period_start": "2026-10-24T00:00:00.000Z",
-      "period_end": "2026-11-23T00:00:00.000Z",
+      "period_start": "2026-10-25T00:00:00.000Z",
+      "period_end": "2026-11-24T00:00:00.000Z",
       "source": "Derived from intents_holders_revenue and intents_net_revenue",
       "method": "DefiLlama holders revenue ÷ net revenue over the period. Based on a label, so a proxy for the share used to buy NEAR.",
       "status": "proxy",
       "reason": null,
       "source_type": "derived",
-      "reported_by": "DefiLlama",
-      "stale": true,
-      "stale_since": "2026-11-23T16:26:00.045Z",
-      "stale_reason": "Unavailable this run: Needs both intents_holders_revenue and intents_net_revenue (one is unavailable or zero)."
+      "reported_by": "DefiLlama"
     },
     "avg_daily_volume": {
-      "value": 134575195.7,
+      "value": 140473055.56666666,
       "unit": "USD/day",
-      "period_start": "2026-10-24T00:00:00.000Z",
-      "period_end": "2026-11-23T00:00:00.000Z",
+      "period_start": "2026-10-25T00:00:00.000Z",
+      "period_end": "2026-11-24T00:00:00.000Z",
       "source": "DefiLlama (protocol slug near-intents): https://api.llama.fi/summary/dexs/near-intents",
       "method": "Period swap volume ÷ 30.",
       "status": "measured",
       "reason": null,
       "source_type": "third_party",
-      "reported_by": "DefiLlama",
-      "stale": true,
-      "stale_since": "2026-11-23T16:26:00.045Z",
-      "stale_reason": "Unavailable this run: Volume unavailable."
+      "reported_by": "DefiLlama"
     },
     "price_avg": {
       "value": 3.7365138814596337,
@@ -504,10 +471,10 @@
       "reported_by": "DefiLlama"
     },
     "price_current": {
-      "value": 2.9812493,
+      "value": 2.7982959345,
       "unit": "USD",
-      "period_start": "2026-11-24T00:51:21.000Z",
-      "period_end": "2026-11-24T00:51:21.000Z",
+      "period_start": "2026-11-24T16:15:08.000Z",
+      "period_end": "2026-11-24T16:15:08.000Z",
       "source": "DefiLlama coins API: https://coins.llama.fi/prices/current/coingecko:near",
       "method": "Latest price for coingecko:near.",
       "status": "measured",
@@ -516,19 +483,16 @@
       "reported_by": "DefiLlama"
     },
     "buyback_proxy_near": {
-      "value": 447531.1427966109,
+      "value": 464277.643428235,
       "unit": "NEAR",
-      "period_start": "2026-10-24T00:00:00.000Z",
-      "period_end": "2026-11-23T00:00:00.000Z",
+      "period_start": "2026-10-25T00:00:00.000Z",
+      "period_end": "2026-11-24T00:00:00.000Z",
       "source": "DefiLlama (protocol slug near-intents) dailyHoldersRevenue ÷ daily NEAR price",
       "method": "Proxy: Σ over days of (DefiLlama holders revenue in USD ÷ NEAR price that day). DefiLlama labels this revenue as buyback money; it is not a confirmed purchase record.",
       "status": "proxy",
       "reason": null,
       "source_type": "derived",
-      "reported_by": "DefiLlama",
-      "stale": true,
-      "stale_since": "2026-11-23T16:26:00.045Z",
-      "stale_reason": "Unavailable this run: Missing days: 2026-11-23"
+      "reported_by": "DefiLlama"
     },
     "wallet_net_accumulation": {
       "value": 351465.99199853523,
@@ -574,80 +538,86 @@
       "wallet_label": "revenue wallet listed on revenue.near.org"
     },
     "verified_purchases": {
-      "value": 73168.1865361124,
+      "value": 50447.714205327546,
       "unit": "NEAR",
-      "period_start": "2026-10-15T00:00:00.000Z",
-      "period_end": "2026-11-14T00:00:00.000Z",
-      "source": "BigQuery public NEAR dataset (bigquery-public-data.crypto_near_mainnet_us): intents.near dip4/nep245 event logs (run 2026-11-14; SQL in queries/bigquery/02-buybacks-30d.sql, queries/bigquery/03-funding-sources-30d.sql, queries/bigquery/04-hub-account-30d.sql)",
-      "method": "Lower bound of NEAR bought. The accounts that signed the native_withdraw intents to the buyback wallet in the window (at least 272) made 7979 token_diff swaps that gained wNEAR (0 NEAR sold), paid with tokens including USDT (Ethereum), USDT0 (Plasma), USDC (Base), ZEC, SUI. NEAR they received by transfer is not counted, because its payment leg is not visible in these events.",
+      "period_start": "2026-10-25T00:00:00.000Z",
+      "period_end": "2026-11-24T00:00:00.000Z",
+      "source": "BigQuery public NEAR dataset (bigquery-public-data.crypto_near_mainnet_us): intents.near event logs, queried daily (data/bigquery-daily.json)",
+      "method": "Lower bound of NEAR bought: wNEAR gained in 3923 token_diff swaps by the accounts that fund the buyback wallet (each counted from the first day it sent NEAR to the wallet), summed over the 30 days (0 NEAR sold). NEAR they received by transfer is not counted, because its payment is not visible in these events.",
       "status": "measured",
       "reason": null,
       "source_type": "onchain",
-      "snapshot": {
-        "run_on": "2026-11-14",
-        "window_matches_dashboard": false
+      "lower_bound": true,
+      "daily": {
+        "updated_at": "2026-11-24T16:19:35.499Z",
+        "latest_block_utc": "2026-11-24T14:59:59.000Z",
+        "accounts_known": 690
       },
-      "lower_bound": true
+      "value_yocto": "50447714205327545594671301623",
+      "swaps": 3923,
+      "sold_near": 0
     },
     "trace_withdrawn_to_wallet": {
-      "value": 301008.214894364,
+      "value": 344367.39588775096,
       "unit": "NEAR",
-      "period_start": "2026-10-15T00:00:00.000Z",
-      "period_end": "2026-11-14T00:00:00.000Z",
-      "source": "BigQuery public NEAR dataset (bigquery-public-data.crypto_near_mainnet_us): intents.near dip4/nep245 event logs (run 2026-11-14; SQL in queries/bigquery/02-buybacks-30d.sql, queries/bigquery/03-funding-sources-30d.sql, queries/bigquery/04-hub-account-30d.sql)",
-      "method": "Sum of 771 native_withdraw intents to the buyback wallet in the window. Cross-check: matches the wallet's RPC balance change for the same window to within 0.3%.",
+      "period_start": "2026-10-25T00:00:00.000Z",
+      "period_end": "2026-11-24T00:00:00.000Z",
+      "source": "BigQuery public NEAR dataset (bigquery-public-data.crypto_near_mainnet_us): intents.near event logs, queried daily (data/bigquery-daily.json)",
+      "method": "Sum of 806 native_withdraw intents to the buyback wallet over the 30 days.",
       "status": "measured",
       "reason": null,
       "source_type": "onchain",
-      "snapshot": {
-        "run_on": "2026-11-14",
-        "window_matches_dashboard": false
-      }
+      "daily": {
+        "updated_at": "2026-11-24T16:19:35.499Z",
+        "latest_block_utc": "2026-11-24T14:59:59.000Z",
+        "accounts_known": 690
+      },
+      "value_yocto": "344367395887750981937008508192",
+      "withdrawals": 806
     },
     "trace_untraced_near": {
-      "value": 227840.0283582516,
+      "value": 293919.6816824234,
       "unit": "NEAR",
-      "period_start": "2026-10-15T00:00:00.000Z",
-      "period_end": "2026-11-14T00:00:00.000Z",
-      "source": "BigQuery public NEAR dataset (bigquery-public-data.crypto_near_mainnet_us): intents.near dip4/nep245 event logs (run 2026-11-14; SQL in queries/bigquery/02-buybacks-30d.sql, queries/bigquery/03-funding-sources-30d.sql, queries/bigquery/04-hub-account-30d.sql)",
-      "method": "NEAR delivered to the wallet that is not matched by a swap of the withdrawing accounts. It reached them by transfer inside NEAR Intents, mostly from one high-volume account (191,434 NEAR in 500 transfers) that moved 17.7M NEAR to many accounts in the window, was funded mainly by solver-priv-liq.near, and made no swaps itself. Consistent with market-maker fills, but the payment is not visible, so it is not counted as verified purchases.",
+      "period_start": "2026-10-25T00:00:00.000Z",
+      "period_end": "2026-11-24T00:00:00.000Z",
+      "source": "BigQuery public NEAR dataset (bigquery-public-data.crypto_near_mainnet_us): intents.near event logs, queried daily (data/bigquery-daily.json)",
+      "method": "NEAR delivered to the wallet that is not matched by a swap of the accounts that fund it: it reached them by transfer inside NEAR Intents (see the one-off trace in docs/bigquery-results.json for where it came from).",
       "status": "measured",
       "reason": null,
       "source_type": "onchain",
-      "snapshot": {
-        "run_on": "2026-11-14",
-        "window_matches_dashboard": false
+      "daily": {
+        "updated_at": "2026-11-24T16:19:35.499Z",
+        "latest_block_utc": "2026-11-24T14:59:59.000Z",
+        "accounts_known": 690
       }
     },
     "coverage_verified": {
-      "value": 0.027423899417108478,
+      "value": 0.0188514735079057,
       "unit": "ratio",
-      "period_start": "2026-10-15T00:00:00.000Z",
-      "period_end": "2026-11-14T00:00:00.000Z",
-      "source": "BigQuery public NEAR dataset (bigquery-public-data.crypto_near_mainnet_us): intents.near dip4/nep245 event logs (run 2026-11-14; SQL in queries/bigquery/02-buybacks-30d.sql, queries/bigquery/03-funding-sources-30d.sql, queries/bigquery/04-hub-account-30d.sql); issuance: NEAR archival RPC",
-      "method": "Verified NEAR bought (lower bound) ÷ measured issuance over the same window (2,668,045 NEAR).",
+      "period_start": "2026-10-25T00:00:00.000Z",
+      "period_end": "2026-11-24T00:00:00.000Z",
+      "source": "BigQuery public NEAR dataset (bigquery-public-data.crypto_near_mainnet_us): intents.near event logs, queried daily (data/bigquery-daily.json); issuance: NEAR archival RPC",
+      "method": "Verified NEAR bought (lower bound, daily BigQuery trace) ÷ measured issuance over the same 30 UTC days.",
       "status": "measured",
       "reason": null,
       "source_type": "onchain",
-      "snapshot": {
-        "run_on": "2026-11-14",
-        "window_matches_dashboard": false
-      },
-      "lower_bound": true
+      "lower_bound": true,
+      "daily": {
+        "updated_at": "2026-11-24T16:19:35.499Z",
+        "latest_block_utc": "2026-11-24T14:59:59.000Z",
+        "accounts_known": 690
+      }
     },
     "coverage_proxy": {
-      "value": 0.1673052293030506,
+      "value": 0.17349284964185693,
       "unit": "ratio",
-      "period_start": "2026-10-24T00:00:00.000Z",
-      "period_end": "2026-11-23T00:00:00.000Z",
+      "period_start": "2026-10-25T00:00:00.000Z",
+      "period_end": "2026-11-24T00:00:00.000Z",
       "source": "Derived from buyback_proxy_near and issuance",
       "method": "Proxy: revenue-based buyback estimate (NEAR) ÷ measured issuance (NEAR), same 30 UTC days.",
       "status": "proxy",
       "reason": null,
-      "source_type": "derived",
-      "stale": true,
-      "stale_since": "2026-11-23T16:26:00.045Z",
-      "stale_reason": "Unavailable this run: Needs both buyback_proxy_near and issuance (one is unavailable or zero)."
+      "source_type": "derived"
     },
     "coverage_wallet": {
       "value": 0.1313370078597234,
@@ -661,44 +631,38 @@
       "source_type": "derived"
     },
     "usage_active_accounts": {
-      "value": 71789.46666666666,
+      "value": 72600.36666666667,
       "unit": "accounts/day",
-      "period_start": "2026-10-24T00:00:00.000Z",
-      "period_end": "2026-11-23T00:00:00.000Z",
+      "period_start": "2026-10-25T00:00:00.000Z",
+      "period_end": "2026-11-24T00:00:00.000Z",
       "source": "BigQuery public NEAR dataset (bigquery-public-data.crypto_near_mainnet_us), filtered on block_date: data/bigquery-usage.json",
       "method": "Daily active accounts. Mean of 30 daily values: distinct transaction signers per UTC day (transactions.signer_account_id). Compared with the previous 30 days. NearBlocks' own figure for the same days is kept as a cross-check (nearblocks_value).",
       "status": "measured",
       "reason": null,
       "source_type": "onchain",
       "reported_by": "BigQuery",
-      "prior_value": 74772.43333333333,
-      "prior_period_start": "2026-09-24T00:00:00.000Z",
-      "prior_period_end": "2026-10-24T00:00:00.000Z",
-      "change_pct": -0.03989393595589829,
-      "nearblocks_value": null,
-      "stale": true,
-      "stale_since": "2026-11-23T16:26:00.045Z",
-      "stale_reason": "usage failed this run: HTTP 410"
+      "prior_value": 74644.13333333333,
+      "prior_period_start": "2026-09-25T00:00:00.000Z",
+      "prior_period_end": "2026-10-25T00:00:00.000Z",
+      "change_pct": -0.02738013793448375,
+      "nearblocks_value": null
     },
     "usage_txns": {
-      "value": 697154.0333333333,
+      "value": 698326.3,
       "unit": "transactions/day",
-      "period_start": "2026-10-24T00:00:00.000Z",
-      "period_end": "2026-11-23T00:00:00.000Z",
+      "period_start": "2026-10-25T00:00:00.000Z",
+      "period_end": "2026-11-24T00:00:00.000Z",
       "source": "BigQuery public NEAR dataset (bigquery-public-data.crypto_near_mainnet_us), filtered on block_date: data/bigquery-usage.json",
       "method": "Daily transactions. Mean of 30 daily values: transactions per UTC day (rows of transactions). Compared with the previous 30 days. NearBlocks' own figure for the same days is kept as a cross-check (nearblocks_value).",
       "status": "measured",
       "reason": null,
       "source_type": "onchain",
       "reported_by": "BigQuery",
-      "prior_value": 807297.2,
-      "prior_period_start": "2026-09-24T00:00:00.000Z",
-      "prior_period_end": "2026-10-24T00:00:00.000Z",
-      "change_pct": -0.13643447130333988,
-      "nearblocks_value": null,
-      "stale": true,
-      "stale_since": "2026-11-23T16:26:00.045Z",
-      "stale_reason": "usage failed this run: HTTP 410"
+      "prior_value": 803768.7666666667,
+      "prior_period_start": "2026-09-25T00:00:00.000Z",
+      "prior_period_end": "2026-10-25T00:00:00.000Z",
+      "change_pct": -0.13118507590678133,
+      "nearblocks_value": null
     },
     "usage_new_accounts": {
       "value": 269951,
@@ -720,81 +684,60 @@
       "stale_reason": "usage failed this run: HTTP 410"
     },
     "usage_active_contracts": {
-      "value": 1345.6666666666667,
+      "value": 1342.4,
       "unit": "contracts/day",
-      "period_start": "2026-10-24T00:00:00.000Z",
-      "period_end": "2026-11-23T00:00:00.000Z",
+      "period_start": "2026-10-25T00:00:00.000Z",
+      "period_end": "2026-11-24T00:00:00.000Z",
       "source": "BigQuery public NEAR dataset (bigquery-public-data.crypto_near_mainnet_us), filtered on block_date: data/bigquery-usage.json",
       "method": "Daily active contracts. Mean of 30 daily values: distinct accounts receiving FUNCTION_CALL actions per UTC day (receipt_actions.receipt_receiver_account_id). Compared with the previous 30 days. NearBlocks' own figure for the same days is kept as a cross-check (nearblocks_value).",
       "status": "measured",
       "reason": null,
       "source_type": "onchain",
       "reported_by": "BigQuery",
-      "prior_value": 1796.9,
-      "prior_period_start": "2026-09-24T00:00:00.000Z",
-      "prior_period_end": "2026-10-24T00:00:00.000Z",
-      "change_pct": -0.25111766560929005,
-      "nearblocks_value": null,
-      "stale": true,
-      "stale_since": "2026-11-23T16:26:00.045Z",
-      "stale_reason": "usage failed this run: HTTP 410"
+      "prior_value": 1793.6666666666667,
+      "prior_period_start": "2026-09-25T00:00:00.000Z",
+      "prior_period_end": "2026-10-25T00:00:00.000Z",
+      "change_pct": -0.2515889239918231,
+      "nearblocks_value": null
     },
     "usage_function_calls": {
-      "value": 1528972.5333333334,
+      "value": 1539394.5333333334,
       "unit": "calls/day",
-      "period_start": "2026-10-24T00:00:00.000Z",
-      "period_end": "2026-11-23T00:00:00.000Z",
+      "period_start": "2026-10-25T00:00:00.000Z",
+      "period_end": "2026-11-24T00:00:00.000Z",
       "source": "BigQuery public NEAR dataset (bigquery-public-data.crypto_near_mainnet_us), filtered on block_date: data/bigquery-usage.json",
       "method": "Daily contract calls. Mean of 30 daily values: FUNCTION_CALL receipt actions per UTC day (receipt_actions). Compared with the previous 30 days. NearBlocks' own figure for the same days is kept as a cross-check (nearblocks_value).",
       "status": "measured",
       "reason": null,
       "source_type": "onchain",
       "reported_by": "BigQuery",
-      "prior_value": 2633401.1333333333,
-      "prior_period_start": "2026-09-24T00:00:00.000Z",
-      "prior_period_end": "2026-10-24T00:00:00.000Z",
-      "change_pct": -0.4193924677939304,
-      "nearblocks_value": null,
-      "stale": true,
-      "stale_since": "2026-11-23T16:26:00.045Z",
-      "stale_reason": "Unavailable this run: BigQuery usage data does not cover this window and the previous one.",
-      "stale_optional": true
+      "prior_value": 2623419.3666666667,
+      "prior_period_start": "2026-09-25T00:00:00.000Z",
+      "prior_period_end": "2026-10-25T00:00:00.000Z",
+      "change_pct": -0.41321065442567884,
+      "nearblocks_value": null
     }
   },
   "stale": {
-    "intents_volume": "2026-11-23T16:26:00.045Z",
-    "intents_gross_fees": "2026-11-23T16:26:00.045Z",
-    "intents_net_revenue": "2026-11-23T16:26:00.045Z",
-    "intents_holders_revenue": "2026-11-23T16:26:00.045Z",
-    "net_revenue_capture_rate": "2026-11-23T16:26:00.045Z",
-    "buyback_allocation": "2026-11-23T16:26:00.045Z",
-    "avg_daily_volume": "2026-11-23T16:26:00.045Z",
-    "buyback_proxy_near": "2026-11-23T16:26:00.045Z",
-    "coverage_proxy": "2026-11-23T16:26:00.045Z",
-    "usage_active_accounts": "2026-11-23T16:26:00.045Z",
-    "usage_txns": "2026-11-23T16:26:00.045Z",
-    "usage_new_accounts": "2026-11-21T20:06:36.546Z",
-    "usage_active_contracts": "2026-11-23T16:26:00.045Z",
-    "usage_function_calls": "2026-11-23T16:26:00.045Z"
+    "usage_new_accounts": "2026-11-21T20:06:36.546Z"
   },
   "simulator": {
     "formula": "Required daily volume (USD) = daily issuance (NEAR) × NEAR price (USD) ÷ (net revenue capture rate × buyback allocation)",
     "label": "Conditional scenario under the stated assumptions. Not a prediction and not a supply-neutrality threshold.",
     "defaults": {
       "daily_issuance_near": 89202.0707455952,
-      "price_usd": 2.9812493,
-      "net_revenue_capture_bps": 4.162213279743844,
+      "price_usd": 2.7982959345,
+      "net_revenue_capture_bps": 4.065128345763017,
       "buyback_allocation_pct": 100,
-      "observed_avg_daily_volume_usd": 134575195.7
+      "observed_avg_daily_volume_usd": 140473055.56666666
     },
     "default_result": {
       "finite": true,
-      "value": 638923556.0394509,
+      "value": 614036681.4655354,
       "reason": null
     },
     "period_start": "2026-10-25T00:00:00.000Z",
-    "period_end": "2026-11-24T00:00:00.000Z",
-    "defaults_stale": true
+    "period_end": "2026-11-24T00:00:00.000Z"
   },
   "series_weekly": [
     {
@@ -1714,7 +1657,7 @@
       "wallet_net_excl_internal_near": 91181.23402887803,
       "wallet_balance_end_near": 2387564.593974018,
       "verified_purchases_near": 3199.426856186787,
-      "intents_volume_usd": 1063102582,
+      "intents_volume_usd": 1118156254,
       "active_accounts_avg": 76506.42857142857,
       "txns_avg": 684650,
       "active_contracts_avg": 1251.2857142857142,
@@ -1729,18 +1672,18 @@
       "issuance_near": 180962.7604124777,
       "supply_change_near": 179278.88429732705,
       "derived_burns_near": 1683.876115150654,
-      "buyback_proxy_near": null,
-      "buyback_proxy_status": "unavailable",
+      "buyback_proxy_near": 35984.7787701199,
+      "buyback_proxy_status": "proxy",
       "wallet_net_near": 27556.212854156205,
       "wallet_internal_near": 0,
       "wallet_net_excl_internal_near": 27556.212854156205,
       "wallet_balance_end_near": 2415120.8068281743,
-      "verified_purchases_near": null,
-      "intents_volume_usd": null,
-      "active_accounts_avg": null,
-      "txns_avg": null,
-      "active_contracts_avg": null,
-      "usage_source": "NearBlocks",
+      "verified_purchases_near": 5508.831507085437,
+      "intents_volume_usd": 287126297,
+      "active_accounts_avg": 74069,
+      "txns_avg": 646328.5,
+      "active_contracts_avg": 1115.5,
+      "usage_source": "BigQuery",
       "price_avg_usd": 2.9348992595861025
     }
   ],
@@ -1749,7 +1692,7 @@
     "period_end": "2026-11-24T00:00:00.000Z",
     "source": "https://api.nearblocks.io/v1/account/buybacks.multisignature.near/txns?per_page=100",
     "complete_history": true,
-    "receipts_cached": 3683,
+    "receipts_cached": 3702,
     "ft_events_cached": 2,
     "first_receipt_time": "2026-03-18T12:42:28.722Z",
     "inbound_count": 750,
@@ -1782,17 +1725,17 @@
   },
   "official_dashboard": {
     "source": "NEAR revenue dashboard (official): https://revenue.near.org/",
-    "fetched_at": "2026-11-24T00:51:28.560Z",
+    "fetched_at": "2026-11-24T16:19:32.104Z",
     "wallet_breakdown": [
       {
         "account": "fefundsadmin.sputnik-dao.near",
-        "near_amount": 2050276.2558709476,
-        "share_pct": 45.5
+        "near_amount": 2057579.199124405,
+        "share_pct": 45.4
       },
       {
         "account": "buybacks.multisignature.near",
-        "near_amount": 1896462.1294664952,
-        "share_pct": 42.1
+        "near_amount": 1917078.1492027135,
+        "share_pct": 42.3
       },
       {
         "account": "1csfundsadmin.sputnik-dao.near",
@@ -1802,19 +1745,19 @@
     ],
     "wallet_row": {
       "account": "buybacks.multisignature.near",
-      "near_amount": 1896462.1294664952,
-      "share_pct": 42.1
+      "near_amount": 1917078.1492027135,
+      "share_pct": 42.3
     },
     "onchain_now": {
-      "block_height": 225931923,
-      "block_time": "2026-11-24T00:51:19.628Z",
-      "total_near": 2415973.474337199,
-      "native_near": 2415973.474337199,
+      "block_height": 226027688,
+      "block_time": "2026-11-24T16:19:26.121Z",
+      "total_near": 2424219.7303420356,
+      "native_near": 2424219.7303420356,
       "wnear_near": 0,
       "intents_wnear_near": 0,
       "staked_near": 0
     },
-    "difference_near": 519511.3448707035,
+    "difference_near": 507141.58113932214,
     "note": "The dashboard attributes captured revenue to wallets; on-chain holdings can differ (other inflows, outflows, timing). Neither figure alone proves purchases."
   },
   "onchain_trace": {
