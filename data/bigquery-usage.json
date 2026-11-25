@@ -1,9 +1,9 @@
 {
   "description": "Daily network usage from the BigQuery public NEAR dataset (scripts/lib/bigquery.mjs, DAILY_USAGE_SQL): transactions, distinct signers, distinct contracts receiving FUNCTION_CALL actions, and function calls, per UTC day.",
   "dataset": "bigquery-public-data.crypto_near_mainnet_us",
-  "updated_at": "2026-11-24T16:19:34.096Z",
-  "latest_block_utc": "2026-11-24T14:59:59.000Z",
-  "last_day": "2026-11-23",
+  "updated_at": "2026-11-25T15:59:47.042Z",
+  "latest_block_utc": "2026-11-25T14:59:59.000Z",
+  "last_day": "2026-11-24",
   "days": {
     "2026-02-01": {
       "txns": 3410196,
@@ -1780,6 +1780,12 @@
       "active_accounts": 74505,
       "active_contracts": 1146,
       "function_calls": 1668829
+    },
+    "2026-11-24": {
+      "txns": 654252,
+      "active_accounts": 78516,
+      "active_contracts": 1137,
+      "function_calls": 1617201
     }
   }
 }

@@ -2,7 +2,7 @@
   "description": "Per-epoch mint measured at each epoch boundary: supply(first block) − supply(previous block) + burns in the first block. yoctoNEAR strings.",
   "source": "https://archival-rpc.mainnet.fastnear.com",
   "backfill_from": "2026-02-01T00:00:00.000Z",
-  "updated_at": "2026-11-24T23:01:56.801Z",
+  "updated_at": "2026-11-25T15:59:42.418Z",
   "records": [
     {
       "epoch_id": "ADLaJWxTLzoxLgv9j7Bd1ZS96FHTqJbCn3mYTxzaEAkA",
@@ -18815,6 +18815,65 @@
       "total_supply_start": "1312602211226970858368521405476679",
       "boundary_block_burnt": "4931761492329300000000",
       "mint_yocto": "25814976349420750510198919283",
+      "max_inflation_rate": [
+        1,
+        40
+      ],
+      "protocol_version": 88,
+      "max_inflation_rate_sampled": true
+    },
+    {
+      "epoch_id": "CcaTMZPYfY12RFKBBryraCKJgcXJnbin91f3u5DSHkj",
+      "start_height": 226079537,
+      "start_hash": "5iZxLSk8oPsYMpL5gDneLgLTE6rrWjeNEvHjsFi3AaAc",
+      "start_time": "2026-11-25T00:31:43.937Z",
+      "start_timestamp_ns": "1795566703937428424",
+      "prev_height": 226079536,
+      "prev_hash": "C6xhYyeQdRGRXkJo48T7Gseg9aNpdkVsjEPYeSVm7uP5",
+      "prev_time": "2026-11-25T00:31:43.333Z",
+      "prev_next_epoch_id": "CcaTMZPYfY12RFKBBryraCKJgcXJnbin91f3u5DSHkj",
+      "total_supply_prev": "1312601983584545712327366305476679",
+      "total_supply_start": "1312627559542774093970216508269124",
+      "boundary_block_burnt": "15367759276605200000000",
+      "mint_yocto": "25575973596140919455402792445",
+      "max_inflation_rate": [
+        1,
+        40
+      ]
+    },
+    {
+      "epoch_id": "C6xhYyeQdRGRXkJo48T7Gseg9aNpdkVsjEPYeSVm7uP5",
+      "start_height": 226122737,
+      "start_hash": "3aB5LzJuuMCebyfiYHfNjQx37YRURyWb2DGCS81cJw6g",
+      "start_time": "2026-11-25T07:22:14.686Z",
+      "start_timestamp_ns": "1795591334686830058",
+      "prev_height": 226122736,
+      "prev_hash": "Co7nSuuhDLMEnDE25we1xFMMFsZjaxF5vJGZtrzo87B2",
+      "prev_time": "2026-11-25T07:22:14.103Z",
+      "prev_next_epoch_id": "C6xhYyeQdRGRXkJo48T7Gseg9aNpdkVsjEPYeSVm7uP5",
+      "total_supply_prev": "1312627388341324593671467308269124",
+      "total_supply_start": "1312652986591457194045910925539501",
+      "boundary_block_burnt": "1272943938158200000000",
+      "mint_yocto": "25598251405544312601817270377",
+      "max_inflation_rate": [
+        1,
+        40
+      ]
+    },
+    {
+      "epoch_id": "Co7nSuuhDLMEnDE25we1xFMMFsZjaxF5vJGZtrzo87B2",
+      "start_height": 226165937,
+      "start_hash": "4jpzNqcASLfZkao8Cxez5rFv5mG6iKiu1yrSTfayfXxV",
+      "start_time": "2026-11-25T14:15:02.565Z",
+      "start_timestamp_ns": "1795616102565264162",
+      "prev_height": 226165936,
+      "prev_hash": "TjyRg7nX15sP7MKma3ghSB3t65eQ8JVxMdonKi7icuU",
+      "prev_time": "2026-11-25T14:15:02.079Z",
+      "prev_next_epoch_id": "Co7nSuuhDLMEnDE25we1xFMMFsZjaxF5vJGZtrzo87B2",
+      "total_supply_prev": "1312652733512637754087527725539501",
+      "total_supply_start": "1312678472912241063703288509326142",
+      "boundary_block_burnt": "5038292492998100000000",
+      "mint_yocto": "25739404641602108758883786641",
       "max_inflation_rate": [
         1,
         40
