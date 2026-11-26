@@ -2,7 +2,7 @@
   "description": "Per-epoch mint measured at each epoch boundary: supply(first block) − supply(previous block) + burns in the first block. yoctoNEAR strings.",
   "source": "https://archival-rpc.mainnet.fastnear.com",
   "backfill_from": "2026-02-01T00:00:00.000Z",
-  "updated_at": "2026-11-25T22:33:15.208Z",
+  "updated_at": "2026-11-26T15:42:16.132Z",
   "records": [
     {
       "epoch_id": "ADLaJWxTLzoxLgv9j7Bd1ZS96FHTqJbCn3mYTxzaEAkA",
@@ -18895,6 +18895,46 @@
       "total_supply_start": "1312703670499185100556332040411350",
       "boundary_block_burnt": "30385325261043300000000",
       "mint_yocto": "25553545165535398243331085207",
+      "max_inflation_rate": [
+        1,
+        40
+      ],
+      "protocol_version": 88,
+      "max_inflation_rate_sampled": true
+    },
+    {
+      "epoch_id": "J9wrxnRGegNasm4wiz4fpX9uwW3uLDzJfovEXwHE8J8a",
+      "start_height": 226252337,
+      "start_hash": "8tnzGYzKcqmA6PfFnL5GPyotSV3i1s6JmMUcfxZegPgu",
+      "start_time": "2026-11-26T03:57:20.456Z",
+      "start_timestamp_ns": "1795665440456216053",
+      "prev_height": 226252336,
+      "prev_hash": "5fcacKRKLDEXbVhS3hdDF8KQDFJTcUYDNBVYiPxQRjy2",
+      "prev_time": "2026-11-26T03:57:19.962Z",
+      "prev_next_epoch_id": "J9wrxnRGegNasm4wiz4fpX9uwW3uLDzJfovEXwHE8J8a",
+      "total_supply_prev": "1312703464061030410100169940411350",
+      "total_supply_start": "1312729174897941497257432380000701",
+      "boundary_block_burnt": "8776989807256500000000",
+      "mint_yocto": "25710845688076964518939589351",
+      "max_inflation_rate": [
+        1,
+        40
+      ]
+    },
+    {
+      "epoch_id": "5fcacKRKLDEXbVhS3hdDF8KQDFJTcUYDNBVYiPxQRjy2",
+      "start_height": 226295537,
+      "start_hash": "EEAeZvouSBqsQ6o19nGLu94Bf1MeBj3ME77p1i8sZcQG",
+      "start_time": "2026-11-26T10:56:30.069Z",
+      "start_timestamp_ns": "1795690590069014767",
+      "prev_height": 226295536,
+      "prev_hash": "DNJHzyyxjPw5Y3vY76nWBfYikUBqxk2Lzrh5N6cXd3fd",
+      "prev_time": "2026-11-26T10:56:29.563Z",
+      "prev_next_epoch_id": "5fcacKRKLDEXbVhS3hdDF8KQDFJTcUYDNBVYiPxQRjy2",
+      "total_supply_prev": "1312728977586361572091514780000701",
+      "total_supply_start": "1312755018414370499043539818437075",
+      "boundary_block_burnt": "7342418211133800000000",
+      "mint_yocto": "26040835351345163158838436374",
       "max_inflation_rate": [
         1,
         40
