@@ -725,7 +725,18 @@
     "5cf3b6fde3ba9cea9e812bc5ed36eb014b9fbd38c2dbe7ebe94bae9e0a2fbe67": "2026-11-25",
     "1cfcd6506b61f85f86329a7d77776f9036c21136762c54a0f0b2c4f8f3e08253": "2026-11-25",
     "dabc4e32ad0e87ed59886e9d81a8a10531634f4e32c6ee11e7c1e1ea5a4bb9f4": "2026-11-25",
-    "7709a4cf94bb737b15c89ee7975726db42358772bfa266bfd3742235f470d6ba": "2026-11-25"
+    "7709a4cf94bb737b15c89ee7975726db42358772bfa266bfd3742235f470d6ba": "2026-11-25",
+    "9e3279161a5b3c640ac20c67ce03044d0e27a2c74eb0faff7a032f8dfcf49e6d": "2026-11-26",
+    "c2050dc5d94124938b03f94592bf336be122d67b43b7e27b3b155c469a5111af": "2026-11-26",
+    "0a562aafc31d8ff10ab832877e0880f115ae89c72f4f1b5f34fbbfde930ca0cb": "2026-11-26",
+    "6983f512b523d437138387a79e3e8efe6993d3be903dd1ed9167b790f3048761": "2026-11-26",
+    "72e789ae4abeaae63674d8a4253610b119c0f40f12af79cab06960aa62eda642": "2026-11-26",
+    "04572751d88bde3d3cced9ccc1e8354ed192bcb8ccac5c99eb71f769ce0abb01": "2026-11-26",
+    "620a15a2b20d6a76f3da2d72977ba0f417076f98e86c193054aadfbbe7f410c4": "2026-11-26",
+    "fd5166075b86ffee301c2e06c5bd4b0588ee5cb0a66a67e8a3c70e511091eab6": "2026-11-26",
+    "394a08395c2b389404efbea3fd8721bd542fd2a476149b01ddc5f780dba449ae": "2026-11-26",
+    "8b9ad286d7a3f2247a96919c377db99867772a5fc3847f1e363cb85dfca96682": "2026-11-26",
+    "7f605cdb8ee097a22183e0c69c3c10cedb206e81525f1396a81b7574c263541d": "2026-11-26"
   },
   "days": {
     "2026-10-15": {
@@ -1021,11 +1032,18 @@
       "swaps": 12,
       "bought_yocto": "253644779071357403161881946",
       "sold_yocto": "0"
+    },
+    "2026-11-26": {
+      "withdrawals": 22,
+      "withdrawn_yocto": "9698728568970526986546814374",
+      "swaps": 14,
+      "bought_yocto": "356982738901844876663607432",
+      "sold_yocto": "0"
     }
   },
-  "last_day": "2026-11-25",
+  "last_day": "2026-11-26",
   "description": "Daily on-chain buyback trace from the BigQuery public NEAR dataset (scripts/lib/bigquery.mjs, DAILY_TRACE_SQL). Amounts are yoctoNEAR integer strings.",
   "dataset": "bigquery-public-data.crypto_near_mainnet_us",
-  "updated_at": "2026-11-26T15:42:22.642Z",
-  "latest_block_utc": "2026-11-26T14:59:59.000Z"
+  "updated_at": "2026-11-27T15:31:45.168Z",
+  "latest_block_utc": "2026-11-27T14:59:59.000Z"
 }
